@@ -9,7 +9,7 @@ class Keystore {
 
         const that = this;
 
-        this.Proxy = class {
+        this.KeyStoreApi = class {
             getAddresses() {
                 if (that._communicationTarget.origin === config.vaultOrigin) {
                     // high secure keys
@@ -25,7 +25,7 @@ class Keystore {
     }
 
     async _connect() {
-        await Boruca.proxy(this._communicationTarget, this._communicationTarget.origin, this.Proxy);
+        await Boruca.proxy(this._communicationTarget, this._communicationTarget.origin, this.KeyStoreApi);
     }
 }
 
