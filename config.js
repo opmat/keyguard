@@ -1,6 +1,6 @@
 const localConfig = {
-    vaultOrigin: 'http://localhost',
-    walletOrigin: 'http://localhost'
+    vaultOrigin: location.origin,
+    walletOrigin: location.origin
 }
 
 const liveConfig = {
