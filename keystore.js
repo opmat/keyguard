@@ -7,7 +7,7 @@ class Keystore {
         // Check if we run in iframe or were opened by window.open()
         this._communicationTarget = window.parent || window.opener;
 
-        class KeyStoreApi {
+        class KeystoreApi {
             getAddresses(callingWindow, callingOrigin) {
                 if (callingOrigin === config.vaultOrigin) {
                     // high secure keys
@@ -16,7 +16,7 @@ class Keystore {
             }
         };
 
-        RPC.Server(KeyStoreApi);
+        RPC.Server(KeystoreApi);
     }
 }
 
