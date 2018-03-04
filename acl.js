@@ -15,14 +15,17 @@ export default class ACL {
 
             async authorize(policy, callingWindow, callingOrigin) {
                 // abort if embedded / request UI?!
-                if (window.parent === callingWindow) return;
+                if (self.parent) return;
 
                 return await UI.requestAuthorize(policy, callingOrigin);
             }
 
+            // example, TODO: iterate over all methods and wrap them
             getAddresses(callingWindow, callingOrigin) {
                 // todo interprete policy
-                if (this._appPolicies.get(callingOrigin)) return clazz.getAddresses();
+                if (this._appPolicies.get(callingOrigin)) {
+                    return clazz.prototype.getAddresses();
+                }
             }
         }
     }

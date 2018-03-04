@@ -17,14 +17,14 @@ class Vault {
         let authorized = false;
 
         const policy = await this._keystore.getPolicy();
-        console.log(policy);
+        console.log(`Got policy: ${policy}`);
 
         if (policy !== assumedPolicy) {
             if (await this._keystore.authorize(policy)) {
                 authorized = true;
-                console.log('authorization successfull');
+                console.log('Authorization successfull');
             } else {
-                console.log('authorization declined');
+                console.log('Authorization declined');
             }
         } else {
             authorized = true;
@@ -34,9 +34,11 @@ class Vault {
             return;
         }
 
-        console.log('now we are authorized');
+        console.log('Now we are authorized');
 
-        await this._keystore.getAddresses();
+        const addresses = await this._keystore.getAddresses();
+
+        console.log(`Addresses: ${addresses}`);
 
     }
 
