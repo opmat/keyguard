@@ -1,11 +1,10 @@
-export default class Wallet {
+export default class KeystoreApi {
     /**
      * Create a new Wallet.
      * @returns {Promise.<Wallet>} Newly created Wallet.
      */
     static async generate() {
-        await Crypto.prepareSyncCryptoWorker();
-        return new Wallet(KeyPair.generate());
+        return new Wallet(Nimiq.KeyPair.generate());
     }
 
     /**
