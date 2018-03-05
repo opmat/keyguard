@@ -4,7 +4,9 @@ export default class Policy {
    }
 
    equals(otherPolicy) {
-      return this._name === otherPolicy._name;
+       if (!otherPolicy) return false;
+
+       return this._name === otherPolicy._name;
    }
 
    static parse(object) {

@@ -9,13 +9,14 @@ export default class ACL {
     }
 
     static addACL(clazz) {
+        debugger;
         return class KeystoreApi {
             constructor() {
                 /** @type {Map<string,Policy> */
                 this._appPolicies = new Map();
 
                 const storedPolicies = self.localStorage.getItem(ACL.constants.policies);
-                if (storedPolicies) {
+                if (storedPolicies) {``
                     try {
                         this._appPolicies = new Map(JSON.parse(storedPolicies));
                     } catch(e) {
@@ -33,7 +34,7 @@ export default class ACL {
 
             async authorize(callingWindow, callingOrigin, policy) {
                 // abort if embedded / request UI?!
-                //if (self.parent) return;
+                if (self.parent) return;
 
                 const userAuthorizesApp = await UI.requestAuthorize(policy, callingOrigin);
 
@@ -47,11 +48,14 @@ export default class ACL {
 
             // example, TODO: iterate over all methods and wrap them
             getAddresses(callingWindow, callingOrigin) {
+                const policy = this._appPolicies.get(callingOrigin);
+
                 // TODO interprete policy
+
+                if (!policy) throw 'Not authorized';
+
                 // TODO add high/low security flag
-                if (this._appPolicies.get(callingOrigin)) {
-                    return clazz.prototype.getAddresses();
-                }
+                return clazz.prototype.getAddresses();
             }
         }
     }
@@ -59,4 +63,4 @@ export default class ACL {
 
 // policy short description => detailed interpretation
 
-// TODO: Encrypt policy data?
+// TODO: Encrypt/sign policy data?

@@ -12,15 +12,18 @@ class Vault {
     async launch() {
         this._keystore = await RPC.Client(this.$keystore.contentWindow, 'KeystoreApi');
 
-        const assumedPolicy = new Policy('vaultDefault');
-
         let authorized = false;
+        const assumedPolicy = new Policy('vaultDefault');
+        let grantedPolicy = await this._keystore.getPolicy();
+        grantedPolicy = grantedPolicy && Policy.parse(grantedPolicy);
 
-        const policy = Policy.parse(await this._keystore.getPolicy());
-        console.log(`Got policy: ${policy}`);
+        console.log(`Got policy: ${grantedPolicy}`);
 
-        if (!policy.equals(assumedPolicy)) {
-            if (await this._keystore.authorize(assumedPolicy)) {
+        if (!assumedPolicy.equals(grantedPolicy)) {
+            const keystoreWindow = window.open(config.keystoreSrc);
+            const keystoreWindowClient = await RPC.Client(keystoreWindow, 'KeystoreApi');
+
+            if (await keystoreWindowClient.authorize(assumedPolicy)) {
                 authorized = true;
                 console.log('Authorization successfull');
             } else {
