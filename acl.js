@@ -33,8 +33,8 @@ export default class ACL {
             }
 
             async authorize(callingWindow, callingOrigin, policy) {
-                // abort if embedded / request UI?!
-                if (self.parent) return;
+                // abort if embedded
+                if (self.parent) throw 'Authorization cannot be requested in iframe';
 
                 const userAuthorizesApp = await UI.requestAuthorize(policy, callingOrigin);
 
