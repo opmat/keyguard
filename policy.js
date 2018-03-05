@@ -1,7 +1,13 @@
 export default class Policy {
-   constructor() {
+   constructor(name) {
+      this._name = name;
+   }
 
+   equals(otherPolicy) {
+      return this._name === otherPolicy._name;
+   }
+
+   static parse(object) {
+       return new Policy(object._name);
    }
 }
-
-// TODO implement equality check

@@ -12,15 +12,15 @@ class Vault {
     async launch() {
         this._keystore = await RPC.Client(this.$keystore.contentWindow, 'KeystoreApi');
 
-        const assumedPolicy = new Policy();
+        const assumedPolicy = new Policy('vaultDefault');
 
         let authorized = false;
 
-        const policy = await this._keystore.getPolicy();
+        const policy = Policy.parse(await this._keystore.getPolicy());
         console.log(`Got policy: ${policy}`);
 
-        if (policy !== assumedPolicy) {
-            if (await this._keystore.authorize(policy)) {
+        if (!policy.equals(assumedPolicy)) {
+            if (await this._keystore.authorize(assumedPolicy)) {
                 authorized = true;
                 console.log('Authorization successfull');
             } else {
@@ -40,30 +40,6 @@ class Vault {
 
         console.log(`Addresses: ${addresses}`);
 
-    }
-
-    _onConsensusEstablished() {
-        console.log('Consensus established');
-    }
-
-    _onBalanceChanged(obj) {
-        console.log('Balance changed:', obj.address, obj.balance);
-    }
-
-    getBalance(address) {
-        return this._network.getBalance(address);
-    }
-
-    subscribeAddress(address) {
-        return this._network.subscribeAddress(address);
-    }
-
-    subscribeAndGetBalance(address) {
-        return this._network.subscribeAndGetBalance(address);
-    }
-
-    relayTransaction(obj) {
-        return this._network.relayTransaction(obj);
     }
 }
 
