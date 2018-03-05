@@ -59,6 +59,4 @@ export default class ACL {
 
 // policy short description => detailed interpretation
 
-// TODO: Persist _appPolicies in localStorage
-// TODO: Listen to 'storage' event
 // TODO: Encrypt policy data?
