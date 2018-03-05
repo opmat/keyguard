@@ -9,23 +9,16 @@ export default class ACL {
     }
 
     static addACL(clazz) {
-        debugger;
         return class KeystoreApi {
             constructor() {
-                /** @type {Map<string,Policy> */
-                this._appPolicies = new Map();
+                this._isEmbedded = self !== top;
 
                 const storedPolicies = self.localStorage.getItem(ACL.constants.policies);
-                if (storedPolicies) {``
-                    try {
-                        this._appPolicies = new Map(JSON.parse(storedPolicies));
-                    } catch(e) {
-                        this._appPolicies = new Map();
-                    }
-                }
+                /** @type {Map<string,Policy> */
+                this._appPolicies = storedPolicies ? ACL._parseAppPolicies(storedPolicies) : new Map();
 
                 self.addEventListener('storage', ({key, newValue}) =>
-                    key === ACL.constants.policies && (this._appPolicies = JSON.parse(newValue)));
+                    key === ACL.constants.policies && (this._appPolicies = ACL._parseAppPolicies(newValue)));
             }
 
             getPolicy(callingWindow, callingOrigin) {
@@ -34,7 +27,7 @@ export default class ACL {
 
             async authorize(callingWindow, callingOrigin, policy) {
                 // abort if embedded
-                if (self.parent) throw 'Authorization cannot be requested in iframe';
+                if (this._isEmbedded) throw 'Authorization cannot be requested in iframe';
 
                 const userAuthorizesApp = await UI.requestAuthorize(policy, callingOrigin);
 
@@ -57,6 +50,14 @@ export default class ACL {
                 // TODO add high/low security flag
                 return clazz.prototype.getAddresses();
             }
+        }
+    }
+
+    static _parseAppPolicies(encoded) {
+        try {
+            return new Map(JSON.parse(encoded));
+        } catch (e) {
+            return new Map();
         }
     }
 }
