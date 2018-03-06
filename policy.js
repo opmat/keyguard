@@ -7,7 +7,6 @@ export default class Policy {
         return otherPolicy && this.name === otherPolicy.name;
     }
 
-<<<<<<< HEAD
     static get(name, ...args) {
         //return new Policy.predefined[name](args);
         return new (Policy.predefined[name].bind.apply(Policy.predefined[name], args));
