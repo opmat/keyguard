@@ -7,6 +7,10 @@ export default class Policy {
         return otherPolicy && this.name === otherPolicy.name;
     }
 
+    static parse(object) {
+        return new Policy(object.name);
+    }
+
     static get(name, ...args) {
         //return new Policy.predefined[name](args);
         return new (Policy.predefined[name].bind.apply(Policy.predefined[name], args));
