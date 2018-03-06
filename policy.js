@@ -40,7 +40,6 @@ class SpendingLimit extends Policy {
         super('spending-limit');
         this.limit = limit;
     }
-    set spendingLimit(limit) { this._limit = limit; }
 
     allows(method, args) { return true; }
     needUi(method, args) {

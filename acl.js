@@ -42,11 +42,23 @@ export default class ACL {
         }
 
         for (const functionName of Reflection.userFunctions(clazz.prototype)) {
-            ClassWithAcl.prototype[functionName] = function (callingWindow, callingOrigin, ...args) {
-                const policy = this._appPolicies.get(callingOrigin);
+            ClassWithAcl.prototype[functionName] = async function (callingWindow, callingOrigin, ...args) {
+                const policyDescription = this._appPolicies.get(callingOrigin);
 
-                // TODO interprete policy
-                if (!policy) throw 'Not authorized';
+                if (!policyDescription) throw 'Not authorized';
+
+                const policy = Policy.get(policyDescription.name);
+
+                if(!policy.allows(functionName, args)) throw 'Not authorized';
+
+                if (policy.needUi(functionName, args)) {
+                    if (this._isEmbedded) {
+                        throw 'need-ui';
+                    } else {
+                        const userConfirms = await UI[functionName](...args);
+                        if (!userConfirms) throw 'User declined action';
+                    }
+                }
 
                 return clazz.prototype[functionName](...args);
             }
