@@ -4,7 +4,7 @@ class WalletStore {
      * @returns {Promise.<WalletStore>}
      */
     constructor(dbName = 'wallet') {
-        this._jdb = new JDB.JungleDB(dbName, WalletStore.VERSION);
+        this._jdb = new Nimiq.JDB.JungleDB(dbName, WalletStore.VERSION);
         /** @type {ObjectStore} */
         this._walletStore = null;
         /** @type {ObjectStore} */
