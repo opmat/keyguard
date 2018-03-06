@@ -7,6 +7,10 @@ export default class Policy {
         return otherPolicy && this.name === otherPolicy.name;
     }
 
+    static parse(object) {
+        return new Policy(object.name);
+    }
+
     static get(name, ...args) {
         return new (Policy.predefined[name].bind.apply(Policy.predefined[name], args));
     }
@@ -25,7 +29,7 @@ export default class Policy {
 }
 
 class FullAccess extends Policy {
-    constructor() { super("full-access"); }
+    constructor() { super('full-access'); }
     allows(method, args) { return true; }
     needUi(method, args) { return false; }
 }

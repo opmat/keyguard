@@ -13,7 +13,7 @@ class Vault {
         this._keystore = await RPC.Client(this.$keystore.contentWindow, 'KeystoreApi');
 
         let authorized = false;
-        const assumedPolicy = Policy.get('full');
+        const assumedPolicy = Policy.get('full-access');
         let grantedPolicy = await this._keystore.getPolicy();
         grantedPolicy = grantedPolicy && Policy.parse(grantedPolicy);
 
