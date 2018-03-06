@@ -7,6 +7,13 @@ export default class Policy {
         return otherPolicy && this.name === otherPolicy.name;
     }
 
+<<<<<<< HEAD
+=======
+    static parse(object) {
+        return new Policy(object.name);
+    }
+
+>>>>>>> c005015f07972643f68aa6feeaadf7aa3d21ca3d
     static get(name, ...args) {
         //return new Policy.predefined[name](args);
         return new (Policy.predefined[name].bind.apply(Policy.predefined[name], args));
@@ -17,30 +24,33 @@ export default class Policy {
     }}
 
     allows(method, args) {
-        throw "make a policy and overwrite me"
+        throw 'make a policy and overwrite me'
     }
 
     needUi(method, args) {
-        throw "make a policy and overwrite me"
+        throw 'make a policy and overwrite me'
     }
 }
 
 class FullAccess extends Policy {
+<<<<<<< HEAD
     constructor() { super("full-access"); }
+=======
+    constructor() { super('full'); }
+>>>>>>> c005015f07972643f68aa6feeaadf7aa3d21ca3d
     allows(method, args) { return true; }
     needUi(method, args) { return false; }
 }
 
 class SpendingLimit extends Policy {
     constructor(limit) {
-        super("spending-limit");
+        super('spending-limit');
         this.limit = limit;
     }
-    set spendingLimit(limit) { this._limit = limit; }
 
     allows(method, args) { return true; }
     needUi(method, args) {
-        if (method === "sign") {
+        if (method === 'sign') {
             const { sender, recipient, value, fee } = args;
             return value > this._limit;
         }

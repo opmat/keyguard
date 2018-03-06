@@ -3,23 +3,23 @@ import Policy from './policy.js';
 import UI from './ui.js';
 
 export default class ACL {
-    static get constants() {
-        return {
-            policies: 'policies'
-        }
+    static get STORAGE_KEY() {
+        return 'policies';
     }
 
     static addACL(clazz) {
-        const KeystoreApi = class KeystoreApi {
+        const ClassWithAcl = class foo extends clazz {
             constructor() {
+                super();
                 this._isEmbedded = self !== top;
 
-                const storedPolicies = self.localStorage.getItem(ACL.constants.policies);
+                const storedPolicies = self.localStorage.getItem(ACL.STORAGE_KEY);
                 /** @type {Map<string,Policy> */
                 this._appPolicies = storedPolicies ? ACL._parseAppPolicies(storedPolicies) : new Map();
 
+                // Listen for policy changes from other instances
                 self.addEventListener('storage', ({key, newValue}) =>
-                    key === ACL.constants.policies && (this._appPolicies = ACL._parseAppPolicies(newValue)));
+                    key === ACL.STORAGE_KEY && (this._appPolicies = ACL._parseAppPolicies(newValue)));
             }
 
             getPolicy(callingWindow, callingOrigin) {
@@ -34,7 +34,7 @@ export default class ACL {
 
                 if (userAuthorizesApp) {
                     this._appPolicies.set(callingOrigin, policy);
-                    self.localStorage.setItem('policies', JSON.stringify([...this._appPolicies]));
+                    self.localStorage.setItem(ACL.STORAGE_KEY, JSON.stringify([...this._appPolicies]));
                 }
 
                 return userAuthorizesApp;
@@ -42,17 +42,32 @@ export default class ACL {
         }
 
         for (const functionName of Reflection.userFunctions(clazz.prototype)) {
-            KeystoreApi.prototype[functionName] = function (callingWindow, callingOrigin, ...args) {
-                const policy = this._appPolicies.get(callingOrigin);
+            ClassWithAcl.prototype[functionName] = async function (callingWindow, callingOrigin, ...args) {
+                const policyDescription = this._appPolicies.get(callingOrigin);
 
-                // TODO interprete policy
-                if (!policy) throw 'Not authorized';
+                if (!policyDescription) throw 'Not authorized';
+
+                const policy = Policy.get(policyDescription.name);
+
+                if(!policy.allows(functionName, args)) throw 'Not authorized';
+
+                if (policy.needUi(functionName, args)) {
+                    if (this._isEmbedded) {
+                        throw 'need-ui';
+                    } else {
+                        const userConfirms = await UI[functionName](...args);
+                        if (!userConfirms) throw 'User declined action';
+                    }
+                }
 
                 return clazz.prototype[functionName](...args);
             }
         }
 
-        return KeystoreApi;
+        // keep class name of clazz
+        Object.defineProperty (ClassWithAcl, 'name', {value: clazz.name});
+
+        return ClassWithAcl;
     }
 
     static _parseAppPolicies(encoded) {
@@ -65,5 +80,3 @@ export default class ACL {
 }
 
 // policy short description => detailed interpretation
-
-// TODO: Encrypt/sign policy data?

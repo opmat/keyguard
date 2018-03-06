@@ -1,17 +1,20 @@
+import AccountStore from './wip/account-store.js';
+
 export default class KeystoreApi {
 
     static get satoshis() { return 1e5 }
 
     constructor() {
-
+        this.$ = Nimiq;
+        this._accountStore = new AccountStore();
     }
 
-    /*
-        Public API
-    */
-
-    getAddresses() {
-        return ['133131','23342424'];
+    async getAddresses() {
+        return ['wff']
+        const accounts = await this._accountStore.list();
+        return accounts.map(account => {
+            account
+        });
     }
 
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
@@ -21,35 +24,22 @@ export default class KeystoreApi {
         return this.$.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
     }
 
-    async getAddress() {
-        await this.loadWallet();
-        return this.address;
-    }
-
-    async getBalance() {
-        await this._apiInitialized;
-        return this.balance;
-    }
-
     get address() {
         return this.$.wallet.address.toUserFriendlyAddress();
     }
 
-    /**
-     * @return {Object} An object containing `privateKey` in native format and `address` in user-friendly format.
-     */
     async generateKeyPair() {
         return Nimiq.KeyPair.generate();
     }
 
     async importKey(privateKey, persist = true) {
-        if(typeof privateKey ===  "string") {
+        if(typeof privateKey ===  'string') {
             privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
         }
         const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
         this.$.wallet = new Nimiq.Wallet(keyPair);
         if (persist) {
-            if(!this.$.walletStore) this.$.walletStore = await new Nimiq.WalletStore();
+            if(!this._walletStore) this.$.walletStore = await new Nimiq.WalletStore();
             await this.$.walletStore.put(this.$.wallet);
         }
         return this.address;
