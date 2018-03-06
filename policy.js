@@ -21,30 +21,30 @@ export default class Policy {
     }}
 
     allows(method, args) {
-        throw "make a policy and overwrite me"
+        throw 'make a policy and overwrite me'
     }
 
     needUi(method, args) {
-        throw "make a policy and overwrite me"
+        throw 'make a policy and overwrite me'
     }
 }
 
 class FullAccess extends Policy {
-    constructor() { super("full"); }
+    constructor() { super('full'); }
     allows(method, args) { return true; }
     needUi(method, args) { return false; }
 }
 
 class SpendingLimit extends Policy {
     constructor(limit) {
-        super("spending-limit");
+        super('spending-limit');
         this.limit = limit;
     }
     set spendingLimit(limit) { this._limit = limit; }
 
     allows(method, args) { return true; }
     needUi(method, args) {
-        if (method === "sign") {
+        if (method === 'sign') {
             const { sender, recipient, value, fee } = args;
             return value > this._limit;
         }
