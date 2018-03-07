@@ -63,6 +63,7 @@ class VaultPolicy extends Policy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
+            case 'getAddresses':
                 return true;
             case 'sign':
                 const { account, recipient, value, fee } = args;
@@ -76,6 +77,7 @@ class VaultPolicy extends Policy {
     needsUi(method, args) {
         switch (method) {
             case 'createNewAccounts':
+            case 'getAddresses':
                 return false;
             case 'triggerAccountImport':
             case 'persistAccount':
@@ -98,11 +100,12 @@ class WalletPolicy extends Policy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
+            case 'getAddresses':
                 return true;
             case 'sign':
                 const { account, recipient, value, fee } = args;
                 if (account.type === AccountType.Low) return true;
-                break;
+                return false;
             default:
                 throw 'Unhandled method';
         }
@@ -113,11 +116,12 @@ class WalletPolicy extends Policy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
-                return true;
+            case 'getAddresses':
+                return false;
             case 'sign':
                 const { account, recipient, value, fee } = args;
                 if (fee > this._limit) return true;
-                break;
+                return false;
             default:
                 throw 'Unhandled method';
         }
