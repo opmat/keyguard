@@ -1,5 +1,5 @@
 import { RPC, EventClient } from '/libraries/boruca-messaging/src/boruca.js';
-import Policy from '../policy.js';
+import Policy from '../policies/policy.js';
 import config from './config.js';
 
 class Vault {
