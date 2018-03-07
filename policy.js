@@ -36,7 +36,7 @@ export default class Policy {
         throw 'make a policy and overwrite me'
     }
 
-    needUi(method, args) {
+    needsUi(method, args) {
         throw 'make a policy and overwrite me'
     }
 }
@@ -44,7 +44,7 @@ export default class Policy {
 class FullAccess extends Policy {
     constructor() { super('full-access'); }
     allows(method, args) { return true; }
-    needUi(method, args) { return false; }
+    needsUi(method, args) { return false; }
 }
 
 class SpendingLimit extends Policy {
@@ -54,7 +54,7 @@ class SpendingLimit extends Policy {
     }
 
     allows(method, args) { return true; }
-    needUi(method, args) {
+    needsUi(method, args) {
         if (method === 'sign') {
             const { sender, recipient, value, fee } = args;
             return value > this._limit;
