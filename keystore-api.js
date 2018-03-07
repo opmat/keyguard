@@ -10,16 +10,15 @@ export default class KeystoreApi {
     }
 
     /*
-    Accounts listing
-    Volatile Account creation
-    Persist Account -> storing
-    Import Account -> storing
-    Store Account
-    Transaction Signing
+     createNewAccounts
+     triggerAccountImport
+     persistAccount
+     getAccounts
+     sign
      */
 
     // dummy
-    async getAddresses() {
+    async getAccounts() {
         return ['wff']
         const accounts = await this._accountStore.list();
         return accounts.map(account => {

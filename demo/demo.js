@@ -2,7 +2,7 @@ import { RPC, EventClient } from '/libraries/boruca-messaging/src/boruca.js';
 import Policy from '../policies/policy.js';
 import config from './config.js';
 
-class Vault {
+class Demo {
     constructor() {
         this.$network = document.querySelector('#network');
         this.$keystore = document.querySelector('#keystore');
@@ -39,11 +39,11 @@ class Vault {
 
         console.log('Now we are authorized');
 
-        const addresses = await this._keystore.getAddresses();
+        const accounts = await this._keystore.getAccounts();
 
-        console.log(`Addresses: ${addresses}`);
+        console.log(`Accounts: ${accounts}`);
 
     }
 }
 
-window.vault = new Vault();
+window.demo = new Demo();
