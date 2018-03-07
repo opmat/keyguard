@@ -7,6 +7,10 @@ export default class WalletPolicy extends BasePolicy {
         this.limit = limit;
     }
 
+    equals(otherPolicy) {
+        return super.equals(otherPolicy) && this.limit === otherPolicy.limit;
+    }
+
     allows(method, args) {
         switch (method) {
             case 'createNewAccounts':
