@@ -1,5 +1,5 @@
 import Reflection from '/libraries/nimiq-utils/reflection/reflection.js';
-import Policy from './policies/policy.js';
+import Policy from './policy.js';
 import UI from './ui.js';
 
 export default class ACL {
