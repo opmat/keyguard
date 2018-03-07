@@ -1,4 +1,4 @@
-class BasePolicy {
+export default class BasePolicy {
    constructor() {
       this.name = this.constructor.name;
    }

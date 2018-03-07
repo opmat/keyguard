@@ -1,7 +1,7 @@
-import Policy from './policy.js';
+import BasePolicy from './base-policy.js';
 import * as AccountType from '../account-type.js';
 
-export default class WalletPolicy extends Policy {
+export default class WalletPolicy extends BasePolicy {
     constructor(limit) {
         super('wallet');
         this.limit = limit;

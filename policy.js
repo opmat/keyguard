@@ -11,11 +11,12 @@ export default class Policy {
     }
 
     static get(name, ...args) {
+        if (!Policy.predefined.hasOwnProperty(name)) throw `Policy "${name} does not exist."`
         return new Policy.predefined[name](...args);
     }
 }
 
 Policy.predefined = {};
-for (policy of [WalletPolicy, SafePolicy]) {
+for (const policy of [WalletPolicy, SafePolicy]) {
     Policy.predefined[policy.name] = policy;
 }
