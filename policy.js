@@ -22,8 +22,8 @@ export default class Policy {
     }
 
     static get predefined() { return {
-        "full-access": FullAccess,
-        "spending-limit": SpendingLimit
+        'full-access': FullAccess,
+        'spending-limit': SpendingLimit
     }}
 
     serialize() {
