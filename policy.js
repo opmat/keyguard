@@ -1,8 +1,8 @@
 import * as AccountType from './account-type.js';
 
 export default class Policy {
-   constructor(name) {
-      this.name = name;
+   constructor() {
+      this.name = this.constructor.name;
    }
 
     equals(otherPolicy) {
@@ -17,19 +17,8 @@ export default class Policy {
     }
 
     static get(name, ...args) {
-        //return new (Object.bind.apply(Policy.predefined[name], args));
-        //return new (Policy.predefined[name].bind, args));
-        //return new (Object.bind(Policy.predefined[name].bind, args));
-        //return new (Function.prototype.bind.apply(Policy.predefined[name], args));
         return new Policy.predefined[name](...args);
     }
-
-    static get predefined() { return {
-        'full-access': FullAccess,
-        'spending-limit': SpendingLimit,
-        'wallet': WalletPolicy,
-        'vault': VaultPolicy
-    }}
 
     serialize() {
         const serialized = {};
@@ -41,22 +30,25 @@ export default class Policy {
     }
 
     allows(method, args) {
-        throw 'make a policy and overwrite me'
+        throw 'Make your own policy by extending Policy and overwrite me'
     }
 
     needsUi(method, args) {
-        throw 'make a policy and overwrite me'
+        throw 'Make your own policy by extending Policy and overwrite me'
     }
 }
 
+Policy.predefined = {};
+for (policy of [FullAccess, WalletPolicy, VaultPolicy]) {
+    Policy.predefined[policy.name] = policy;
+}
+
 class FullAccess extends Policy {
-    constructor() { super('full-access'); }
     allows(method, args) { return true; }
     needsUi(method, args) { return false; }
 }
 
 class VaultPolicy extends Policy {
-    constructor() { super('vault'); }
 
     allows(method, args) {
          switch (method) {
@@ -89,7 +81,7 @@ class VaultPolicy extends Policy {
 
 class WalletPolicy extends Policy {
     constructor(limit) {
-        super('wallet');
+        super();
         this.limit = limit;
     }
 
@@ -124,11 +116,9 @@ class WalletPolicy extends Policy {
     }
 }
 
-
-
 class SpendingLimit extends Policy {
     constructor(limit) {
-        super('spending-limit');
+        super();
         this.limit = limit;
     }
 
