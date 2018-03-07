@@ -53,7 +53,7 @@ export default class ACL {
 
                 if (policy.needsUi(functionName, args)) {
                     if (this._isEmbedded) {
-                        throw 'need-ui';
+                        throw 'needs-ui';
                     } else {
                         const userConfirms = await UI[functionName](...args);
                         if (!userConfirms) throw 'User declined action';
