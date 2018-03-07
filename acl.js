@@ -49,7 +49,7 @@ export default class ACL {
 
                 const policy = Policy.get(policyDescription.name);
 
-                if(!policy.allows(functionName, args)) throw 'Not authorized';
+                if (!policy.allows(functionName, args)) throw 'Not authorized';
 
                 if (policy.needsUi(functionName, args)) {
                     if (this._isEmbedded) {
