@@ -8,6 +8,7 @@ export default class Policy {
     }
 
     static parse(serialized) {
+        if (!serialized) return null;
         const policy = Policy.get(serialized.name)
         for (const prop in serialized) policy[prop] = serialized[prop];
         return policy;
