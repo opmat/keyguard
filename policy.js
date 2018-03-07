@@ -1,3 +1,5 @@
+import * as AccountType from './account-type.js';
+
 export default class Policy {
    constructor(name) {
       this.name = name;
@@ -24,12 +26,17 @@ export default class Policy {
 
     static get predefined() { return {
         'full-access': FullAccess,
-        'spending-limit': SpendingLimit
+        'spending-limit': SpendingLimit,
+        'wallet': WalletPolicy,
+        'vault': VaultPolicy
     }}
 
     serialize() {
         const serialized = {};
-        for (const prop in this) if (!(this[prop] instanceof Function)) serialized[prop] = this[prop];
+
+        for (const prop in this)
+            if (!(this[prop] instanceof Function)) serialized[prop] = this[prop];
+
         return serialized;
     }
 
@@ -48,6 +55,77 @@ class FullAccess extends Policy {
     needsUi(method, args) { return false; }
 }
 
+class VaultPolicy extends Policy {
+    constructor() { super('vault'); }
+
+    allows(method, args) {
+         switch (method) {
+            case 'createNewAccounts':
+            case 'triggerAccountImport':
+            case 'persistAccount':
+                return true;
+            case 'sign':
+                const { account, recipient, value, fee } = args;
+                if (account.type === AccountType.High) return true;
+                break;
+            default:
+                throw 'Unhandled method';
+        }
+    }
+
+    needsUi(method, args) {
+        switch (method) {
+            case 'createNewAccounts':
+                return false;
+            case 'triggerAccountImport':
+            case 'persistAccount':
+            case 'sign':
+                return true;
+            default:
+                throw 'Unhandled method';
+        }
+    }
+}
+
+class WalletPolicy extends Policy {
+    constructor(limit) {
+        super('wallet');
+        this.limit = limit;
+    }
+
+    allows(method, args) {
+        switch (method) {
+            case 'createNewAccounts':
+            case 'triggerAccountImport':
+            case 'persistAccount':
+                return true;
+            case 'sign':
+                const { account, recipient, value, fee } = args;
+                if (account.type === AccountType.Low) return true;
+                break;
+            default:
+                throw 'Unhandled method';
+        }
+    }
+
+    needsUi(method, args) {
+        switch (method) {
+            case 'createNewAccounts':
+            case 'triggerAccountImport':
+            case 'persistAccount':
+                return true;
+            case 'sign':
+                const { account, recipient, value, fee } = args;
+                if (fee > this._limit) return true;
+                break;
+            default:
+                throw 'Unhandled method';
+        }
+    }
+}
+
+
+
 class SpendingLimit extends Policy {
     constructor(limit) {
         super('spending-limit');
@@ -57,7 +135,7 @@ class SpendingLimit extends Policy {
     allows(method, args) { return true; }
     needsUi(method, args) {
         if (method === 'sign') {
-            const { sender, recipient, value, fee } = args;
+            const { accont, recipient, value, fee } = args;
             return value > this._limit;
         }
         return false;

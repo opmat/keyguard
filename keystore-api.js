@@ -9,6 +9,15 @@ export default class KeystoreApi {
         this._accountStore = new AccountStore();
     }
 
+    /*
+    Accounts listing
+    Volatile Account creation
+    Persist Account -> storing
+    Import Account -> storing
+    Store Account
+    Transaction Signing
+     */
+
     // dummy
     async getAddresses() {
         return ['wff']
