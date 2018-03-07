@@ -9,6 +9,7 @@ export default class KeystoreApi {
         this._accountStore = new AccountStore();
     }
 
+    // dummy
     async getAddresses() {
         return ['wff']
         const accounts = await this._accountStore.list();
@@ -16,6 +17,14 @@ export default class KeystoreApi {
             account
         });
     }
+
+    // dummy
+    async sign(sender, recipient, value, fee) {
+        const signature = 'mySign';
+        return signature;
+        // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
+    }
+
 
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
