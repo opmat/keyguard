@@ -51,7 +51,7 @@ export default class ACL {
 
                 if(!policy.allows(functionName, args)) throw 'Not authorized';
 
-                if (policy.needUi(functionName, args)) {
+                if (policy.needsUi(functionName, args)) {
                     if (this._isEmbedded) {
                         throw 'need-ui';
                     } else {
