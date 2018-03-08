@@ -8,7 +8,7 @@ const localConfig = {
 }
 
 const liveConfig = {
-    keystoreSrc: 'https://secure.nimiq.com',
+    keyguardSrc: 'https://secure.nimiq.com/keyguard.html',
     networkOrigin: 'https://network.nimiq.com'
 }
 

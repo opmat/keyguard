@@ -1,4 +1,4 @@
-export default class KeystoreApi {
+export default class KeyguardApi {
     /**
      * Create a new Wallet.
      * @returns {Promise.<Wallet>} Newly created Wallet.

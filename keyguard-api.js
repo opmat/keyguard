@@ -1,6 +1,6 @@
 import AccountStore from './account-store.js';
 
-export default class KeystoreApi {
+export default class KeyguardApi {
 
     static get satoshis() { return 1e5 }
 
@@ -30,8 +30,8 @@ export default class KeystoreApi {
 
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
-        value = Math.round(Number(value) * KeystoreApi.satoshis);
-        fee = Math.round(Number(fee) * KeystoreApi.satoshis);
+        value = Math.round(Number(value) * KeyguardApi.satoshis);
+        fee = Math.round(Number(fee) * KeyguardApi.satoshis);
         return Nimiq.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
     }
 

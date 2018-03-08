@@ -6,7 +6,7 @@ import SafePolicy from './policies/safe-policy.js';
 import WalletPolicy from './policies/wallet-policy.js';
 import config from './config.js';
 
-class Keystore {
+class Keyguard {
     constructor() {
 
         this._state = {
@@ -29,4 +29,4 @@ class Keystore {
     }
 }
 
-new Keystore();
+new Keyguard();

@@ -11,7 +11,7 @@ class Demo {
     }
 
     async launch() {
-        this._keyguard = await RPC.Client(this.$keyguard.contentWindow, 'KeystoreApi');
+        this._keyguard = await RPC.Client(this.$keyguard.contentWindow, 'KeyguardApi');
 
         let authorized = false;
         const assumedPolicy = new SafePolicy;
@@ -21,10 +21,10 @@ class Demo {
         console.log(`Got policy: ${grantedPolicy}`);
 
         if (!assumedPolicy.equals(grantedPolicy)) {
-            const keystoreWindow = window.open(config.keyguardSrc);
-            const keystoreWindowClient = await RPC.Client(keystoreWindow, 'KeystoreApi');
+            const keyguardWindow = window.open(config.keyguardSrc);
+            const keyguardWindowClient = await RPC.Client(keyguardWindow, 'KeyguardApi');
 
-            if (await keystoreWindowClient.authorize(assumedPolicy)) {
+            if (await keyguardWindowClient.authorize(assumedPolicy)) {
                 authorized = true;
                 console.log('Authorization successfull');
             } else {
