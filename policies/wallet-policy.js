@@ -16,7 +16,7 @@ export default class WalletPolicy extends BasePolicy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
-            case 'getAddresses':
+            case 'getAccounts':
                 return true;
             case 'sign':
                 const { account, recipient, value, fee } = args;
@@ -32,11 +32,11 @@ export default class WalletPolicy extends BasePolicy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
-            case 'getAddresses':
+            case 'getAccounts':
                 return false;
             case 'sign':
                 const { account, recipient, value, fee } = args;
-                if (fee > this._limit) return true;
+                if (value + fee > this._limit) return true;
                 return false;
             default:
                 throw 'Unhandled method';

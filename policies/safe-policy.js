@@ -7,7 +7,7 @@ export default class SafePolicy extends BasePolicy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
-            case 'getAddresses':
+            case 'getAccounts':
                 return true;
             case 'sign':
                 const { account, recipient, value, fee } = args;
@@ -21,7 +21,7 @@ export default class SafePolicy extends BasePolicy {
     needsUi(method, args) {
         switch (method) {
             case 'createNewAccounts':
-            case 'getAddresses':
+            case 'getAccounts':
                 return false;
             case 'triggerAccountImport':
             case 'persistAccount':
