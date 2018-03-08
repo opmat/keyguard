@@ -5,13 +5,13 @@ import config from './config.js';
 
 class Demo {
     constructor() {
-        this.$network = document.querySelector('#network');
         this.$keyguard = document.querySelector('#keyguard');
+        this.$keyguard.src = config.keyguardSrc;
         this.launch();
     }
 
     async launch() {
-        this._keyguard = await RPC.Client(this.$keyguard.contentWindow, 'KeyguardApi');
+        this._keyguard = await RPC.Client(this.$keyguard.contentWindow, 'KeyguardApi', (new URL(config.keyguardSrc)).origin);
 
         let authorized = false;
         const assumedPolicy = new SafePolicy;
@@ -22,7 +22,7 @@ class Demo {
 
         if (!assumedPolicy.equals(grantedPolicy)) {
             const keyguardWindow = window.open(config.keyguardSrc);
-            const keyguardWindowClient = await RPC.Client(keyguardWindow, 'KeyguardApi');
+            const keyguardWindowClient = await RPC.Client(keyguardWindow, 'KeyguardApi', (new URL(config.keyguardSrc)).origin);
 
             if (await keyguardWindowClient.authorize(assumedPolicy)) {
                 authorized = true;

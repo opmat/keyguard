@@ -1,6 +1,5 @@
 const devConfig = {
-    keyguardSrc: '/libraries/keyguard/keyguard.html',
-    networkOrigin: location.origin
+    keyguardSrc: `${location.origin}/libraries/keyguard/keyguard.html`
 }
 
 const localConfig = {
@@ -8,8 +7,7 @@ const localConfig = {
 }
 
 const liveConfig = {
-    keyguardSrc: 'https://secure.nimiq.com/keyguard.html',
-    networkOrigin: 'https://network.nimiq.com'
+    keyguardSrc: 'https://secure.nimiq.com/keyguard.html'
 }
 
 export default devConfig;
