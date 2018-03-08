@@ -7,7 +7,7 @@ export default class ACL {
         return 'policies';
     }
 
-    static addACL(clazz) {
+    static addACL(clazz, getState) {
         const ClassWithAcl = class foo extends clazz {
             constructor() {
                 super();
@@ -47,11 +47,13 @@ export default class ACL {
 
                 if (!policyDescription) throw 'Not authorized';
 
-                const policy = Policy.get(policyDescription.name);
+                const policy = Policy.parse(policyDescription);
 
-                if (!policy.allows(functionName, args)) throw 'Not authorized';
+                const state = getState();
 
-                if (policy.needsUi(functionName, args)) {
+                if (!policy.allows(functionName, args, state)) throw 'Not authorized';
+
+                if (policy.needsUi(functionName, args, state)) {
                     if (this._isEmbedded) {
                         throw 'needs-ui';
                     } else {

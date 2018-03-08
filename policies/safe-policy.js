@@ -7,9 +7,10 @@ export default class SafePolicy extends BasePolicy {
             case 'createNewAccounts':
             case 'triggerAccountImport':
             case 'persistAccount':
-            case 'getAddresses':
+            case 'getAccounts':
                 return true;
             case 'sign':
+                // TODO how to get account type here?
                 const { account, recipient, value, fee } = args;
                 if (account.type === AccountType.High) return true;
                 break;
@@ -21,7 +22,7 @@ export default class SafePolicy extends BasePolicy {
     needsUi(method, args) {
         switch (method) {
             case 'createNewAccounts':
-            case 'getAddresses':
+            case 'getAccounts':
                 return false;
             case 'triggerAccountImport':
             case 'persistAccount':
