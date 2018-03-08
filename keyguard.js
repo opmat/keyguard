@@ -16,6 +16,8 @@ class Keystore {
             number: 123,
             type: AccountType.high
         });
+
+        // todo design internal architecture - e.g. use inner api class?
     }
 }
 
