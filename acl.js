@@ -8,7 +8,7 @@ export default class ACL {
         return 'policies';
     }
 
-    static addACL(clazz, getState) {
+    static addACL(clazz, getState, defaultPolicies) {
         const ClassWithAcl = class extends clazz {
             constructor() {
                 super();
@@ -19,10 +19,11 @@ export default class ACL {
                 this._appPolicies = storedPolicies ? ACL._parseAppPolicies(storedPolicies) : new Map();
 
                 // Init defaults
-                this._appPolicies.set(config.vaultOrigin, new Policy.predefined.SafePolicy());
-                // Don't overwrite existing WalletPolicy, so we keep the spending limit
-                if (!this._appPolicies.get(config.walletOrigin)) 
-                    this._appPolicies.set(config.walletOrigin, new Policy.predefined.WalletPolicy(1000));
+                for (const defaultPolicy of defaultPolicies){
+                    if (!this._appPolicies.get(defaultPolicy.origin)) {
+                       this._appPolicies.set(defaultPolicy.origin, defaultPolicy.policy);
+                    }
+                }
 
                 // Listen for policy changes from other instances
                 self.addEventListener('storage', ({key, newValue}) =>

@@ -1,5 +1,5 @@
 import { RPC, EventClient } from '/libraries/boruca-messaging/src/boruca.js';
-import WalletPolicy from '../policies/wallet-policy.js';
+import SafePolicy from '../policies/safe-policy.js';
 import Policy from '../policy.js';
 import config from './config.js';
 
@@ -14,7 +14,7 @@ class Demo {
         this._keyguard = await RPC.Client(this.$keyguard.contentWindow, 'KeystoreApi');
 
         let authorized = false;
-        const assumedPolicy = new WalletPolicy(1000);
+        const assumedPolicy = new SafePolicy;
         let grantedPolicy = await this._keyguard.getPolicy();
         grantedPolicy = grantedPolicy && Policy.parse(grantedPolicy);
 

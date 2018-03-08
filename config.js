@@ -1,10 +1,10 @@
 const localConfig = {
-    vaultOrigin: location.origin,
+    safeOrigin: location.origin,
     walletOrigin: location.origin
 }
 
 const liveConfig = {
-    vaultOrigin: 'https://vault.nimiq.com',
+    safeOrigin: 'https://safe.nimiq.com',
     walletOrigin: 'https://wallet.nimiq.com'
 }
 
