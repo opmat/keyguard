@@ -1,26 +1,27 @@
 import { RPC, EventClient } from '/libraries/boruca-messaging/src/boruca.js';
-import Policy from '../policies/policy.js';
+import WalletPolicy from '../policies/wallet-policy.js';
+import Policy from '../policy.js';
 import config from './config.js';
 
 class Demo {
     constructor() {
         this.$network = document.querySelector('#network');
-        this.$keystore = document.querySelector('#keystore');
+        this.$keyguard = document.querySelector('#keyguard');
         this.launch();
     }
 
     async launch() {
-        this._keystore = await RPC.Client(this.$keystore.contentWindow, 'KeystoreApi');
+        this._keyguard = await RPC.Client(this.$keyguard.contentWindow, 'KeystoreApi');
 
         let authorized = false;
-        const assumedPolicy = Policy.get('wallet', 1000);
-        let grantedPolicy = await this._keystore.getPolicy();
+        const assumedPolicy = new WalletPolicy(1000);
+        let grantedPolicy = await this._keyguard.getPolicy();
         grantedPolicy = grantedPolicy && Policy.parse(grantedPolicy);
 
         console.log(`Got policy: ${grantedPolicy}`);
 
         if (!assumedPolicy.equals(grantedPolicy)) {
-            const keystoreWindow = window.open(config.keystoreSrc);
+            const keystoreWindow = window.open(config.keyguardSrc);
             const keystoreWindowClient = await RPC.Client(keystoreWindow, 'KeystoreApi');
 
             if (await keystoreWindowClient.authorize(assumedPolicy)) {
@@ -39,7 +40,7 @@ class Demo {
 
         console.log('Now we are authorized');
 
-        const accounts = await this._keystore.getAccounts();
+        const accounts = await this._keyguard.getAccounts();
 
         console.log(`Accounts: ${accounts}`);
 

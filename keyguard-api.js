@@ -19,7 +19,7 @@ export default class KeystoreApi {
 
     // dummy
     async getAccounts() {
-        return ['wff']
+        return ['ffwf'];
         const accounts = await this._accountStore.list();
         return accounts.map(account => {
             account

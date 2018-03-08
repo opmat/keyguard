@@ -10,6 +10,7 @@ export default class SafePolicy extends BasePolicy {
             case 'getAccounts':
                 return true;
             case 'sign':
+                // TODO how to get account type here?
                 const { account, recipient, value, fee } = args;
                 if (account.type === AccountType.High) return true;
                 break;

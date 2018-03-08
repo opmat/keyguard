@@ -11,7 +11,7 @@ export default class WalletPolicy extends BasePolicy {
         return super.equals(otherPolicy) && this.limit === otherPolicy.limit;
     }
 
-    allows(method, args) {
+    allows(method, args, state) {
         switch (method) {
             case 'createNewAccounts':
             case 'triggerAccountImport':
@@ -19,15 +19,16 @@ export default class WalletPolicy extends BasePolicy {
             case 'getAccounts':
                 return true;
             case 'sign':
-                const { account, recipient, value, fee } = args;
-                if (account.type === AccountType.Low) return true;
+                const { accountNumber, recipient, value, fee } = args;
+                const account = state.accounts.get(accountNumber);
+                if (account && account.type === AccountType.Low) return true;
                 return false;
             default:
                 throw 'Unhandled method';
         }
     }
 
-    needsUi(method, args) {
+    needsUi(method, args, state) {
         switch (method) {
             case 'createNewAccounts':
             case 'triggerAccountImport':
