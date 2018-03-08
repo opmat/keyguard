@@ -1,6 +1,10 @@
-const localConfig = {
+const devConfig = {
     safeOrigin: location.origin,
     walletOrigin: location.origin
+}
+
+const localConfig = {
+
 }
 
 const liveConfig = {
@@ -8,4 +12,4 @@ const liveConfig = {
     walletOrigin: 'https://wallet.nimiq.com'
 }
 
-export default localConfig;
+export default devConfig;
