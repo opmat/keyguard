@@ -20,7 +20,8 @@ export default class ACL {
 
                 // Init defaults
                 this._appPolicies.set(config.vaultOrigin, new Policy.predefined.SafePolicy());
-                if (!this._appPolicies.get(config.walletOrigin)) // In case that the spending limit was adapted
+                // Don't overwrite existing WalletPolicy, so we keep the spending limit
+                if (!this._appPolicies.get(config.walletOrigin)) 
                     this._appPolicies.set(config.walletOrigin, new Policy.predefined.WalletPolicy(1000));
 
                 // Listen for policy changes from other instances
