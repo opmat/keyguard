@@ -9,7 +9,7 @@ export default class ACL {
     }
 
     static addACL(clazz) {
-        const ClassWithAcl = class foo extends clazz {
+        const ClassWithAcl = class extends clazz {
             constructor() {
                 super();
                 this._isEmbedded = self !== top;
@@ -51,11 +51,11 @@ export default class ACL {
             ClassWithAcl.prototype[functionName] = async function (callingWindow, callingOrigin, ...args) {
                 const policyDescription = this._appPolicies.get(callingOrigin);
 
-                if (!policyDescription) throw 'Not authorized';
+                if (!policyDescription) throw 'Not authorized from ' + callingOrigin;
 
                 const policy = Policy.get(policyDescription.name);
 
-                if (!policy.allows(functionName, args)) throw 'Not authorized';
+                if (!policy.allows(functionName, args)) throw 'Not authorized (function call with wrong number of arguments)';
 
                 if (policy.needsUi(functionName, args)) {
                     if (this._isEmbedded) {
