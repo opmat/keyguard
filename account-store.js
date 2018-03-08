@@ -1,22 +1,28 @@
 export default class AccountStore {
+
+    static get instance() {
+        this._instance = this._instance || new AccountStore();
+        return this._instance;
+    }
+
     /**
-     * @returns {Promise.<AccountStore>}
+     * @constructor
      */
-    constructor(dbName = 'wallet') {
-        /** @type {ObjectStore} */
-        this._accountStore = new Map();
+    constructor() {
+        /** @type {Map<string, Account>} */
+        this.accounts = new Map();
         /** @type {ObjectStore} */
         this._multiSigStore = null;
     }
 
     /**
      * @param {Address} address
-     * @param {Uint8Array|string} [key]
+     * @param {Uint8Array|string} key
      * @returns {Promise.<Wallet>}
      */
     async get(address, key) {
         const base64Address = address.toBase64();
-        const buf = await this._accountStore.get(base64Address);
+        const buf = await this.accounts.get(base64Address);
         if (key) {
             return Nimiq.Wallet.loadEncrypted(buf, key);
         }
@@ -38,7 +44,7 @@ export default class AccountStore {
         } else {
             buf = wallet.exportPlain();
         }
-        return this._accountStore.put(base64Address, buf);
+        return this.accounts.set(base64Address, buf);
     }
 
     /**
@@ -47,25 +53,17 @@ export default class AccountStore {
      */
     async remove(address) {
         const base64Address = address.toBase64();
-        const tx = this._accountStore.transaction();
+        // ??
+        const tx = this.accounts.transaction();
         await tx.remove(base64Address);
-        // Remove default address as well if they coincide.
-        let defaultAddress = await this._accountStore.get('default');
-        if (defaultAddress) {
-            defaultAddress = new Nimiq.Address(defaultAddress);
-            if (address.equals(defaultAddress)) {
-                await tx.remove('default');
-            }
-        }
         return tx.commit();
     }
 
     /**
-     * @returns {Promise<Array.<Address>>}
+     * @returns {Address[]}
      */
-    async list() {
-        const keys = await this._accountStore.keys();
-        return Array.from(keys).filter(key => key !== 'default').map(key => Nimiq.Address.fromBase64(key));
+    list() {
+        return [...this.accounts].map(key => Nimiq.Address.fromBase64(key));
     }
 
     /**
@@ -121,5 +119,4 @@ export default class AccountStore {
         return this._jdb.close();
     }
 }
-AccountStore._instance = null;
 AccountStore.VERSION = 2;

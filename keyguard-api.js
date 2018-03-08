@@ -1,13 +1,8 @@
-import AccountStore from './wip/account-store.js';
+import AccountStore from './account-store.js';
 
 export default class KeystoreApi {
 
     static get satoshis() { return 1e5 }
-
-    constructor() {
-        this.$ = Nimiq;
-        this._accountStore = new AccountStore();
-    }
 
     /*
      createNewAccounts
@@ -19,8 +14,7 @@ export default class KeystoreApi {
 
     // dummy
     async getAccounts() {
-        return ['ffwf'];
-        const accounts = await this._accountStore.list();
+        const accounts = await AccountStore.instance.list();
         return accounts.map(account => {
             account
         });
@@ -38,11 +32,11 @@ export default class KeystoreApi {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
         value = Math.round(Number(value) * KeystoreApi.satoshis);
         fee = Math.round(Number(fee) * KeystoreApi.satoshis);
-        return this.$.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
+        return Nimiq.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
     }
 
     get address() {
-        return this.$.wallet.address.toUserFriendlyAddress();
+        return Nimiq.wallet.address.toUserFriendlyAddress();
     }
 
     async generateKeyPair() {
@@ -54,38 +48,36 @@ export default class KeystoreApi {
             privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
         }
         const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
-        this.$.wallet = new Nimiq.Wallet(keyPair);
+        Nimiq.wallet = new Nimiq.Wallet(keyPair);
         if (persist) {
-            if(!this._walletStore) this.$.walletStore = await new Nimiq.WalletStore();
-            await this.$.walletStore.put(this.$.wallet);
+            AccountStore.instance.put(Nimiq.wallet);
         }
         return this.address;
     }
 
     async exportKey() {
-        return this.$.wallet.keyPair.privateKey.toHex();
+        return Nimiq.wallet.keyPair.privateKey.toHex();
     }
 
     async lockWallet(pin) {
-        return this.$.wallet.lock(pin);
+        return Nimiq.wallet.lock(pin);
     }
 
     async unlockWallet(pin) {
-        return this.$.wallet.unlock(pin);
+        return Nimiq.wallet.unlock(pin);
     }
 
     async importEncrypted(encryptedKey, password, persist = true) {
         encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey);
-        this.$.wallet = await Nimiq.Wallet.loadEncrypted(encryptedKey, password);
+        Nimiq.wallet = await Nimiq.Wallet.loadEncrypted(encryptedKey, password);
         if (persist) {
-            if(!this.$.walletStore) this.$.walletStore = await new Nimiq.WalletStore();
-            await this.$.walletStore.put(this.$.wallet);
+            AccountStore.instance.put(Nimiq.wallet);
         }
         return this.address;
     }
 
     async exportEncrypted(password) {
-        const exportedWallet = await this.$.wallet.exportEncrypted(password);
+        const exportedWallet = await Nimiq.wallet.exportEncrypted(password);
         return Nimiq.BufferUtils.toBase64(exportedWallet);
     }
 
