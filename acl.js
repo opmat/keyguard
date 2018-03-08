@@ -1,5 +1,6 @@
 import Reflection from '/libraries/nimiq-utils/reflection/reflection.js';
 import Policy from './policy.js';
+import config from './config.js';
 import UI from './ui.js';
 
 export default class ACL {
@@ -16,6 +17,11 @@ export default class ACL {
                 const storedPolicies = self.localStorage.getItem(ACL.STORAGE_KEY);
                 /** @type {Map<string,Policy> */
                 this._appPolicies = storedPolicies ? ACL._parseAppPolicies(storedPolicies) : new Map();
+
+                // Init defaults
+                this._appPolicies.set(config.vaultOrigin, new Policy.predefined.SafePolicy());
+                if (!this._appPolicies.get(config.walletOrigin)) // In case that the spending limit was adapted
+                    this._appPolicies.set(config.walletOrigin, new Policy.predefined.WalletPolicy(1000));
 
                 // Listen for policy changes from other instances
                 self.addEventListener('storage', ({key, newValue}) =>
