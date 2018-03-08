@@ -37,7 +37,7 @@ export default class WalletPolicy extends BasePolicy {
                 return false;
             case 'sign':
                 const { account, recipient, value, fee } = args;
-                if (fee > this._limit) return true;
+                if (value + fee > this._limit) return true;
                 return false;
             default:
                 throw 'Unhandled method';

@@ -1,5 +1,6 @@
 import Reflection from '/libraries/nimiq-utils/reflection/reflection.js';
 import Policy from './policy.js';
+import config from './config.js';
 import UI from './ui.js';
 
 export default class ACL {
@@ -8,7 +9,7 @@ export default class ACL {
     }
 
     static addACL(clazz, getState) {
-        const ClassWithAcl = class foo extends clazz {
+        const ClassWithAcl = class extends clazz {
             constructor() {
                 super();
                 this._isEmbedded = self !== top;
@@ -16,6 +17,12 @@ export default class ACL {
                 const storedPolicies = self.localStorage.getItem(ACL.STORAGE_KEY);
                 /** @type {Map<string,Policy> */
                 this._appPolicies = storedPolicies ? ACL._parseAppPolicies(storedPolicies) : new Map();
+
+                // Init defaults
+                this._appPolicies.set(config.vaultOrigin, new Policy.predefined.SafePolicy());
+                // Don't overwrite existing WalletPolicy, so we keep the spending limit
+                if (!this._appPolicies.get(config.walletOrigin)) 
+                    this._appPolicies.set(config.walletOrigin, new Policy.predefined.WalletPolicy(1000));
 
                 // Listen for policy changes from other instances
                 self.addEventListener('storage', ({key, newValue}) =>
@@ -45,11 +52,13 @@ export default class ACL {
             ClassWithAcl.prototype[functionName] = async function (callingWindow, callingOrigin, ...args) {
                 const policyDescription = this._appPolicies.get(callingOrigin);
 
-                if (!policyDescription) throw 'Not authorized';
+                if (!policyDescription) throw 'Not authorized from ' + callingOrigin;
 
                 const policy = Policy.parse(policyDescription);
-
+                
                 const state = getState();
+
+                if (!policy.allows(functionName, args, state)) throw 'Not authorized (function call with wrong number of arguments)';
 
                 if (!policy.allows(functionName, args, state)) throw 'Not authorized';
 
