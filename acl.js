@@ -61,8 +61,6 @@ export default class ACL {
 
                 if (!policy.allows(functionName, args, state)) throw 'Not authorized (function call with wrong number of arguments)';
 
-                if (!policy.allows(functionName, args, state)) throw 'Not authorized';
-
                 if (policy.needsUi(functionName, args, state)) {
                     if (this._isEmbedded) {
                         throw 'needs-ui';
