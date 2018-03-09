@@ -38,7 +38,9 @@ class Keyguard {
 
             const result = await this._api[method](origin, ...args)
 
-            this._eventServer.fire(`result-of-${id}`, result);
+            this._eventServer.fire(`result-of-${id}`, { id, data: result });
+        i
+
     }
 }
 
