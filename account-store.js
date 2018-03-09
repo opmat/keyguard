@@ -1,4 +1,4 @@
-export default class AccountStore {
+class AccountStore {
 
     static get instance() {
         this._instance = this._instance || new AccountStore();
@@ -120,3 +120,5 @@ export default class AccountStore {
     }
 }
 AccountStore.VERSION = 2;
+
+export default AccountStore.instance;

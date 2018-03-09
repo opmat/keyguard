@@ -1,4 +1,5 @@
 import AccountStore from './account-store.js';
+import State from './state.js';
 
 export default class KeyguardApi {
 
@@ -14,7 +15,7 @@ export default class KeyguardApi {
 
     // dummy
     async getAccounts() {
-        const accounts = await AccountStore.instance.list();
+        const accounts = await AccountStore.list();
         return accounts.map(account => {
             account
         });
@@ -27,6 +28,17 @@ export default class KeyguardApi {
         // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
     }
 
+    importAccount() {
+       //router.navigate('import');
+    }
+
+    exportAccount(accountNumber) {
+        State.exportAccount.number = accountNumber;
+        State.exportAccount.promise = new Promise((resolve) => {
+            State.exportAccount.resolve = resolve;
+        });
+        //Router.navigate(`export`);
+    }
 
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
