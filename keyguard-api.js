@@ -1,4 +1,5 @@
-import AccountStore from './account-store.js';
+import accountStore from './account-store.js';
+import state from './state.js';
 
 export default class KeyguardApi {
 
@@ -14,10 +15,22 @@ export default class KeyguardApi {
 
     // dummy
     async getAccounts() {
-        const accounts = await AccountStore.instance.list();
+        const accounts = await accountStore.list();
         return accounts.map(account => {
             account
         });
+    }
+
+    importAccount() {
+        //router.navigate('import');
+    }
+
+    exportAccount(accountNumber) {
+        state.exportAccount.number = accountNumber;
+        state.exportAccount.promise = new Promise((resolve) => {
+            state.exportAccount.resolve = resolve;
+        });
+        //Router.navigate(`export`);
     }
 
     // dummy
@@ -26,7 +39,6 @@ export default class KeyguardApi {
         return signature;
         // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
     }
-
 
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
@@ -50,7 +62,7 @@ export default class KeyguardApi {
         const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
         Nimiq.wallet = new Nimiq.Wallet(keyPair);
         if (persist) {
-            AccountStore.instance.put(Nimiq.wallet);
+            accountStore.put(Nimiq.wallet);
         }
         return this.address;
     }
@@ -71,7 +83,7 @@ export default class KeyguardApi {
         encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey);
         Nimiq.wallet = await Nimiq.Wallet.loadEncrypted(encryptedKey, password);
         if (persist) {
-            AccountStore.instance.put(Nimiq.wallet);
+            accountStore.put(Nimiq.wallet);
         }
         return this.address;
     }

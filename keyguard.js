@@ -1,17 +1,13 @@
 import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
 import KeyguardApi from './keyguard-api.js';
 import ACL from './acl.js';
-import AccountStore from './account-store.js';
 import SafePolicy from './policies/safe-policy.js';
 import WalletPolicy from './policies/wallet-policy.js';
 import config from './config.js';
+import state from './state.js';
 
 class Keyguard {
     constructor() {
-
-        this._state = {
-            accounts: AccountStore.instance.accounts
-        }
 
         const defaultPolicies = [
             {
@@ -25,7 +21,7 @@ class Keyguard {
         ];
 
 
-        RPC.Server(ACL.addACL(KeyguardApi, () => this._state, defaultPolicies), true);
+        RPC.Server(ACL.addACL(KeyguardApi, () => state, defaultPolicies), true);
     }
 }
 
