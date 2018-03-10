@@ -21,8 +21,10 @@ class Keyguard {
         ];
 
 
-        RPC.Server(ACL.addACL(KeyguardApi, () => state, defaultPolicies), true);
+        this._rpcServer = RPC.Server(ACL.addACL(KeyguardApi, () => state, defaultPolicies), true);
+
+        this._state = state;
     }
 }
 
-new Keyguard();
+window.keyguard = new Keyguard();

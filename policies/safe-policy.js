@@ -8,6 +8,7 @@ export default class SafePolicy extends BasePolicy {
             case 'triggerAccountImport':
             case 'persistAccount':
             case 'getAccounts':
+            case 'createVolatileAccounts':
                 return true;
             case 'sign':
                 // TODO how to get account type here?
@@ -23,6 +24,7 @@ export default class SafePolicy extends BasePolicy {
         switch (method) {
             case 'createNewAccounts':
             case 'getAccounts':
+            case 'createVolatileAccounts':
                 return false;
             case 'triggerAccountImport':
             case 'persistAccount':

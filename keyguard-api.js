@@ -40,6 +40,19 @@ export default class KeyguardApi {
         // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
     }
 
+    async createVolatileAccounts(number) {
+        for (let i = 0; i < number; i++) {
+           const keyPair = Nimiq.KeyPair.generate();
+           const account = {
+               publicKey: keyPair.publicKey,
+               privateKey: keyPair.privateKey
+           };
+           state.volatileAccounts.set(account.publicKey, account);
+        }
+
+        return state.volatileAccounts.map(account => account.publicKey);
+    }
+
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
         value = Math.round(Number(value) * KeyguardApi.satoshis);
@@ -49,10 +62,6 @@ export default class KeyguardApi {
 
     get address() {
         return Nimiq.wallet.address.toUserFriendlyAddress();
-    }
-
-    async generateKeyPair() {
-        return Nimiq.KeyPair.generate();
     }
 
     async importKey(privateKey, persist = true) {

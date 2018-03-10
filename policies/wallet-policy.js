@@ -17,6 +17,7 @@ export default class WalletPolicy extends BasePolicy {
             case 'triggerAccountImport':
             case 'persistAccount':
             case 'getAccounts':
+            case 'createVolatileAccounts':
                 return true;
             case 'sign':
                 const { accountNumber, recipient, value, fee } = args;
@@ -34,6 +35,7 @@ export default class WalletPolicy extends BasePolicy {
             case 'triggerAccountImport':
             case 'persistAccount':
             case 'getAccounts':
+            case 'createVolatileAccounts':
                 return false;
             case 'sign':
                 const { account, recipient, value, fee } = args;

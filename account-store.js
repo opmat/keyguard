@@ -8,11 +8,49 @@ class AccountStore {
     /**
      * @constructor
      */
-    constructor() {
-        /** @type {Map<string, Account>} */
-        this.accounts = new Map();
-        /** @type {ObjectStore} */
-        this._multiSigStore = null;
+    constructor(dbName = 'accounts') {
+        this._dbInitialized = new Promise((resolve, reject) => {
+            const request = self.indexedDB.open(dbName, AccountStore.VERSION);
+
+            request.onerror = () => reject(request.error);
+
+            request.onupgradeneeded = () => {
+                this._db = request.result;
+
+                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE, {keyPath: 'base64address'});
+
+                // todo later
+                this._multiSigStore = null;
+            };
+
+            request.onsuccess = () => {
+                this._db = request.result;
+                resolve();
+            }
+        });
+    }
+
+    _getStore(storeName) {
+        return new Promise(async (resolve, reject) => {
+            await this._dbInitialized;
+
+            const transaction = this._db.transaction([storeName], 'readwrite')
+
+            transaction.onerror = () => reject(transaction.error);
+
+            resolve(transaction.objectStore(storeName));
+        });
+    }
+
+    _getResult(request) {
+        return new Promise (async (resolve, reject)=> {
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    get _accountStore() {
+        return this._getStore(AccountStore.ACCOUNT_DATABASE);
     }
 
     /**
@@ -21,11 +59,21 @@ class AccountStore {
      * @returns {Promise.<Wallet>}
      */
     async get(address, key) {
+        await this._dbInitialized;
         const base64Address = address.toBase64();
-        const buf = await this.accounts.get(base64Address);
+        const request = (await this._accountStore).get(base64Address);
+        const buf = await this._getResult(request);
+
+        /*
+        const buf = await new Promise (async (resolve, reject)=> {
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });*/
+
         if (key) {
             return Nimiq.Wallet.loadEncrypted(buf, key);
         }
+
         return Nimiq.Wallet.loadPlain(buf);
     }
 
@@ -36,6 +84,7 @@ class AccountStore {
      * @returns {Promise}
      */
     async put(wallet, key, unlockKey) {
+        await this._dbInitialized;
         const base64Address = wallet.address.toBase64();
         /** @type {Uint8Array} */
         let buf = null;
@@ -44,7 +93,10 @@ class AccountStore {
         } else {
             buf = wallet.exportPlain();
         }
-        return this.accounts.set(base64Address, buf);
+
+        const request = (await this._accountStore).add(base64Address, buf);
+
+        return await this._getResult(request);
     }
 
     /**
@@ -52,8 +104,8 @@ class AccountStore {
      * @returns {Promise}
      */
     async remove(address) {
+        await this._dbInitialized;
         const base64Address = address.toBase64();
-        // ??
         const tx = this.accounts.transaction();
         await tx.remove(base64Address);
         return tx.commit();
@@ -62,8 +114,21 @@ class AccountStore {
     /**
      * @returns {Address[]}
      */
-    list() {
-        return [...this.accounts].map(key => Nimiq.Address.fromBase64(key));
+    async list() {
+        await this._dbInitialized;
+
+        const request = (await this._accountStore).getAll();
+
+        const accounts = await this._getResult(request);
+
+        /*
+        const accounts = await new Promise(resolve => {
+            const request = this._accountStore.getAll();
+            request.onsuccess = (event) => resolve(event.target.result);
+
+        });*/
+
+        return [...accounts].map(key => Nimiq.Address.fromBase64(key));
     }
 
     /**
@@ -72,6 +137,7 @@ class AccountStore {
      * @returns {Promise.<MultiSigWallet>}
      */
     async getMultiSig(address, key) {
+        await this._dbInitialized;
         const base64Address = address.toBase64();
         const buf = await this._multiSigStore.get(base64Address);
         if (key) {
@@ -87,6 +153,7 @@ class AccountStore {
      * @returns {Promise}
      */
     async putMultiSig(wallet, key, unlockKey) {
+        await this._dbInitialized;
         const base64Address = wallet.address.toBase64();
         /** @type {Uint8Array} */
         let buf = null;
@@ -102,7 +169,8 @@ class AccountStore {
      * @param {Address} address
      * @returns {Promise}
      */
-    removeMultiSig(address) {
+    async removeMultiSig(address) {
+        await this._dbInitialized;
         const base64Address = address.toBase64();
         return this._multiSigStore.remove(base64Address);
     }
@@ -111,14 +179,20 @@ class AccountStore {
      * @returns {Promise<Array.<Address>>}
      */
     async listMultiSig() {
+        await this._dbInitialized;
         const keys = await this._multiSigStore.keys();
         return Array.from(keys).map(key => Nimiq.Address.fromBase64(key));
     }
 
     close() {
-        return this._jdb.close();
+        return this._db.close();
     }
 }
+
 AccountStore.VERSION = 2;
+AccountStore.ACCOUNT_DATABASE = 'accounts';
+AccountStore.MULTISIG_WALLET_DATABASE = 'multisig-wallets';
 
 export default AccountStore.instance;
+
+// Todo: Differentiate between read and write access
