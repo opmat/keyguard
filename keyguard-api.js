@@ -41,27 +41,34 @@ export default class KeyguardApi {
     }
 
     async createVolatileAccounts(number) {
+        
+        state.volatileAccounts.clear();
+
         for (let i = 0; i < number; i++) {
-           const keyPair = Nimiq.KeyPair.generate();
+           const { publicKey, privateKey } = await Nimiq.KeyPair.generate();
+           const address = await publicKey.toAddress();
+           const userFriendlyAddress = address.toUserFriendlyAddress();
            const account = {
-               publicKey: keyPair.publicKey,
-               privateKey: keyPair.privateKey
+               userFriendlyAddress,
+               address,
+               publicKey,
+               privateKey
            };
-           state.volatileAccounts.set(account.publicKey, account);
+
+           state.volatileAccounts.set(userFriendlyAddress, account);
         }
 
-        return state.volatileAccounts.map(account => account.publicKey);
+        return [...state.volatileAccounts.keys()];
     }
+
+
+    // old
 
     async createTransaction(recipient, value, validityStartHeight, fee = 0) {
         const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
         value = Math.round(Number(value) * KeyguardApi.satoshis);
         fee = Math.round(Number(fee) * KeyguardApi.satoshis);
         return Nimiq.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
-    }
-
-    get address() {
-        return Nimiq.wallet.address.toUserFriendlyAddress();
     }
 
     async importKey(privateKey, persist = true) {
