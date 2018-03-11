@@ -17,7 +17,7 @@ class AccountStore {
             request.onupgradeneeded = () => {
                 this._db = request.result;
 
-                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE);
+                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE, { keyPath: '_userFriendlyAddress' });
 
                 // todo later
                 this._multiSigStore = null;
@@ -60,9 +60,10 @@ class AccountStore {
      */
     async get(address, key) {
         await this._dbInitialized;
-        const base64Address = address.toBase64();
-        const request = (await this._accountStore).get(base64Address);
-        const buf = await this._getResult(request);
+        const request = (await this._accountStore).get(address);
+        const account = await this._getResult(request);
+
+        return account;
 
         /*
         const buf = await new Promise (async (resolve, reject)=> {
@@ -85,16 +86,16 @@ class AccountStore {
      */
     async put(account, key, unlockKey) {
         await this._dbInitialized;
-        const base64Address = account.address.toBase64();
+        /*const base64Address = account.address.toBase64();
         /** @type {Uint8Array} */
-        let buf = null;
+        /*let buf = null;
         if (key) {
             buf = await account.exportEncrypted(key, unlockKey);
         } else {
             buf = account.exportPlain();
-        }
+        }*/
 
-        const request = (await this._accountStore).add(buf, account);
+        const request = (await this._accountStore).put(account);
 
         return await this._getResult(request);
     }
@@ -121,14 +122,13 @@ class AccountStore {
 
         const accounts = await this._getResult(request);
 
-        /*
-        const accounts = await new Promise(resolve => {
-            const request = this._accountStore.getAll();
-            request.onsuccess = (event) => resolve(event.target.result);
+        const result = [...accounts].map(account => ({
+            userFriendlyAddress: account._userFriendlyAddress,
+            address: account._address,
+            type: account._type
+        }));
 
-        });*/
-
-        return [...accounts].map(key => Nimiq.Address.fromBase64(key));
+        return result;
     }
 
     /**

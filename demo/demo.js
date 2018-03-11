@@ -1,7 +1,8 @@
-import { RPC, EventClient } from '/libraries/boruca-messaging/src/boruca.js';
+import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
 import SafePolicy from '../policies/safe-policy.js';
 import Policy from '../policy.js';
 import config from './config.js';
+import * as AccountType from '../accounts/account-type.js';
 
 class Demo {
     constructor() {
@@ -48,7 +49,7 @@ class Demo {
 
         console.log(`Volatile accounts: ${volatileAccounts}`);
 
-        await this._keyguard.persistAccount(volatileAccounts[0]);
+        await this._keyguard.persistAccount(volatileAccounts[0], AccountType.Low);
 
         accounts = await this._keyguard.getAccounts();
 

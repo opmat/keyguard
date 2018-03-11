@@ -1,5 +1,5 @@
 import BasePolicy from './base-policy.js';
-import * as AccountType from '../account-type.js';
+import * as AccountType from '../accounts/account-type.js';
 
 export default class SafePolicy extends BasePolicy {
     allows(method, args) {

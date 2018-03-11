@@ -1,11 +1,4 @@
 export default class Account {
-    static async create(keyPair) {
-        const account = new Account(keyPair);
-        account._address = await account._address;
-        return account;
-    }
-
-
     /**
      * @param {Uint8Array|string} buf
      * @return {Account}
@@ -23,10 +16,10 @@ export default class Account {
      * @param {Uint8Array|string} key
      * @return {Promise.<Account>}
      */
-    static async loadEncrypted(buf, key) {
+    static loadEncrypted(buf, key) {
         if (typeof buf === 'string') buf = BufferUtils.fromHex(buf);
         if (typeof key === 'string') key = BufferUtils.fromAscii(key);
-        return new Account(await Nimiq.KeyPair.fromEncrypted(new SerialBuffer(buf), key));
+        return new Account(Nimiq.KeyPair.fromEncrypted(new SerialBuffer(buf), key));
     }
 
     /**
@@ -34,11 +27,13 @@ export default class Account {
      * @param {KeyPair} keyPair KeyPair owning this Account
      * @returns {Account} A newly generated Account
      */
-    constructor(keyPair) {
+    constructor(keyPair, type) {
         /** @type {KeyPair} */
         this._keyPair = keyPair;
         /** @type {Address} */
         this._address = this._keyPair.publicKey.toAddress();
+        this._userFriendlyAddress = this.address.toUserFriendlyAddress();
+        this._type = type;
     }
 
     /**
@@ -116,6 +111,10 @@ export default class Account {
         return this._address;
     }
 
+    get userFriendlyAddress() {
+        return this._userFriendlyAddress;
+    }
+
     /**
      * The public key of the Account owner
      * @type {PublicKey}
@@ -127,5 +126,9 @@ export default class Account {
     /** @type {KeyPair} */
     get keyPair() {
         return this._keyPair;
+    }
+
+    get type() {
+        return this._type;
     }
 }

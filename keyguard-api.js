@@ -1,5 +1,5 @@
 import Account from './accounts/account.js';
-import accountStore from './account-store.js';
+import accountStore from './accounts/account-store.js';
 import state from './state.js';
 
 export default class KeyguardApi {
@@ -16,9 +16,7 @@ export default class KeyguardApi {
     // dummy
     async getAccounts() {
         const accounts = await accountStore.list();
-        return accounts.map(account => {
-            account
-        });
+        return accounts;
     }
 
     importAccount() {
@@ -40,45 +38,25 @@ export default class KeyguardApi {
         // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
     }
 
-    async createVolatileAccounts2(number) {
+    createVolatileAccounts(number) {
 
         state.volatileAccounts.clear();
 
         for (let i = 0; i < number; i++) {
-           const { publicKey, privateKey } = await Nimiq.KeyPair.generate();
-           const address = await publicKey.toAddress();
-           const userFriendlyAddress = address.toUserFriendlyAddress();
-           const account = {
-               userFriendlyAddress,
-               address,
-               publicKey,
-               privateKey
-           };
+            const keyPair = Nimiq.KeyPair.generate();
+            const account = new Account(keyPair);
 
-           state.volatileAccounts.set(userFriendlyAddress, account);
+            state.volatileAccounts.set(account.userFriendlyAddress, account);
         }
 
         return [...state.volatileAccounts.keys()];
     }
 
-    async createVolatileAccounts(number) {
-
-        state.volatileAccounts.clear();
-
-        for (let i = 0; i < number; i++) {
-            const keyPair = await Nimiq.KeyPair.generate();
-            const account = await Account.create(keyPair);
-            const userFriendlyAddress = account.address.toUserFriendlyAddress();
-
-            state.volatileAccounts.set(userFriendlyAddress, account);
-        }
-
-        return [...state.volatileAccounts.keys()];
-    }
-
-    async persistAccount(userFriendlyAddress) {
+    async persistAccount(userFriendlyAddress, accountType) {
 
         const account = state.volatileAccounts.get(userFriendlyAddress);
+
+        account._type = accountType;
 
         if (!account) throw new Error('Account not found');
 
@@ -103,36 +81,34 @@ export default class KeyguardApi {
             privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
         }
         const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
-        Nimiq.wallet = new Nimiq.Wallet(keyPair);
+        const account = new Account(keyPair);
         if (persist) {
-            accountStore.put(Nimiq.wallet);
+            await accountStore.put(account);
         }
-        return this.address;
+        return account.userFriendlyAddress;
     }
 
-    async exportKey() {
-        return Nimiq.wallet.keyPair.privateKey.toHex();
+    async lockAccount(accountNumber, pin) {
+        const account = accountStore.get(accountNumber);
+        return account.lock(pin);
     }
 
-    async lockWallet(pin) {
-        return Nimiq.wallet.lock(pin);
-    }
-
-    async unlockWallet(pin) {
-        return Nimiq.wallet.unlock(pin);
+    async unlockAccount(accountNumber, pin) {
+        const account = accountStore.get(accountNumber);
+        return account.unlock(pin);
     }
 
     async importEncrypted(encryptedKey, password, persist = true) {
         encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey);
-        Nimiq.wallet = await Nimiq.Wallet.loadEncrypted(encryptedKey, password);
+        const account = Account.loadEncrypted(encryptedKey, password);
         if (persist) {
-            accountStore.put(Nimiq.wallet);
+            accountStore.put(account);
         }
-        return this.address;
+        return account.userFriendlyAddress;
     }
 
     async exportEncrypted(password) {
-        const exportedWallet = await Nimiq.wallet.exportEncrypted(password);
+        const exportedWallet = Account.exportEncrypted(password);
         return Nimiq.BufferUtils.toBase64(exportedWallet);
     }
 

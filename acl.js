@@ -21,7 +21,7 @@ export default class ACL {
                 // Init defaults
                 for (const defaultPolicy of defaultPolicies){
                     if (!this._appPolicies.get(defaultPolicy.origin)) {
-                       this._appPolicies.set(defaultPolicy.origin, defaultPolicy.policy);
+                        this._appPolicies.set(defaultPolicy.origin, defaultPolicy.policy);
                     }
                 }
 
@@ -30,11 +30,11 @@ export default class ACL {
                     key === ACL.STORAGE_KEY && (this._appPolicies = ACL._parseAppPolicies(newValue)));
             }
 
-            getPolicy(callingWindow, callingOrigin) {
+            getPolicy(callingOrigin) {
                 return this._appPolicies.get(callingOrigin);
             }
 
-            async authorize(callingWindow, callingOrigin, policy) {
+            async authorize(callingOrigin, policy) {
                 // abort if embedded
                 if (this._isEmbedded) throw 'Authorization cannot be requested in iframe';
 
@@ -50,18 +50,16 @@ export default class ACL {
         }
 
         for (const functionName of Reflection.userFunctions(clazz.prototype)) {
-            ClassWithAcl.prototype[functionName] = async function (callingWindow, callingOrigin, ...args) {
+            ClassWithAcl.prototype[functionName] = (async function (callingOrigin, ...args) {
                 const policyDescription = this._appPolicies.get(callingOrigin);
 
                 if (!policyDescription) throw 'Not authorized from ' + callingOrigin;
 
                 const policy = Policy.parse(policyDescription);
-                
+
                 const state = getState();
 
                 if (!policy.allows(functionName, args, state)) throw 'Not authorized (function call with wrong number of arguments)';
-
-                if (!policy.allows(functionName, args, state)) throw 'Not authorized';
 
                 if (policy.needsUi(functionName, args, state)) {
                     if (this._isEmbedded) {
@@ -73,11 +71,11 @@ export default class ACL {
                 }
 
                 return clazz.prototype[functionName](...args);
-            }
+            });
         }
 
         // keep class name of clazz
-        Object.defineProperty (ClassWithAcl, 'name', {value: clazz.name});
+        Object.defineProperty(ClassWithAcl, 'name', {value: clazz.name});
 
         return ClassWithAcl;
     }
@@ -90,5 +88,3 @@ export default class ACL {
         }
     }
 }
-
-// policy short description => detailed interpretation

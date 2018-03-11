@@ -27,4 +27,9 @@ class Keyguard {
     }
 }
 
-window.keyguard = new Keyguard();
+(async function() {
+    // to be removed
+    await Nimiq.load();
+    window.keyguard = new Keyguard();
+})();
+
