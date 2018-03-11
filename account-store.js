@@ -17,7 +17,7 @@ class AccountStore {
             request.onupgradeneeded = () => {
                 this._db = request.result;
 
-                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE, {keyPath: 'base64address'});
+                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE);
 
                 // todo later
                 this._multiSigStore = null;
@@ -78,23 +78,23 @@ class AccountStore {
     }
 
     /**
-     * @param {Wallet} wallet
+     * @param {Wallet} account
      * @param {Uint8Array|string} [key]
      * @param {Uint8Array|string} [unlockKey]
      * @returns {Promise}
      */
-    async put(wallet, key, unlockKey) {
+    async put(account, key, unlockKey) {
         await this._dbInitialized;
-        const base64Address = wallet.address.toBase64();
+        const base64Address = account.address.toBase64();
         /** @type {Uint8Array} */
         let buf = null;
         if (key) {
-            buf = await wallet.exportEncrypted(key, unlockKey);
+            buf = await account.exportEncrypted(key, unlockKey);
         } else {
-            buf = wallet.exportPlain();
+            buf = account.exportPlain();
         }
 
-        const request = (await this._accountStore).add(base64Address, buf);
+        const request = (await this._accountStore).add(buf, account);
 
         return await this._getResult(request);
     }

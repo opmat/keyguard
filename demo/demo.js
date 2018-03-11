@@ -40,10 +40,19 @@ class Demo {
 
         console.log('Now we are authorized');
 
-        const accounts = await this._keyguard.getAccounts();
+        let accounts = await this._keyguard.getAccounts();
 
         console.log(`Accounts: ${accounts}`);
 
+        const volatileAccounts = await this._keyguard.createVolatileAccounts(2);
+
+        console.log(`Volatile accounts: ${volatileAccounts}`);
+
+        await this._keyguard.persistAccount(volatileAccounts[0]);
+
+        accounts = await this._keyguard.getAccounts();
+
+        console.log(`Accounts after persisting first volatile account: ${accounts}`);
     }
 }
 

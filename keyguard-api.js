@@ -1,3 +1,4 @@
+import Account from './accounts/account.js';
 import accountStore from './account-store.js';
 import state from './state.js';
 
@@ -6,7 +7,6 @@ export default class KeyguardApi {
     static get satoshis() { return 1e5 }
 
     /*
-     createNewAccounts
      triggerAccountImport
      persistAccount
      getAccounts
@@ -40,8 +40,8 @@ export default class KeyguardApi {
         // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
     }
 
-    async createVolatileAccounts(number) {
-        
+    async createVolatileAccounts2(number) {
+
         state.volatileAccounts.clear();
 
         for (let i = 0; i < number; i++) {
@@ -61,6 +61,33 @@ export default class KeyguardApi {
         return [...state.volatileAccounts.keys()];
     }
 
+    async createVolatileAccounts(number) {
+
+        state.volatileAccounts.clear();
+
+        for (let i = 0; i < number; i++) {
+            const keyPair = await Nimiq.KeyPair.generate();
+            const account = await Account.create(keyPair);
+            const userFriendlyAddress = account.address.toUserFriendlyAddress();
+
+            state.volatileAccounts.set(userFriendlyAddress, account);
+        }
+
+        return [...state.volatileAccounts.keys()];
+    }
+
+    async persistAccount(userFriendlyAddress) {
+
+        const account = state.volatileAccounts.get(userFriendlyAddress);
+
+        if (!account) throw new Error('Account not found');
+
+        if (!await accountStore.put(account)) {
+            throw new Error('Account could not be persisted');
+        }
+
+        return true;
+    }
 
     // old
 

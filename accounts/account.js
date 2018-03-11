@@ -1,39 +1,38 @@
-export default class KeyguardApi {
-    /**
-     * Create a new Wallet.
-     * @returns {Promise.<Wallet>} Newly created Wallet.
-     */
-    static async generate() {
-        return new Wallet(Nimiq.KeyPair.generate());
+export default class Account {
+    static async create(keyPair) {
+        const account = new Account(keyPair);
+        account._address = await account._address;
+        return account;
     }
+
 
     /**
      * @param {Uint8Array|string} buf
-     * @return {Wallet}
+     * @return {Account}
      */
     static loadPlain(buf) {
         if (typeof buf === 'string') buf = BufferUtils.fromHex(buf);
         if (!buf || buf.byteLength === 0) {
-            throw new Error('Invalid wallet seed');
+            throw new Error('Invalid Account seed');
         }
-        return new Wallet(KeyPair.unserialize(new SerialBuffer(buf)));
+        return new Account(KeyPair.unserialize(new SerialBuffer(buf)));
     }
 
     /**
      * @param {Uint8Array|string} buf
      * @param {Uint8Array|string} key
-     * @return {Promise.<Wallet>}
+     * @return {Promise.<Account>}
      */
     static async loadEncrypted(buf, key) {
         if (typeof buf === 'string') buf = BufferUtils.fromHex(buf);
         if (typeof key === 'string') key = BufferUtils.fromAscii(key);
-        return new Wallet(await KeyPair.fromEncrypted(new SerialBuffer(buf), key));
+        return new Account(await Nimiq.KeyPair.fromEncrypted(new SerialBuffer(buf), key));
     }
 
     /**
-     * Create a new Wallet object.
-     * @param {KeyPair} keyPair KeyPair owning this Wallet.
-     * @returns {Wallet} A newly generated Wallet.
+     * Create a new Account object.
+     * @param {KeyPair} keyPair KeyPair owning this Account
+     * @returns {Account} A newly generated Account
      */
     constructor(keyPair) {
         /** @type {KeyPair} */
@@ -43,7 +42,7 @@ export default class KeyguardApi {
     }
 
     /**
-     * Create a Transaction that is signed by the owner of this Wallet.
+     * Create a Transaction that is signed by the owner of this Account
      * @param {Address} recipient Address of the transaction receiver
      * @param {number} value Number of Satoshis to send.
      * @param {number} fee Number of Satoshis to donate to the Miner.
@@ -102,15 +101,15 @@ export default class KeyguardApi {
     }
 
     /**
-     * @param {Wallet} o
+     * @param {Account} o
      * @return {boolean}
      */
     equals(o) {
-        return o instanceof Wallet && this.keyPair.equals(o.keyPair) && this.address.equals(o.address);
+        return o instanceof Account && this.keyPair.equals(o.keyPair) && this.address.equals(o.address);
     }
 
     /**
-     * The address of the Wallet owner.
+     * The address of the Account owner.
      * @type {Address}
      */
     get address() {
@@ -118,7 +117,7 @@ export default class KeyguardApi {
     }
 
     /**
-     * The public key of the Wallet owner
+     * The public key of the Account owner
      * @type {PublicKey}
      */
     get publicKey() {

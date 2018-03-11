@@ -21,13 +21,14 @@ export default class SafePolicy extends BasePolicy {
     }
 
     needsUi(method, args) {
+        // todo persistAccount => true (debugging now)
         switch (method) {
             case 'createNewAccounts':
             case 'getAccounts':
             case 'createVolatileAccounts':
+            case 'persistAccount':
                 return false;
             case 'triggerAccountImport':
-            case 'persistAccount':
             case 'sign':
                 return true;
             default:

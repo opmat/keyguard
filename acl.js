@@ -30,11 +30,11 @@ export default class ACL {
                     key === ACL.STORAGE_KEY && (this._appPolicies = ACL._parseAppPolicies(newValue)));
             }
 
-            getPolicy(callingOrigin) {
+            getPolicy(callingWindow, callingOrigin) {
                 return this._appPolicies.get(callingOrigin);
             }
 
-            async authorize(callingOrigin, policy) {
+            async authorize(callingWindow, callingOrigin, policy) {
                 // abort if embedded
                 if (this._isEmbedded) throw 'Authorization cannot be requested in iframe';
 
@@ -50,7 +50,7 @@ export default class ACL {
         }
 
         for (const functionName of Reflection.userFunctions(clazz.prototype)) {
-            ClassWithAcl.prototype[functionName] = async function (callingOrigin, ...args) {
+            ClassWithAcl.prototype[functionName] = async function (callingWindow, callingOrigin, ...args) {
                 const policyDescription = this._appPolicies.get(callingOrigin);
 
                 if (!policyDescription) throw 'Not authorized from ' + callingOrigin;
@@ -60,6 +60,8 @@ export default class ACL {
                 const state = getState();
 
                 if (!policy.allows(functionName, args, state)) throw 'Not authorized (function call with wrong number of arguments)';
+
+                if (!policy.allows(functionName, args, state)) throw 'Not authorized';
 
                 if (policy.needsUi(functionName, args, state)) {
                     if (this._isEmbedded) {
