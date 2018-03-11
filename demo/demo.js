@@ -1,6 +1,6 @@
 import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
-import SafePolicy from '../policies/safe-policy.js';
-import Policy from '../policy.js';
+import SafePolicy from '../access-control/safe-policy.js';
+import Policy from '../access-control/policy.js';
 import config from './config.js';
 import * as AccountType from '../accounts/account-type.js';
 
@@ -43,7 +43,7 @@ class Demo {
 
         let accounts = await this._keyguard.getAccounts();
 
-        console.log(`Accounts: ${accounts}`);
+        console.log(`Accounts: ${JSON.stringify(accounts)}`);
 
         const volatileAccounts = await this._keyguard.createVolatileAccounts(2);
 
@@ -53,7 +53,7 @@ class Demo {
 
         accounts = await this._keyguard.getAccounts();
 
-        console.log(`Accounts after persisting first volatile account: ${accounts}`);
+        console.log(`Accounts after persisting first volatile account: ${JSON.stringify(accounts)}`);
     }
 }
 

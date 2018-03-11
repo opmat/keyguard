@@ -1,14 +1,14 @@
 import Reflection from '/libraries/nimiq-utils/reflection/reflection.js';
 import Policy from './policy.js';
-import config from './config.js';
-import UI from './ui.js';
+import config from '../config.js';
+import UI from '../ui.js';
 
 export default class ACL {
     static get STORAGE_KEY() {
         return 'policies';
     }
 
-    static addACL(clazz, getState, defaultPolicies) {
+    static addAccessControl(clazz, getState, defaultPolicies) {
         const ClassWithAcl = class extends clazz {
             constructor() {
                 super();

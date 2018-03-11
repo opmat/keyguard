@@ -1,8 +1,8 @@
 import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
 import KeyguardApi from './keyguard-api.js';
-import ACL from './acl.js';
-import SafePolicy from './policies/safe-policy.js';
-import WalletPolicy from './policies/wallet-policy.js';
+import AccessControl from './access-control/access-control.js';
+import SafePolicy from './access-control/safe-policy.js';
+import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
 import state from './state.js';
 
@@ -20,10 +20,7 @@ class Keyguard {
             }
         ];
 
-
-        this._rpcServer = RPC.Server(ACL.addACL(KeyguardApi, () => state, defaultPolicies), true);
-
-        this._state = state;
+        RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => state, defaultPolicies), true);
     }
 }
 

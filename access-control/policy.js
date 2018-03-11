@@ -1,5 +1,5 @@
-import WalletPolicy from './policies/wallet-policy.js';
-import SafePolicy from './policies/safe-policy.js';
+import WalletPolicy from './wallet-policy.js';
+import SafePolicy from './safe-policy.js';
 
 export default class Policy {
 
