@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XPersistAccount from './elements/x-persist-account.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
-import XPasswordInput from '/elements/x-password-input/x-password-input.js';
+import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XRouter from '/elements/x-router/x-router.js';
 
 export default class XKeyguardApp extends XElement {
@@ -15,7 +15,7 @@ export default class XKeyguardApp extends XElement {
         <x-router>
           <x-persist-account x-route="persist">
             <x-identicon></x-identicon>
-            <x-password-input></x-password-input>
+            <x-password-setter></x-password-setter>
             <button>Confirm</button>
           </x-persist-account>
           <main x-route="/">
@@ -26,7 +26,7 @@ export default class XKeyguardApp extends XElement {
     }
 
     children() {
-        return [ XRouter, XPersistAccount, XIdenticon, XPasswordInput ];
+        return [ XRouter, XPersistAccount, XIdenticon, XPasswordSetter ];
     }
 
     onCreate() {

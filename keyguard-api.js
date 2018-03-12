@@ -1,15 +1,19 @@
+import { bindActionCreators } from '/libraries/redux/src/index.js';
 import Account from './accounts/account.js';
 import accountStore from './accounts/account-store.js';
 import store from './store/store.js';
+import { addVolatile, clearVolatile } from './store/accounts-reducer.js';
 
 export default class KeyguardApi {
 
     static get satoshis() { return 1e5 }
 
+    constructor() {
+        this.actions = bindActionCreators({addVolatile, clearVolatile}, store.dispatch);
+    }
+
     /*
      triggerAccountImport
-     persistAccount
-     getAccounts
      sign
      */
 
@@ -24,37 +28,37 @@ export default class KeyguardApi {
     }
 
     exportAccount(accountNumber) {
-        state.exportAccount.number = accountNumber;
+        /*state.exportAccount.number = accountNumber;
         state.exportAccount.promise = new Promise((resolve) => {
             state.exportAccount.resolve = resolve;
-        });
-        //Router.navigate(`export`);
+        });*/
+        //Router.navigate(`export/${accountNumber}`);
     }
 
     // dummy
     async sign(sender, recipient, value, fee) {
         const signature = 'mySign';
         return signature;
-        // TODO: Either create transaction here, or ACL has to know how to get value out of Transaction.
     }
 
     createVolatileAccounts(number) {
 
-        state.volatileAccounts.clear();
+        this.actions.clearVolatile();
 
         for (let i = 0; i < number; i++) {
             const keyPair = Nimiq.KeyPair.generate();
             const account = new Account(keyPair);
 
-            state.volatileAccounts.set(account.userFriendlyAddress, account);
+            this.actions.addVolatile(account);
         }
 
-        return [...state.volatileAccounts.keys()];
+        const accounts = store.getState().accounts.volatileAccounts;
+        return [...accounts.keys()]
     }
 
     async persistAccount(userFriendlyAddress, accountType) {
 
-        const account = state.volatileAccounts.get(userFriendlyAddress);
+        const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
 
         account._type = accountType;
 
