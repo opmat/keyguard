@@ -1,3 +1,4 @@
 @import "/libraries/nimiq-style/nimiq-style.css";
 @import "/elements/x-router/x-router.css";
 @import "./ui/x-keyguard-app.css";
+@import "/elements/x-password-input/x-password-input.css";
