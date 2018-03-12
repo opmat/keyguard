@@ -2,6 +2,7 @@ export const TypeKeys = {
     SET_PASSWORD: 'userInputs/setPassword',
     SET_LABEL: 'userInputs/setLabel',
     CONFIRM: 'userInputs/confirm',
+    PERSIST: 'userInputs/persist',
     CLEAR: 'userInputs/clear'
 };
 
@@ -57,10 +58,25 @@ export function setLabel(label) {
     }
 }
 
-export function confirm(confirmed) {
+export function persist(password, label) {
+    return {
+        type: TypeKeys.PERSIST,
+        password,
+        label
+    }
+}
+
+export function confirm() {
     return {
         type: TypeKeys.CONFIRM,
-        confirmed
+        confirmed: true
+    }
+}
+
+export function deny() {
+    return {
+        type: TypeKeys.CONFIRM,
+        confirmed: false
     }
 }
 

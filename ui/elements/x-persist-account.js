@@ -1,13 +1,18 @@
 import XElement from '/libraries/x-element/x-element.js';
 import store from '../../store/store.js';
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-//import { add } from '../../store/sample-reducer.js';
+import { setPassword } from '../../store/user-inputs.js';
 
 export default class XPersistAccount extends XElement {
 
     onCreate() {
-        this.$button = this.$('button');
+        this.actions = bindActionCreators({setPassword}, store.dispatch);
+    }
 
-        //this.$button.addEventListener('click', () => actions.add('efwf', 1));
+    listeners() {
+        return {
+            'x-password-setter-valid': 'actions.setPassword'
+        }
+
     }
 }
