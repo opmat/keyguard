@@ -2,14 +2,20 @@ import { bindActionCreators } from '/libraries/redux/src/index.js';
 import Account from './accounts/account.js';
 import accountStore from './accounts/account-store.js';
 import store from './store/store.js';
-import { addVolatile, clearVolatile } from './store/accounts-reducer.js';
+import { addVolatile, clearVolatile } from './store/accounts.js';
+import { clear as clearUserInputs } from './store/user-inputs.js';
+import XRouter from '/elements/x-router/x-router.js';
 
 export default class KeyguardApi {
 
     static get satoshis() { return 1e5 }
 
     constructor() {
-        this.actions = bindActionCreators({addVolatile, clearVolatile}, store.dispatch);
+        this.actions = bindActionCreators({
+            addVolatile,
+            clearVolatile,
+            clearUserInputs
+        }, store.dispatch);
     }
 
     /*
@@ -63,6 +69,28 @@ export default class KeyguardApi {
         account._type = accountType;
 
         if (!account) throw new Error('Account not found');
+
+        const password = await new Promise((resolve, reject) => {
+
+            store.subscribe(state => {
+                const passwordFromUI = state.userInputs.password;
+                const confirmed = state.userInputs.confirmed;
+
+                if (passwordFromUI) {
+                    this.actions.clearUserInputs();
+                    resolve(passwordFromUI);
+                }
+
+                if (!confirmed) {
+                    this.actions.clearUserInputs();
+                    reject('User denied action');
+                }
+            });
+
+            XRouter.root.goTo('persist');
+        });
+
+        // todo encrypt key with password
 
         if (!await accountStore.put(account)) {
             throw new Error('Account could not be persisted');
