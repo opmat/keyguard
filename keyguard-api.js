@@ -1,6 +1,6 @@
 import Account from './accounts/account.js';
 import accountStore from './accounts/account-store.js';
-import state from './state.js';
+import store from './store/store.js';
 
 export default class KeyguardApi {
 

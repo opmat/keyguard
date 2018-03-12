@@ -3,6 +3,20 @@
 <head>
     <title>Nimiq Keyguard</title>
     <script src="https://cdn.nimiq-network.com/branches/master/nimiq.js"></script>
+    <!-- PWA Configs -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="/libraries/nimiq-style/icons/favicon.ico">
+    <!-- Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#536dfe">
+    <meta name="google" content="notranslate">
+    <!-- iOS ( See: https://developer.apple.com/libraries/content/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html ) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src http: https: data:; child-src 'none';">
+    <link rel="apple-touch-icon" href="pwa/icons/apple-touch-icon.png">
+    <link rel="apple-touch-startup-image" href="pwa/icons/icon-512x512.png">
+    <link rel="stylesheet" href="keyguard.css">
 </head>
 <body>
 <script src="keyguard.js" type="module"></script>
