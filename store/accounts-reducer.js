@@ -1,13 +1,12 @@
 export const TypeKeys = {
-    ADD: 'demo/add',
-    REMOVE: 'demo/remove'
+    ADD: 'accounts/add',
+    CLEAR: 'accounts/clear'
 };
 
 export function reducer(state, action) {
     if (state === undefined) {
         return {
-            myMap: new Map(),
-            counter: 0
+            volatileAccounts: new Map()
         }
     }
 
@@ -15,15 +14,13 @@ export function reducer(state, action) {
         case TypeKeys.ADD:
             return {
                 ...state,
-                myMap: new Map(state.myMap).set(action.key, action.value),
-                counter: state.counter + 1
+                volatileAccounts: new Map(state.volatileAccounts).set(action.account.userFriendlyAddress, action.account)
             };
 
-        case TypeKeys.REMOVE:
+        case TypeKeys.CLEAR:
             return {
                 ...state,
-                myMap: new Map(state.myMap).delete(key),
-                counter: state.counter - 1
+                volatileAccounts: new Map()
             };
 
         default:
@@ -31,17 +28,15 @@ export function reducer(state, action) {
     }
 }
 
-export function add(key, value) {
+export function addVolatile(account) {
     return {
         type: TypeKeys.ADD,
-        key,
-        value
+        account
     }
 }
 
-export function remove(key) {
+export function clearVolatile() {
     return {
-        type: TypeKeys.REMOVE,
-        key
+        type: TypeKeys.CLEAR
     }
 }

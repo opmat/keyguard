@@ -6,9 +6,7 @@ import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
 import state from './state.js';
 import XKeyguardApp from './ui/x-keyguard-app.js';
-import { bindActionCreators } from '/libraries/redux/src/index.js';
-import { Store, default as store } from './store/store.js';
-import { add, remove } from './store/sample-reducer.js';
+import store from './store/store.js';
 
 class Keyguard {
     constructor() {
@@ -27,14 +25,6 @@ class Keyguard {
         RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => state, defaultPolicies), true);
 
         window.app = XKeyguardApp.launch();
-
-        /*
-        Store.initialize({
-            sample: {
-                myMap: new Map(),
-                counter: 5
-            }
-        });*/
 
         function update () {
             console.log('state change detected');
