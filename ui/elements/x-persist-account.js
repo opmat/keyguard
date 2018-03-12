@@ -4,15 +4,16 @@ import { bindActionCreators } from '/libraries/redux/src/index.js';
 import { add } from '../../store/sample-reducer.js';
 
 export default class XPersistAccount extends XElement {
-   onCreate() {
-       this.$button = this.$('button');
 
-       const actions = bindActionCreators({add}, store.dispatch);
+    onCreate() {
+        this.$button = this.$('button');
 
-       store.getState();
+        const actions = bindActionCreators({ add }, store.dispatch);
 
-       actions.add('foo', 5);
+        store.getState();
 
-       this.$button.addEventListener('click', () => actions.add('efwf', 1));
-   }
+        actions.add('foo', 5);
+
+        this.$button.addEventListener('click', () => actions.add('efwf', 1));
+    }
 }
