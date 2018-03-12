@@ -16,7 +16,7 @@ export function reducer(state, action) {
             return {
                 ...state,
                 myMap: new Map(state.myMap).set(action.key, action.value),
-                counter: state. counter + 1
+                counter: state.counter + 1
             };
 
         case TypeKeys.REMOVE:
