@@ -2,17 +2,17 @@ import BasePolicy from './base-policy.js';
 import * as AccountType from '../accounts/account-type.js';
 
 export default class SafePolicy extends BasePolicy {
-    allows(method, args) {
+    allows(method, args, state) {
         switch (method) {
             case 'createNewAccounts':
             case 'triggerAccountImport':
-            case 'persistAccount':
             case 'getAccounts':
             case 'createVolatileAccounts':
+            case 'persistAccount':
                 return true;
             case 'sign':
-                // TODO how to get account type here?
-                const { account, recipient, value, fee } = args;
+                const { accountNumber, recipient, value, fee } = args;
+                const account = state.accounts.get(accountNumber);
                 if (account.type === AccountType.High) return true;
                 break;
             default:
@@ -20,14 +20,13 @@ export default class SafePolicy extends BasePolicy {
         }
     }
 
-    needsUi(method, args) {
-        // todo persistAccount => true (debugging now)
+    needsUi(method, args, state) {
         switch (method) {
             case 'createNewAccounts':
             case 'getAccounts':
             case 'createVolatileAccounts':
-            case 'persistAccount':
                 return false;
+            case 'persistAccount':
             case 'triggerAccountImport':
             case 'sign':
                 return true;

@@ -36,7 +36,7 @@ class Keyguard {
 
 (async function() {
     // to be removed
-    //await Nimiq.load();
+    await Nimiq.load();
     window.keyguard = new Keyguard();
 })();
 

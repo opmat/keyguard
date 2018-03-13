@@ -31,11 +31,11 @@ export default class XPersistAccount extends XElement {
 
     onCreate() {
         this.actions = bindActionCreators({setPassword}, store.dispatch);
-        this.$identicon.address = 'monkey pie';
-    }
+        store.subscribe(() => {
+            const state = store.getState();
+            if (state.accounts.toBePersisted) this.$identicon.address = state.accounts.toBePersisted
+        });
 
-    onStageChanged(state) {
-        this.$identicon.address = state.address;
     }
 
     listeners() {
