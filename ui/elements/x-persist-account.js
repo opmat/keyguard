@@ -9,14 +9,33 @@ export default class XPersistAccount extends XElement {
 
     html() { return `
         <x-identicon></x-identicon>
-        <x-password-setter></x-password-setter>
-        <button>Confirm</button>
+        <h1>Enter your Passphrase</h1>
+        <section>
+            <p>Please enter a passphrase to secure your account.</p>
+            <p>Your pass phrase will become stronger if you&hellip;</p>
+            <ul>
+                <li>
+                    make it longer!
+                </li>
+                <li>
+                    mix languages together, use slang, or even misspellings
+                </li>
+                <li>
+                    add special characters and numbers.
+                </li>
+            </ul>
+        </section>
+        <x-password-setter buttonLabel="Confirm" showIndicator="true"></x-password-setter>
         `;
     }
 
     onCreate() {
-        this.$identicon.address = 'monkey pie';
         this.actions = bindActionCreators({setPassword}, store.dispatch);
+        this.$identicon.address = 'monkey pie';
+    }
+
+    onStageChanged(state) {
+        this.$identicon.address = state.address;
     }
 
     listeners() {
