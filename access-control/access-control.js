@@ -9,9 +9,8 @@ export default class ACL {
     }
 
     static addAccessControl(clazz, getState, defaultPolicies) {
-        const ClassWithAcl = class extends clazz {
+        const ClassWithAcl = class {
             constructor() {
-                super();
                 this._isEmbedded = self !== top;
 
                 const storedPolicies = self.localStorage.getItem(ACL.STORAGE_KEY);
@@ -28,6 +27,8 @@ export default class ACL {
                 // Listen for policy changes from other instances
                 self.addEventListener('storage', ({key, newValue}) =>
                     key === ACL.STORAGE_KEY && (this._appPolicies = ACL._parseAppPolicies(newValue)));
+
+                this._innerClass = new clazz();
             }
 
             getPolicy(callingOrigin) {
@@ -70,7 +71,7 @@ export default class ACL {
                     }
                 }
 
-                return clazz.prototype[functionName](...args);
+                return this._innerClass[functionName](...args);
             });
         }
 
