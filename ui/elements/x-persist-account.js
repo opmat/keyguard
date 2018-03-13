@@ -9,9 +9,9 @@ export default class XPersistAccount extends XElement {
 
     html() { return `
         <x-identicon></x-identicon>
-        <h1>Enter your pass phrase</h1>
+        <h1>Enter your Passphrase</h1>
         <section>
-            <p>Please enter a pass phrase to secure your account.</p>
+            <p>Please enter a passphrase to secure your account.</p>
             <p>Your pass phrase will become stronger if you&hellip;</p>
             <ul>
                 <li>
@@ -25,18 +25,18 @@ export default class XPersistAccount extends XElement {
                 </li>
             </ul>
         </section>
-        <x-password-setter></x-password-setter>
-        <button>Confirm</button>
+        <x-password-setter buttonLabel="Confirm" showIndicator="true"></x-password-setter>
         `;
     }
 
     onCreate() {
         this.actions = bindActionCreators({setPassword}, store.dispatch);
+        this.$identicon.address = 'monkey pie';
     }
 
-    // onStageChanged(state) {
-    //     this.$identicon.address = state.address;
-    // }
+    onStageChanged(state) {
+        this.$identicon.address = state.address;
+    }
 
     listeners() {
         return {
