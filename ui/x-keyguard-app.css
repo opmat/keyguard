@@ -1,7 +1,13 @@
+body x-router {
+    display: flex;
+    justify-content: center;
+}
+
 body x-router > * {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     width: 100vw;
+    max-width: var(--max-width);
     height: 100vh;
 }
