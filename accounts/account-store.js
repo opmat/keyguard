@@ -30,11 +30,11 @@ class AccountStore {
         });
     }
 
-    _getStore(storeName) {
+    _getStore(storeName, mode) {
         return new Promise(async (resolve, reject) => {
             await this._dbInitialized;
 
-            const transaction = this._db.transaction([storeName], 'readwrite')
+            const transaction = this._db.transaction([storeName], mode)
 
             transaction.onerror = () => reject(transaction.error);
 
@@ -49,8 +49,12 @@ class AccountStore {
         });
     }
 
-    get _accountStore() {
-        return this._getStore(AccountStore.ACCOUNT_DATABASE);
+    get _accountStoreRead() {
+        return this._getStore(AccountStore.ACCOUNT_DATABASE, 'read');
+    }
+
+    get _accountStoreWrite() {
+        return this._getStore(AccountStore.ACCOUNT_DATABASE, 'readwrite');
     }
 
     /**
@@ -60,7 +64,7 @@ class AccountStore {
      */
     async get(address, key) {
         await this._dbInitialized;
-        const request = (await this._accountStore).get(address);
+        const request = (await this._accountStoreRead).get(address);
         const account = await this._getResult(request);
 
         return account;
@@ -95,7 +99,7 @@ class AccountStore {
             buf = account.exportPlain();
         }*/
 
-        const request = (await this._accountStore).put(account);
+        const request = (await this._accountStoreWrite).put(account);
 
         return await this._getResult(request);
     }
@@ -118,7 +122,7 @@ class AccountStore {
     async list() {
         await this._dbInitialized;
 
-        const request = (await this._accountStore).getAll();
+        const request = (await this._accountStoreRead).getAll();
 
         const accounts = await this._getResult(request);
 
@@ -194,5 +198,3 @@ AccountStore.ACCOUNT_DATABASE = 'accounts';
 AccountStore.MULTISIG_WALLET_DATABASE = 'multisig-wallets';
 
 export default AccountStore.instance;
-
-// Todo: Differentiate between read and write access
