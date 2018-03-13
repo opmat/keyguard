@@ -1,12 +1,14 @@
 export const TypeKeys = {
     ADD: 'accounts/add',
-    CLEAR: 'accounts/clear'
+    CLEAR: 'accounts/clear',
+    PERSIST: 'accounts/persist'
 };
 
 export function reducer(state, action) {
     if (state === undefined) {
         return {
-            volatileAccounts: new Map()
+            volatileAccounts: new Map(),
+            toBePersisted: null
         }
     }
 
@@ -21,6 +23,12 @@ export function reducer(state, action) {
             return {
                 ...state,
                 volatileAccounts: new Map()
+            };
+
+        case TypeKeys.PERSIST:
+            return {
+                ...state,
+                toBePersisted: action.accountNumber
             };
 
         default:
@@ -38,5 +46,12 @@ export function addVolatile(account) {
 export function clearVolatile() {
     return {
         type: TypeKeys.CLEAR
+    }
+}
+
+export function persist(accountNumber) {
+    return {
+        type: TypeKeys.PERSIST,
+        accountNumber
     }
 }

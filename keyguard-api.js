@@ -2,7 +2,7 @@ import { bindActionCreators } from '/libraries/redux/src/index.js';
 import Account from './accounts/account.js';
 import accountStore from './accounts/account-store.js';
 import store from './store/store.js';
-import { addVolatile, clearVolatile } from './store/accounts.js';
+import { addVolatile, clearVolatile, persist } from './store/accounts.js';
 import { clear as clearUserInputs } from './store/user-inputs.js';
 import XRouter from '/elements/x-router/x-router.js';
 
@@ -14,7 +14,8 @@ export default class KeyguardApi {
         this.actions = bindActionCreators({
             addVolatile,
             clearVolatile,
-            clearUserInputs
+            persist,
+            clearUserInputs,
         }, store.dispatch);
     }
 
@@ -70,6 +71,8 @@ export default class KeyguardApi {
 
         if (!account) throw new Error('Account not found');
 
+        this.actions.persist(account.userFriendlyAddress);
+
         const password = await new Promise((resolve, reject) => {
 
             store.subscribe(state => {
@@ -81,7 +84,7 @@ export default class KeyguardApi {
                     resolve(passwordFromUI);
                 }
 
-                if (!confirmed) {
+                if (confirmed === false) {
                     this.actions.clearUserInputs();
                     reject('User denied action');
                 }

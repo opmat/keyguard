@@ -23,7 +23,6 @@ export default class XPersistAccount extends XElement {
         return {
             'x-password-setter-valid': 'actions.setPassword'
         }
-
     }
 
     children() {
