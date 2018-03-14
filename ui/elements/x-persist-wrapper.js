@@ -17,7 +17,7 @@ export default class XPersistWrapper extends XElement {
             const state = store.getState();
             if (state.accounts.toBePersisted) {
                 const wrappedElement = XPersistAccount.createElement(new Map()
-                        .set('user-friendly-address', state.accounts.toBePersisted)
+                        .set('userFriendlyAddress', state.accounts.toBePersisted)
                 );
                 this.$el.textContent = '';
                 this.$el.appendChild(wrappedElement.$el);
