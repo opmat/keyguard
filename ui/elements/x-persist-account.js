@@ -12,16 +12,16 @@ export default class XPersistAccount extends XElement {
         <h1>Enter your Passphrase</h1>
         <section>
             <p>Please enter a passphrase to secure your account.</p>
-            <p>Your pass phrase will become stronger if you&hellip;</p>
+            <p>Your passphrase becomes stronger:</p>
             <ul>
                 <li>
-                    make it longer!
+                    the longer it is
                 </li>
                 <li>
-                    mix languages together, use slang, or even misspellings
+                    if you mix languages, use slang and misspellings
                 </li>
                 <li>
-                    add special characters and numbers.
+                    by adding special characters and numbers.
                 </li>
             </ul>
         </section>
@@ -31,7 +31,9 @@ export default class XPersistAccount extends XElement {
 
     onCreate() {
         const { userFriendlyAddress } = this.attributes;
+        if (!userFriendlyAddress) throw new Error('Data not available');
         this.$identicon.address = userFriendlyAddress;
+        // TODO catch errors in a top level error panel catching all previously uncaught exceptions
         this.actions = bindActionCreators({setPassword}, store.dispatch);
     }
 
