@@ -1,5 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XPersistAccount from './elements/x-persist-account.js';
+import XPersistWrapper from './elements/x-persist-wrapper.js';
 import XRouter from '/elements/x-router/x-router.js';
 
 export default class XKeyguardApp extends XElement {
@@ -7,16 +7,17 @@ export default class XKeyguardApp extends XElement {
     html() {
         return `
         <x-router>
-          <x-persist-account x-route="persist">
-          </x-persist-account>
+          <x-persist-wrapper x-route="persist">
+          </x-persist-wrapper>
           <main x-route="/">
-            <a x-href="persist">persist</a>
+            <x-loading-animation></x-loading-animation>
+            <h2>Calling keyguard</h2>
           </main>
         </x-router>
         `;
     }
 
     children() {
-        return [ XRouter, XPersistAccount ];
+        return [ XRouter, XPersistWrapper ];
     }
 }

@@ -84,7 +84,8 @@ export default class KeyguardApi {
 
         const password = await new Promise((resolve, reject) => {
 
-            store.subscribe(state => {
+            store.subscribe(() => {
+                const state = store.getState();
                 const passwordFromUI = state.userInputs.password;
                 const confirmed = state.userInputs.confirmed;
 
