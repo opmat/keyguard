@@ -33,14 +33,8 @@ class XPersistAccount extends XElement {
         const {userFriendlyAddress} = this.properties;
 
         if (userFriendlyAddress) {
-            /*XPersistAccount.createElement(newAttributes);
-            this.$el.textContent = '';
-            wrappedElement.$el.className = 'in';
-            this.$el.parentNode.replaceChild(wrappedElement.$el, this.$el);
-            this._unsubscribe();
-            this.$identicon.address = value;*/
+            this.$identicon.address = userFriendlyAddress;
         }
-        // TODO catch errors in a top level error panel catching all previously uncaught exceptions
     }
 
     listeners() {
@@ -58,8 +52,8 @@ class XPersistAccount extends XElement {
 /* connect the element to the redux store */
 export default connect(
     store,
-    state => {
+    state => ({
         userFriendlyAddress: state.accounts.toBePersisted
-    },
+    }),
     { setPassword }
 )(XPersistAccount)
