@@ -9,4 +9,10 @@ export default class UI {
         return new Promise(resolve =>
             resolve(confirm(`${origin} wants to access your addresses.`)));
     }
+
+    static async persistAccount() {
+
+    }
+
+
 }

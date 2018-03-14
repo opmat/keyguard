@@ -50,7 +50,7 @@ class AccountStore {
     }
 
     get _accountStoreRead() {
-        return this._getStore(AccountStore.ACCOUNT_DATABASE, 'read');
+        return this._getStore(AccountStore.ACCOUNT_DATABASE, 'readonly');
     }
 
     get _accountStoreWrite() {

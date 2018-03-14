@@ -25,7 +25,7 @@ export default class XPersistAccount extends XElement {
                 </li>
             </ul>
         </section>
-        <x-password-setter buttonLabel="Confirm" showIndicator="true"></x-password-setter>
+        <x-password-setter button-label="Confirm" show-indicator="true"></x-password-setter>
         `;
     }
 

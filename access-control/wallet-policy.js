@@ -13,11 +13,10 @@ export default class WalletPolicy extends BasePolicy {
 
     allows(method, args, state) {
         switch (method) {
-            case 'createNewAccounts':
-            case 'triggerAccountImport':
-            case 'persistAccount':
-            case 'getAccounts':
-            case 'createVolatileAccounts':
+            case 'triggerImport':
+            case 'persist':
+            case 'get':
+            case 'createVolatile':
                 return true;
             case 'sign':
                 const { accountNumber, recipient, value, fee } = args;
@@ -25,24 +24,23 @@ export default class WalletPolicy extends BasePolicy {
                 if (account && account.type === AccountType.Low) return true;
                 return false;
             default:
-                throw 'Unhandled method';
+                throw new Error(`Unhandled method: ${method}`);
         }
     }
 
     needsUi(method, args, state) {
         switch (method) {
-            case 'createNewAccounts':
-            case 'triggerAccountImport':
-            case 'persistAccount':
-            case 'getAccounts':
-            case 'createVolatileAccounts':
+            case 'triggerImport':
+            case 'persist':
+            case 'get':
+            case 'createVolatile':
                 return false;
             case 'sign':
                 const { account, recipient, value, fee } = args;
                 if (value + fee > this._limit) return true;
                 return false;
             default:
-                throw 'Unhandled method';
+                throw new Error(`Unhandled method: ${method}`);
         }
     }
 }

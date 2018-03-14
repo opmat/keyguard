@@ -4,13 +4,18 @@ import AccessControl from './access-control/access-control.js';
 import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
-import state from './state.js';
-import XKeyguardApp from './ui/x-keyguard-app.js';
 import store from './store/store.js';
+import accountStore from './accounts/account-store.js';
+import XKeyguardApp from './ui/x-keyguard-app.js';
+import { KeyNotFoundError } from './errors/index.js';
 
 class Keyguard {
     constructor() {
 
+        // show UI if we are not embedded
+        if (self === top) window.app = new XKeyguardApp(document.body);
+
+        // configure access control
         const defaultPolicies = [
             {
                 origin: config.safeOrigin,
@@ -20,17 +25,28 @@ class Keyguard {
                 origin: config.walletOrigin,
                 policy: new WalletPolicy(1000)
             }
-        ];
+        ]
 
-        RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => state, defaultPolicies), true);
+        // start postMessage RPC server
+        RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
 
-        window.app = XKeyguardApp.launch();
+        // listen for persist account command from other instance
+        self.addEventListener('storage', this._handleLocalStoragePersist.bind(this));
+    }
 
-        function update () {
-            console.log('state change detected');
+    async _handleLocalStoragePersist({key, value}) {
+        if (key !== 'persist') return;
+
+        const { userFriendlyAddress, password } = value;
+
+        const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+
+        if (!account) throw new KeyNotFoundError();
+
+        // todo encrypt key with password
+        if (!await accountStore.put(account)) {
+            throw new Error('Account could not be persisted');
         }
-
-        store.subscribe(update);
     }
 }
 

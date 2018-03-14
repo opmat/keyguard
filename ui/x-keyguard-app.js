@@ -4,13 +4,6 @@ import XRouter from '/elements/x-router/x-router.js';
 
 export default class XKeyguardApp extends XElement {
 
-    static launch() { window.addEventListener('load', () => new this()); }
-
-    get __tagName() { return 'body' }
-
-    onCreate() {
-    }
-
     html() {
         return `
         <x-router>

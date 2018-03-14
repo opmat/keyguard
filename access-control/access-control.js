@@ -2,6 +2,7 @@ import Reflection from '/libraries/nimiq-utils/reflection/reflection.js';
 import Policy from './policy.js';
 import config from '../config.js';
 import UI from '../ui.js';
+import { NoUIError } from '../errors/index.js';
 
 export default class ACL {
     static get STORAGE_KEY() {
@@ -37,7 +38,7 @@ export default class ACL {
 
             async authorize(callingOrigin, policy) {
                 // abort if embedded
-                if (this._isEmbedded) throw 'Authorization cannot be requested in iframe';
+                if (this._isEmbedded) throw new Error('Authorization cannot be requested in iframe');
 
                 const userAuthorizesApp = await UI.requestAuthorize(policy, callingOrigin);
 
@@ -48,27 +49,27 @@ export default class ACL {
 
                 return userAuthorizesApp;
             }
-        }
+        };
 
         for (const functionName of Reflection.userFunctions(clazz.prototype)) {
             ClassWithAcl.prototype[functionName] = (async function (callingOrigin, ...args) {
                 const policyDescription = this._appPolicies.get(callingOrigin);
 
-                if (!policyDescription) throw 'Not authorized from ' + callingOrigin;
+                if (!policyDescription) throw new Error('Not authorized from ' + callingOrigin);
 
                 const policy = Policy.parse(policyDescription);
 
                 const state = getState();
 
-                if (!policy.allows(functionName, args, state)) throw 'Not authorized (function call with wrong number of arguments)';
+                if (!policy.allows(functionName, args, state)) throw new Error('Not authorized (function call with wrong number of arguments)');
 
                 if (policy.needsUi(functionName, args, state)) {
                     if (this._isEmbedded) {
-                        throw 'needs-ui';
-                    } else {
+                        throw new NoUIError(functionName);
+                    }/* else {
                         const userConfirms = await UI[functionName](...args);
                         if (!userConfirms) throw 'User declined action';
-                    }
+                    }*/
                 }
 
                 return this._innerClass[functionName](...args);
