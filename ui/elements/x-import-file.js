@@ -9,7 +9,7 @@ export default class XImportFile extends XElement {
     html() { return `
         <h1>Enter your Passphrase</h1>
         <section>
-            <p>Please enter your passphrase to import your Account Access File.</p>
+            <p>Please enter your passphrase to unlock your Account Access File.</p>
         </section>
         <x-password-setter buttonLabel="Import" showIndicator="false"></x-password-setter>
         `;

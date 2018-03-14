@@ -12,16 +12,16 @@ class XPersistAccount extends XElement {
         <h1>Enter your Passphrase</h1>
         <section>
             <p>Please enter a passphrase to secure your account.</p>
-            <p>Your pass phrase will become stronger if you&hellip;</p>
+            <p>Your passphrase becomes stronger:</p>
             <ul>
                 <li>
-                    make it longer!
+                    the longer it is
                 </li>
                 <li>
-                    mix languages together, use slang, or even misspellings
+                    if you mix languages, use slang and misspellings
                 </li>
                 <li>
-                    add special characters and numbers.
+                    by adding special characters and numbers.
                 </li>
             </ul>
         </section>
@@ -30,11 +30,17 @@ class XPersistAccount extends XElement {
     }
 
     _onPropertiesChanged() {
-        const { userFriendlyAddress } = this.properties;
+        const {userFriendlyAddress} = this.properties;
 
         if (userFriendlyAddress) {
-            this.$identicon.address = value;
+            /*XPersistAccount.createElement(newAttributes);
+            this.$el.textContent = '';
+            wrappedElement.$el.className = 'in';
+            this.$el.parentNode.replaceChild(wrappedElement.$el, this.$el);
+            this._unsubscribe();
+            this.$identicon.address = value;*/
         }
+        // TODO catch errors in a top level error panel catching all previously uncaught exceptions
     }
 
     listeners() {
@@ -47,6 +53,7 @@ class XPersistAccount extends XElement {
         return [ XIdenticon, XPasswordSetter ];
     }
 }
+
 
 /* connect the element to the redux store */
 export default connect(
