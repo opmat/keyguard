@@ -1,4 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
+// TODO what to do when the user reloads the page and the state is not initialized again??
+import XPersistWrapper from './elements/x-persist-wrapper.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XPersistAccount from './elements/x-persist-account.js';
 import XImportFile from './elements/x-import-file.js';
@@ -18,14 +20,15 @@ export default class XKeyguardApp extends XElement {
     html() {
         return `
         <x-router>
-          <x-persist-account x-route="persist"></x-persist-account>
+          <x-persist-wrapper x-route="persist"></x-persist-wrapper>
           <main x-route="import-from-words"> Import via mnemonic phrase </main>
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
           <main x-route="sign"> Sign aka createTransaction </main>
           <main x-route="export"> Export aka backup </main>
           <main x-route="rename"> Rename account </main>
           <main x-route="/">
-            <h1>Test Page</h1>
+            <x-loading-animation></x-loading-animation>
+            <h2>Calling keyguard</h2>
             <a x-href="import-from-file">persist</a>
             <a x-href="persist">persist</a>
           </main>
@@ -34,6 +37,7 @@ export default class XKeyguardApp extends XElement {
     }
 
     children() {
-        return [ XRouter, XPersistAccount, XImportFile ];
+	// TODO what to do with the wrapper? We'd also need to wrap import file...
+        return [ XRouter, XPersistWrapper, XImportFile ];
     }
 }

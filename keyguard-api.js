@@ -1,5 +1,6 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
 import Account from './accounts/account.js';
+import * as AccountType from './accounts/account-type.js';
 import accountStore from './accounts/account-store.js';
 import store from './store/store.js';
 import { addVolatile, clearVolatile, persist } from './store/accounts.js';
@@ -20,12 +21,12 @@ export default class KeyguardApi {
     }
 
     /*
-     triggerAccountImport
+     triggerImport
      sign
      */
 
     // dummy
-    async getAccounts() {
+    async get() {
         const accounts = await accountStore.list();
         return accounts;
     }
@@ -43,12 +44,13 @@ export default class KeyguardApi {
     }
 
     // dummy
-    async sign(sender, recipient, value, fee) {
+    // todo test if transaction or generic message
+    async sign({sender, recipient, value, fee}) {
         const signature = 'mySign';
         return signature;
     }
 
-    createVolatileAccounts(number) {
+    createVolatile(number) {
 
         this.actions.clearVolatile();
 
@@ -60,22 +62,30 @@ export default class KeyguardApi {
         }
 
         const accounts = store.getState().accounts.volatileAccounts;
+
+        const publicKeys = [...accounts].map(([key, value]) => ([key, {
+            publicKey: value.keyPair.publicKey
+        }]));
+
+        localStorage.setItem('volatiles', JSON.stringify(publicKeys));
+
         return [...accounts.keys()]
     }
 
-    async persistAccount(userFriendlyAddress, accountType) {
+    async persist(userFriendlyAddress, accountType) {
 
-        const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+        const storedVolatiles = new Map(JSON.parse(localStorage.getItem('volatiles')));
 
-        account._type = accountType;
+        const account = storedVolatiles.get(userFriendlyAddress);
 
         if (!account) throw new Error('Account not found');
 
-        this.actions.persist(account.userFriendlyAddress);
+        this.actions.persist(userFriendlyAddress);
 
         const password = await new Promise((resolve, reject) => {
 
-            store.subscribe(state => {
+            store.subscribe(() => {
+                const state = store.getState();
                 const passwordFromUI = state.userInputs.password;
                 const confirmed = state.userInputs.confirmed;
 
@@ -93,7 +103,26 @@ export default class KeyguardApi {
             XRouter.root.goTo('persist');
         });
 
-        // todo encrypt key with password
+        // encypt password with public key and send it per local storage to iframe
+
+        // todo encrypt
+
+        localStorage.setItem('persist', JSON.stringify({
+            userFriendlyAddress: account.userFriendlyAddress,
+            password,
+            accountType
+        }));
+    }
+
+    async persistWithPin(userFriendlyAddress, pin) {
+
+        const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+
+        if (!account) throw new Error('Account not found');
+
+        account._type = AccountType.low;
+
+        // todo encrypt key with pin
 
         if (!await accountStore.put(account)) {
             throw new Error('Account could not be persisted');
@@ -111,7 +140,7 @@ export default class KeyguardApi {
         return Nimiq.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
     }
 
-    async importKey(privateKey, persist = true) {
+    async import(privateKey, persist = true) {
         if(typeof privateKey ===  'string') {
             privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
         }
@@ -123,12 +152,12 @@ export default class KeyguardApi {
         return account.userFriendlyAddress;
     }
 
-    async lockAccount(accountNumber, pin) {
+    async lock(accountNumber, pin) {
         const account = accountStore.get(accountNumber);
         return account.lock(pin);
     }
 
-    async unlockAccount(accountNumber, pin) {
+    async unlock(accountNumber, pin) {
         const account = accountStore.get(accountNumber);
         return account.unlock(pin);
     }

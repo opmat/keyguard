@@ -25,17 +25,14 @@ export default class XPersistAccount extends XElement {
                 </li>
             </ul>
         </section>
-        <x-password-setter buttonLabel="Confirm" showIndicator="true"></x-password-setter>
+        <x-password-setter button-label="Confirm" show-indicator="true"></x-password-setter>
         `;
     }
 
     onCreate() {
+        const { userFriendlyAddress } = this.attributes;
+        this.$identicon.address = userFriendlyAddress;
         this.actions = bindActionCreators({setPassword}, store.dispatch);
-        store.subscribe(() => {
-            const state = store.getState();
-            if (state.accounts.toBePersisted) this.$identicon.address = state.accounts.toBePersisted
-        });
-
     }
 
     listeners() {
@@ -47,5 +44,4 @@ export default class XPersistAccount extends XElement {
     children() {
         return [ XIdenticon, XPasswordSetter ];
     }
-
 }

@@ -4,11 +4,10 @@ import * as AccountType from '../accounts/account-type.js';
 export default class SafePolicy extends BasePolicy {
     allows(method, args, state) {
         switch (method) {
-            case 'createNewAccounts':
-            case 'triggerAccountImport':
-            case 'getAccounts':
-            case 'createVolatileAccounts':
-            case 'persistAccount':
+            case 'triggerImport':
+            case 'get':
+            case 'createVolatile':
+            case 'persist':
                 return true;
             case 'sign':
                 const { accountNumber, recipient, value, fee } = args;
@@ -16,22 +15,21 @@ export default class SafePolicy extends BasePolicy {
                 if (account.type === AccountType.High) return true;
                 break;
             default:
-                throw 'Unhandled method';
+                throw new Error(`Unhandled method: ${method}`);
         }
     }
 
     needsUi(method, args, state) {
         switch (method) {
-            case 'createNewAccounts':
-            case 'getAccounts':
-            case 'createVolatileAccounts':
+            case 'get':
+            case 'createVolatile':
                 return false;
-            case 'persistAccount':
-            case 'triggerAccountImport':
+            case 'persist':
+            case 'triggerImport':
             case 'sign':
                 return true;
             default:
-                throw 'Unhandled method';
+                throw new Error(`Unhandled method: ${method}`);
         }
     }
 }

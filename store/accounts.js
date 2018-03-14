@@ -55,3 +55,10 @@ export function persist(accountNumber) {
         accountNumber
     }
 }
+
+export function clearPersist() {
+    return {
+        type: TypeKeys.PERSIST,
+        accountNumber: null
+    }
+}
