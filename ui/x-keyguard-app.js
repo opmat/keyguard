@@ -5,6 +5,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XPersistAccount from './elements/x-persist-account.js';
 import XImportFile from './elements/x-import-file.js';
+import XImportWords from './elements/x-import-words.js';
 
 export default class XKeyguardApp extends XElement {
 
@@ -22,7 +23,7 @@ export default class XKeyguardApp extends XElement {
         return `
         <x-router>
           <x-persist-account x-route="persist" user-friendly-address="monkey pie"></x-persist-account>
-          <main x-route="import-from-words"> Import via mnemonic phrase </main>
+          <x-import-words x-route="import-from-words"> Import via mnemonic phrase </x-import-words>
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
           <main x-route="sign"> Sign aka createTransaction </main>
           <main x-route="export"> Export aka backup </main>
@@ -38,6 +39,6 @@ export default class XKeyguardApp extends XElement {
     }
 
     children() {
-        return [ XRouter, XPersistAccount, XImportFile ];
+        return [ XRouter, XPersistAccount, XImportFile, XImportWords ];
     }
 }

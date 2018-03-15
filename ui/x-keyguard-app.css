@@ -1,7 +1,8 @@
+@import '/elements/x-router/x-router.css';
 @import '/elements/x-loading-animation/x-loading-animation.css';
 @import '/elements/x-loader/x-loader.css';
 @import '/elements/x-password-setter/x-password-setter.css';
-@import '/elements/x-router/x-router.css';
+@import '/elements/x-mnemonic-input/x-mnemonic-input.css';
 @import '/elements/nimiq-logo/nimiq-logo.css';
 
 body x-router {
@@ -20,4 +21,13 @@ body x-router > * {
     width: 100vw;
     max-width: var(--max-width);
     height: 100vh;
+}
+
+/* make code blocks look like keys on the keyboard */
+code {
+    font-family: monospace;
+    font-size: 15px;
+    border: 1px solid white;
+    padding: 2px 6px;
+    border-radius: 5px;
 }
