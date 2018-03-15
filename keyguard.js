@@ -41,13 +41,20 @@ class Keyguard {
     async _handleLocalStoragePersist({key, newValue}) {
         if (key !== 'persist') return;
 
-        const { userFriendlyAddress, password } = JSON.parse(newValue);
+        localStorage.removeItem('persist');
 
+        const { userFriendlyAddress, password, type, label } = JSON.parse(newValue);
+
+        // get account which shall be persisted
         const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+
+        account.type = type;
+        account.label = label;
 
         if (!account) throw new KeyNotFoundError();
 
         // todo encrypt key with password
+        // persist in indexedDB
         if (!await accountStore.put(account)) {
             throw new Error('Account could not be persisted');
         }

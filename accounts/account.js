@@ -4,22 +4,22 @@ export default class Account {
      * @return {Account}
      */
     static loadPlain(buf) {
-        if (typeof buf === 'string') buf = BufferUtils.fromHex(buf);
+        if (typeof buf === 'string') buf = Nimiq.BufferUtils.fromHex(buf);
         if (!buf || buf.byteLength === 0) {
             throw new Error('Invalid Account seed');
         }
-        return new Account(KeyPair.unserialize(new SerialBuffer(buf)));
+        return new Account(Nimiq.KeyPair.unserialize(new Nimiq.SerialBuffer(buf)));
     }
 
     /**
      * @param {Uint8Array|string} buf
-     * @param {Uint8Array|string} key
+     * @param {Uint8Array|string} password
      * @return {Promise.<Account>}
      */
-    static loadEncrypted(buf, key) {
-        if (typeof buf === 'string') buf = BufferUtils.fromHex(buf);
-        if (typeof key === 'string') key = BufferUtils.fromAscii(key);
-        return new Account(Nimiq.KeyPair.fromEncrypted(new SerialBuffer(buf), key));
+    static loadEncrypted(buf, password) {
+        if (typeof buf === 'string') buf = Nimiq.BufferUtils.fromHex(buf);
+        if (typeof password === 'string') password = Nimiq.BufferUtils.fromAscii(password);
+        return new Account(Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), password));
     }
 
     /**
@@ -27,17 +27,32 @@ export default class Account {
      * @param {KeyPair} keyPair KeyPair owning this Account
      * @returns {Account} A newly generated Account
      */
-    constructor(keyPair, type) {
+    constructor(keyPair, type, label) {
         /** @type {KeyPair} */
         this._keyPair = keyPair;
         /** @type {Address} */
-        this._address = this._keyPair.publicKey.toAddress();
-        this._userFriendlyAddress = this.address.toUserFriendlyAddress();
-        this._type = type;
+        this.address = this._keyPair.publicKey.toAddress();
+        this.userFriendlyAddress = this.address.toUserFriendlyAddress();
+        this.type = type;
+        this.label = label;
+    }
+
+    static _isTransaction() {
+        // todo implement
+    }
+
+    /** Sign a generic message */
+    sign(message) {
+        if (this._isTransaction(message)) {
+            // todo implement
+            this.signTransaction(message);
+        } else {
+           return Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, message);
+        }
     }
 
     /**
-     * Create a Transaction that is signed by the owner of this Account
+     * Sign Transaction that is signed by the owner of this Account
      * @param {Address} recipient Address of the transaction receiver
      * @param {number} value Number of Satoshis to send.
      * @param {number} fee Number of Satoshis to donate to the Miner.
@@ -46,7 +61,7 @@ export default class Account {
      */
     createTransaction(recipient, value, fee, validityStartHeight) {
         const transaction = new BasicTransaction(this._keyPair.publicKey, recipient, value, fee, validityStartHeight);
-        transaction.signature = Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
+        transaction.signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
         return transaction;
     }
 
@@ -63,8 +78,8 @@ export default class Account {
      * @return {Promise.<Uint8Array>}
      */
     exportEncrypted(key, unlockKey) {
-        if (typeof key === 'string') key = BufferUtils.fromAscii(key);
-        if (typeof unlockKey === 'string') unlockKey = BufferUtils.fromAscii(unlockKey);
+        if (typeof key === 'string') key = Nimiq.BufferUtils.fromAscii(key);
+        if (typeof unlockKey === 'string') unlockKey = Nimiq.BufferUtils.fromAscii(unlockKey);
         return this._keyPair.exportEncrypted(key, unlockKey);
     }
 
@@ -78,7 +93,7 @@ export default class Account {
      * @returns {Promise.<void>}
      */
     lock(key) {
-        if (typeof key === 'string') key = BufferUtils.fromAscii(key);
+        if (typeof key === 'string') key = Nimiq.BufferUtils.fromAscii(key);
         return this.keyPair.lock(key);
     }
 
@@ -91,7 +106,7 @@ export default class Account {
      * @returns {Promise.<void>}
      */
     unlock(key) {
-        if (typeof key === 'string') key = BufferUtils.fromAscii(key);
+        if (typeof key === 'string') key = Nimiq.BufferUtils.fromAscii(key);
         return this.keyPair.unlock(key);
     }
 
@@ -101,18 +116,6 @@ export default class Account {
      */
     equals(o) {
         return o instanceof Account && this.keyPair.equals(o.keyPair) && this.address.equals(o.address);
-    }
-
-    /**
-     * The address of the Account owner.
-     * @type {Address}
-     */
-    get address() {
-        return this._address;
-    }
-
-    get userFriendlyAddress() {
-        return this._userFriendlyAddress;
     }
 
     /**
@@ -126,9 +129,5 @@ export default class Account {
     /** @type {KeyPair} */
     get keyPair() {
         return this._keyPair;
-    }
-
-    get type() {
-        return this._type;
     }
 }

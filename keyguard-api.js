@@ -85,6 +85,8 @@ export default class KeyguardApi {
 
         this.actions.requestPersist(userFriendlyAddress);
 
+
+        // todo get both password and label (const [password, label] = ...)
         const password = await new Promise((resolve, reject) => {
 
             // wait until the ui dispatches the user's feedback

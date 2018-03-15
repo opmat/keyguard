@@ -1,3 +1,5 @@
+import Account from './account.js';
+
 class AccountStore {
 
     static get instance() {
@@ -17,7 +19,7 @@ class AccountStore {
             request.onupgradeneeded = () => {
                 this._db = request.result;
 
-                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE, { keyPath: '_userFriendlyAddress' });
+                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE, { keyPath: 'userFriendlyAddress' });
 
                 // todo later
                 this._multiSigStore = null;
@@ -76,10 +78,10 @@ class AccountStore {
         });*/
 
         if (key) {
-            return Nimiq.Wallet.loadEncrypted(buf, key);
+            return Account.loadEncrypted(buf, key);
         }
 
-        return Nimiq.Wallet.loadPlain(buf);
+        return Account.loadPlain(buf);
     }
 
     /**
@@ -110,10 +112,10 @@ class AccountStore {
      */
     async remove(address) {
         await this._dbInitialized;
-        const base64Address = address.toBase64();
-        const tx = this.accounts.transaction();
-        await tx.remove(base64Address);
-        return tx.commit();
+
+        const request = (await this._accountStoreWrite).remove(address);
+
+        return await this._getResult(request);
     }
 
     /**
@@ -127,9 +129,9 @@ class AccountStore {
         const accounts = await this._getResult(request);
 
         const result = [...accounts].map(account => ({
-            userFriendlyAddress: account._userFriendlyAddress,
-            address: account._address,
-            type: account._type
+            userFriendlyAddress: account.userFriendlyAddress,
+            address: account.address,
+            type: account.type
         }));
 
         return result;
@@ -140,7 +142,7 @@ class AccountStore {
      * @param {Uint8Array|string} [key]
      * @returns {Promise.<MultiSigWallet>}
      */
-    async getMultiSig(address, key) {
+    /*async getMultiSig(address, key) {
         await this._dbInitialized;
         const base64Address = address.toBase64();
         const buf = await this._multiSigStore.get(base64Address);
@@ -148,7 +150,7 @@ class AccountStore {
             return MultiSigWallet.loadEncrypted(buf, key);
         }
         return MultiSigWallet.loadPlain(buf);
-    }
+    }*/
 
     /**
      * @param {MultiSigWallet} wallet
@@ -156,37 +158,37 @@ class AccountStore {
      * @param {Uint8Array|string} [unlockKey]
      * @returns {Promise}
      */
-    async putMultiSig(wallet, key, unlockKey) {
+    /*async putMultiSig(wallet, key, unlockKey) {
         await this._dbInitialized;
         const base64Address = wallet.address.toBase64();
         /** @type {Uint8Array} */
-        let buf = null;
+        /*let buf = null;
         if (key) {
             buf = await wallet.exportEncrypted(key, unlockKey);
         } else {
             buf = wallet.exportPlain();
         }
         return this._multiSigStore.put(base64Address, buf);
-    }
+    }*/
 
     /**
      * @param {Address} address
      * @returns {Promise}
      */
-    async removeMultiSig(address) {
+    /*async removeMultiSig(address) {
         await this._dbInitialized;
         const base64Address = address.toBase64();
         return this._multiSigStore.remove(base64Address);
-    }
+    }*/
 
     /**
      * @returns {Promise<Array.<Address>>}
      */
-    async listMultiSig() {
+    /*async listMultiSig() {
         await this._dbInitialized;
         const keys = await this._multiSigStore.keys();
         return Array.from(keys).map(key => Nimiq.Address.fromBase64(key));
-    }
+    }*/
 
     close() {
         return this._db.close();
