@@ -22,7 +22,7 @@ export default class XKeyguardApp extends XElement {
     html() {
         return `
         <x-router>
-          <x-persist-account x-route="persist" user-friendly-address="monkey pie"></x-persist-account>
+          <x-persist-account x-route="persist"></x-persist-account>
           <x-import-words x-route="import-from-words"> Import via mnemonic phrase </x-import-words>
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
           <main x-route="sign"> Sign aka createTransaction </main>
@@ -42,3 +42,5 @@ export default class XKeyguardApp extends XElement {
         return [ XRouter, XPersistAccount, XImportFile, XImportWords ];
     }
 }
+
+// TODO catch errors in a top level error panel catching all previously uncaught exceptions

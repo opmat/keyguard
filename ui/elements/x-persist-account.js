@@ -2,10 +2,10 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '../../store/store.js';
-import { bindActionCreators } from '/libraries/redux/src/index.js';
 import { setPassword } from '../../store/user-inputs.js';
+import connect from '/libraries/redux/src/redux-x-element.js';
 
-export default class XPersistAccount extends XElement {
+class XPersistAccount extends XElement {
 
     html() { return `
         <x-identicon></x-identicon>
@@ -29,12 +29,12 @@ export default class XPersistAccount extends XElement {
         `;
     }
 
-    onCreate() {
-        const { userFriendlyAddress } = this.attributes;
-        if (!userFriendlyAddress) throw new Error('Data not available');
-        this.$identicon.address = userFriendlyAddress;
-        // TODO catch errors in a top level error panel catching all previously uncaught exceptions
-        this.actions = bindActionCreators({setPassword}, store.dispatch);
+    _onPropertiesChanged() {
+        const {userFriendlyAddress} = this.properties;
+
+        if (userFriendlyAddress) {
+            this.$identicon.address = userFriendlyAddress;
+        }
     }
 
     listeners() {
@@ -47,3 +47,13 @@ export default class XPersistAccount extends XElement {
         return [ XIdenticon, XPasswordSetter ];
     }
 }
+
+
+/* connect the element to the redux store */
+export default connect(
+    store,
+    state => ({
+        userFriendlyAddress: state.accounts.toBePersisted
+    }),
+    { setPassword }
+)(XPersistAccount)

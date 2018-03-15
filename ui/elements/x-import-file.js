@@ -19,8 +19,8 @@ export default class XImportFile extends XElement {
         this.actions = bindActionCreators({setPassword}, store.dispatch);
         store.subscribe(() => {
             const state = store.getState();
-            if (state.feedback.wrongPassphrase)
-                this.$xPasswordSetter.wrongPassphrase();
+            /*if (state.feedback.wrongPassphrase)
+                this.$xPasswordSetter.wrongPassphrase();*/
         });
 
     }
