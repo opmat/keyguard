@@ -34,10 +34,10 @@ class Keyguard {
         self.addEventListener('storage', this._handleLocalStoragePersist.bind(this));
     }
 
-    async _handleLocalStoragePersist({key, value}) {
+    async _handleLocalStoragePersist({key, newValue}) {
         if (key !== 'persist') return;
 
-        const { userFriendlyAddress, password } = value;
+        const { userFriendlyAddress, password } = newValue;
 
         const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
 

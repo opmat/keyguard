@@ -3,7 +3,7 @@ import Account from './accounts/account.js';
 import * as AccountType from './accounts/account-type.js';
 import accountStore from './accounts/account-store.js';
 import store from './store/store.js';
-import { addVolatile, clearVolatile, persist } from './store/accounts.js';
+import { addVolatile, clearVolatile, requestPersist } from './store/accounts.js';
 import { clear as clearUserInputs } from './store/user-inputs.js';
 import XRouter from '/elements/x-router/x-router.js';
 
@@ -15,7 +15,7 @@ export default class KeyguardApi {
         this.actions = bindActionCreators({
             addVolatile,
             clearVolatile,
-            persist,
+            requestPersist,
             clearUserInputs,
         }, store.dispatch);
     }
@@ -76,20 +76,24 @@ export default class KeyguardApi {
 
         const storedVolatiles = new Map(JSON.parse(localStorage.getItem('volatiles')));
 
+        localStorage.removeItem('volatiles');
+
         const account = storedVolatiles.get(userFriendlyAddress);
 
         if (!account) throw new Error('Account not found');
 
-        this.actions.persist(userFriendlyAddress);
+        this.actions.requestPersist(userFriendlyAddress);
 
         const password = await new Promise((resolve, reject) => {
 
+            // wait until the ui dispatches the user's feedback
             store.subscribe(() => {
                 const state = store.getState();
+
                 const passwordFromUI = state.userInputs.password;
                 const confirmed = state.userInputs.confirmed;
 
-                if (passwordFromUI) {
+                if (confirmed && passwordFromUI) {
                     this.actions.clearUserInputs();
                     resolve(passwordFromUI);
                 }

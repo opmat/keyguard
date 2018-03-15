@@ -1,9 +1,9 @@
 export const TypeKeys = {
     SET_PASSWORD: 'userInputs/setPassword',
     SET_LABEL: 'userInputs/setLabel',
-    CONFIRM: 'userInputs/confirm',
-    PERSIST: 'userInputs/persist',
-    CLEAR: 'userInputs/clear'
+    CONFIRM_PERSIST: 'userInputs/confirmPersist',
+    CLEAR: 'userInputs/clear',
+    DENY: 'userInputs/deny'
 };
 
 export function reducer(state, action) {
@@ -30,10 +30,11 @@ export function reducer(state, action) {
                 label: action.label
             };
 
-        case TypeKeys.CONFIRM:
+        case TypeKeys.CONFIRM_PERSIST:
             return {
                 ...state,
-                confirmed: action.confirmed
+                confirmed: true,
+                password: action.password
             };
 
         case TypeKeys.CLEAR:
@@ -41,6 +42,14 @@ export function reducer(state, action) {
 
         default:
             return state
+    }
+}
+
+export function confirmPersist(password, label) {
+    return {
+        type: TypeKeys.CONFIRM_PERSIST,
+        password,
+        label
     }
 }
 
@@ -58,24 +67,9 @@ export function setLabel(label) {
     }
 }
 
-export function persist(password, label) {
-    return {
-        type: TypeKeys.PERSIST,
-        password,
-        label
-    }
-}
-
-export function confirm() {
-    return {
-        type: TypeKeys.CONFIRM,
-        confirmed: true
-    }
-}
-
 export function deny() {
     return {
-        type: TypeKeys.CONFIRM,
+        type: TypeKeys.DENY,
         confirmed: false
     }
 }

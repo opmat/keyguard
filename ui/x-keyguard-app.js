@@ -10,7 +10,7 @@ export default class XKeyguardApp extends XElement {
 
     // TODO [sven] move to new XApp class
     static launch() {
-        if (document.readyState === "complete") new XKeyguardApp();
+        if (document.readyState === 'complete') return new this();
         else window.addEventListener('load', () => new this());
     }
 

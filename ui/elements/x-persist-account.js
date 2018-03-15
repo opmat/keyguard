@@ -2,8 +2,8 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '../../store/store.js';
-import { setPassword } from '../../store/user-inputs.js';
-import connect from '/libraries/redux/src/redux-x-element.js';
+import { confirmPersist } from '../../store/user-inputs.js';
+import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XPersistAccount extends XElement {
 
@@ -30,7 +30,7 @@ class XPersistAccount extends XElement {
     }
 
     _onPropertiesChanged() {
-        const {userFriendlyAddress} = this.properties;
+        const { userFriendlyAddress } = this.properties;
 
         if (userFriendlyAddress) {
             this.$identicon.address = userFriendlyAddress;
@@ -39,7 +39,7 @@ class XPersistAccount extends XElement {
 
     listeners() {
         return {
-            'x-password-setter-valid': password => this.actions.setPassword(password)
+            'x-password-setter-submitted': password => this.actions.confirmPersist(password)
         }
     }
 
@@ -50,10 +50,10 @@ class XPersistAccount extends XElement {
 
 
 /* connect the element to the redux store */
-export default connect(
+export default reduxify(
     store,
     state => ({
         userFriendlyAddress: state.accounts.toBePersisted
     }),
-    { setPassword }
+    { confirmPersist }
 )(XPersistAccount)
