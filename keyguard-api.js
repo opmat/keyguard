@@ -64,7 +64,8 @@ export default class KeyguardApi {
         const accounts = store.getState().accounts.volatileAccounts;
 
         const publicKeys = [...accounts].map(([key, value]) => ([key, {
-            publicKey: value.keyPair.publicKey
+            publicKey: value.keyPair.publicKey,
+
         }]));
 
         localStorage.setItem('volatiles', JSON.stringify(publicKeys));
@@ -112,9 +113,9 @@ export default class KeyguardApi {
         // todo encrypt
 
         localStorage.setItem('persist', JSON.stringify({
-            userFriendlyAddress: account.userFriendlyAddress,
+            userFriendlyAddress,
             password,
-            accountType
+            accountType,
         }));
     }
 

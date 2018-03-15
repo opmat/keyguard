@@ -13,7 +13,9 @@ class Keyguard {
     constructor() {
 
         // show UI if we are not embedded
-        if (self === top) window.app = XKeyguardApp.launch();
+        if (self === top) {
+            window.app = XKeyguardApp.launch();
+        }
 
         // configure access control
         const defaultPolicies = [
@@ -30,14 +32,16 @@ class Keyguard {
         // start postMessage RPC server
         RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
 
-        // listen for persist account command from other instance
-        self.addEventListener('storage', this._handleLocalStoragePersist.bind(this));
+        if (self !== top) {
+            // in iframe, listen for persist account command from other instance
+            self.addEventListener('storage', this._handleLocalStoragePersist.bind(this));
+        }
     }
 
     async _handleLocalStoragePersist({key, newValue}) {
         if (key !== 'persist') return;
 
-        const { userFriendlyAddress, password } = newValue;
+        const { userFriendlyAddress, password } = JSON.parse(newValue);
 
         const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
 
