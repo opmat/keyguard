@@ -68,16 +68,16 @@ export default class KeyguardApi {
 
         }]));
 
-        localStorage.setItem(KeyguardApi.Volatiles, JSON.stringify(publicKeys));
+        localStorage.setItem(KeyguardApi.VOLATILES, JSON.stringify(publicKeys));
 
         return [...accounts.keys()]
     }
 
     async persist(userFriendlyAddress, accountType) {
 
-        const storedVolatiles = new Map(JSON.parse(localStorage.getItem(KeyguardApi.Volatiles)));
+        const storedVolatiles = new Map(JSON.parse(localStorage.getItem(KeyguardApi.VOLATILES)));
 
-        localStorage.removeItem(KeyguardApi.Volatiles);
+        localStorage.removeItem(KeyguardApi.VOLATILES);
 
         const account = storedVolatiles.get(userFriendlyAddress);
 
@@ -115,16 +115,16 @@ export default class KeyguardApi {
         // wait for response from iframe...
         const response = new Promise(resolve => {
             const listener = ({ key, newValue }) => {
-                if (key !== KeyguardApi.PersistResponse || newValue === '') return;
+                if (key !== KeyguardApi.PERSIST_RESPONSE || newValue === '') return;
                 self.removeEventListener('storage', listener);
-                localStorage.removeItem(KeyguardApi.PersistResponse);
+                localStorage.removeItem(KeyguardApi.PERSIST_RESPONSE);
                 resolve(newValue);
             }
 
             self.addEventListener('storage', listener);
 
             // ...to this request
-            localStorage.setItem(KeyguardApi.Persist, JSON.stringify({
+            localStorage.setItem(KeyguardApi.PERSIST, JSON.stringify({
                 userFriendlyAddress,
                 password,
                 accountType,
@@ -241,6 +241,6 @@ export default class KeyguardApi {
     }
 }
 
-KeyguardApi.Persist = 'persist';
-KeyguardApi.PersistResponse = 'persistResponse';
-KeyguardApi.Volatiles = 'volatiles';
+KeyguardApi.PERSIST = 'persist';
+KeyguardApi.PERSIST_RESPONSE = 'persistResponse';
+KeyguardApi.VOLATILES = 'volatiles';

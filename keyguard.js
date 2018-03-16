@@ -39,9 +39,9 @@ class Keyguard {
     }
 
     async _handleLocalStoragePersist({key, newValue}) {
-        if (key !== KeyguardApi.Persist || newValue === '') return;
+        if (key !== KeyguardApi.PERSIST || newValue === '') return;
 
-        localStorage.removeItem(KeyguardApi.Persist);
+        localStorage.removeItem(KeyguardApi.PERSIST);
 
         const { userFriendlyAddress, password, type, label } = JSON.parse(newValue);
 
@@ -57,9 +57,9 @@ class Keyguard {
 
         // persist in indexedDB and return success to window instance
         if (await accountStore.put(account)) {
-            localStorage.setItem(KeyguardApi.PersistResponse, '1');
+            localStorage.setItem(KeyguardApi.PERSIST_RESPONSE, '1');
         } else {
-            localStorage.setItem(KeyguardApi.PersistResponse, '0');
+            localStorage.setItem(KeyguardApi.PERSIST_RESPONSE, '0');
         }
     }
 }
