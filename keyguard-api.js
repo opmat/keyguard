@@ -68,16 +68,16 @@ export default class KeyguardApi {
 
         }]));
 
-        localStorage.setItem('volatiles', JSON.stringify(publicKeys));
+        localStorage.setItem(KeyguardApi.Volatiles, JSON.stringify(publicKeys));
 
         return [...accounts.keys()]
     }
 
     async persist(userFriendlyAddress, accountType) {
 
-        const storedVolatiles = new Map(JSON.parse(localStorage.getItem('volatiles')));
+        const storedVolatiles = new Map(JSON.parse(localStorage.getItem(KeyguardApi.Volatiles)));
 
-        localStorage.removeItem('volatiles');
+        localStorage.removeItem(KeyguardApi.Volatiles);
 
         const account = storedVolatiles.get(userFriendlyAddress);
 
@@ -103,22 +103,36 @@ export default class KeyguardApi {
 
                 if (confirmed === false) {
                     this.actions.clearUserInputs();
-                    reject('User denied action');
+                    reject(new Error('User denied action'));
                 }
             });
 
             XRouter.root.goTo('persist');
         });
 
-        // encypt password with public key and send it per local storage to iframe
+        // todo encypt password with public key
 
-        // todo encrypt
+        // wait for response from iframe...
+        const response = new Promise(resolve => {
+            const listener = ({ key, newValue }) => {
+                if (key !== KeyguardApi.PersistResponse || newValue === '') return;
+                self.removeEventListener('storage', listener);
+                localStorage.removeItem(KeyguardApi.PersistResponse);
+                resolve(newValue);
+            }
 
-        localStorage.setItem('persist', JSON.stringify({
-            userFriendlyAddress,
-            password,
-            accountType,
-        }));
+            self.addEventListener('storage', listener);
+
+            // ...to this request
+            localStorage.setItem(KeyguardApi.Persist, JSON.stringify({
+                userFriendlyAddress,
+                password,
+                accountType,
+            }));
+        });
+
+        // return 0=false or 1=true
+        return parseInt(await response);
     }
 
     async persistWithPin(userFriendlyAddress, pin) {
@@ -226,3 +240,7 @@ export default class KeyguardApi {
         return parseInt(tmp);
     }
 }
+
+KeyguardApi.Persist = 'persist';
+KeyguardApi.PersistResponse = 'persistResponse';
+KeyguardApi.Volatiles = 'volatiles';

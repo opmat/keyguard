@@ -41,17 +41,20 @@ class Demo {
 
         console.log('Now we are authorized');
 
-        let accounts = await this._keyguard.getAccounts();
+        let accounts = await this._keyguard.get();
 
         console.log(`Accounts: ${JSON.stringify(accounts)}`);
 
-        const volatileAccounts = await this._keyguard.createVolatileAccounts(2);
+        const volatileAccounts = await this._keyguard.createVolatile(2);
 
         console.log(`Volatile accounts: ${volatileAccounts}`);
 
-        await this._keyguard.persistAccount(volatileAccounts[0], AccountType.Low);
+        const keyguardWindow = window.open(config.keyguardSrc);
+        const keyguardWindowClient = await RPC.Client(keyguardWindow, 'KeyguardApi', (new URL(config.keyguardSrc)).origin);
 
-        accounts = await this._keyguard.getAccounts();
+        await keyguardWindowClient.persist(volatileAccounts[0], AccountType.Low);
+
+        accounts = await this._keyguard.get();
 
         console.log(`Accounts after persisting first volatile account: ${JSON.stringify(accounts)}`);
     }

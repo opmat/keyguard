@@ -29,19 +29,19 @@ class Keyguard {
             }
         ]
 
-        // start postMessage RPC server
-        RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
-
         if (self !== top) {
             // in iframe, listen for persist account command from other instance
             self.addEventListener('storage', this._handleLocalStoragePersist.bind(this));
         }
+
+        // start postMessage RPC server
+        RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
     }
 
     async _handleLocalStoragePersist({key, newValue}) {
-        if (key !== 'persist') return;
+        if (key !== KeyguardApi.Persist || newValue === '') return;
 
-        localStorage.removeItem('persist');
+        localStorage.removeItem(KeyguardApi.Persist);
 
         const { userFriendlyAddress, password, type, label } = JSON.parse(newValue);
 
@@ -54,9 +54,12 @@ class Keyguard {
         if (!account) throw new KeyNotFoundError();
 
         // todo encrypt key with password
-        // persist in indexedDB
-        if (!await accountStore.put(account)) {
-            throw new Error('Account could not be persisted');
+
+        // persist in indexedDB and return success to window instance
+        if (await accountStore.put(account)) {
+            localStorage.setItem(KeyguardApi.PersistResponse, '1');
+        } else {
+            localStorage.setItem(KeyguardApi.PersistResponse, '0');
         }
     }
 }
