@@ -47,11 +47,10 @@ class Keyguard {
 
         // get account which shall be persisted
         const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+        if (!account) throw new KeyNotFoundError();
 
         account.type = type;
         account.label = label;
-
-        if (!account) throw new KeyNotFoundError();
 
         // todo encrypt key with password
 
