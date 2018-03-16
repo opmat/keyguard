@@ -2,8 +2,9 @@ import XElement from '/libraries/x-element/x-element.js';
 // TODO what to do when the user reloads the page and the state is not initialized again??
 // > persist the state onUnload
 // import XPersistWrapper from './elements/x-persist-wrapper.js';
-import { getRouter } from '/elements/x-router/x-router.js';
+import XRouter from '/elements/x-router/x-router.js';
 import XPersistAccount from './elements/x-persist-account.js';
+import XIdenticons from './elements/x-identicons/x-identicons.js';
 import XImportFile from './elements/x-import-file.js';
 import XImportWords from './elements/x-import-words.js';
 
@@ -23,6 +24,7 @@ export default class XKeyguardApp extends XElement {
         return `
         <x-router>
           <x-persist-account x-route="persist"></x-persist-account>
+          <x-identicons x-route="create-account"></x-identicons>
           <x-import-words x-route="import-from-words"> Import via mnemonic phrase </x-import-words>
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
           <main x-route="sign"> Sign aka createTransaction </main>
@@ -39,7 +41,7 @@ export default class XKeyguardApp extends XElement {
     }
 
     children() {
-        return [ getRouter([XPersistAccount, XImportFile, XImportWords]) ];
+        return [ XRouter, XPersistAccount, XIdenticons, XImportFile, XImportWords ];
     }
 }
 

@@ -1,9 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
-import store from '../../../../../apps/safe/store/store.js';
+import store from '/libraries/keyguard/store/store.js';
 import XRouter from '/elements/x-router/x-router.js';
-import { addVolatile } from '/libraries/keyguard/store/keys.js';
+import { createVolatile } from '/libraries/keyguard/store/keys.js';
 
 class XIdenticons extends XElement {
 
@@ -48,19 +48,23 @@ class XIdenticons extends XElement {
         this._clearIdenticons();
     }
 
-    async _generateIdenticons() {
-        // or move it in store?!
-        const volatileKeys = Nimiq.Keypair.generate();
+    _onPropertiesChanged() {
+        const { addresses } = this.properties;
+
         this.$container.textContent = '';
-        volatileKeys.forEach(keyPair => this._generateIdenticon(keyPair));
+
+        for (const address of addresses) {
+            const $identicon = XIdenticon.createElement();
+            this.$container.appendChild($identicon.$el);
+            $identicon.address = address;
+            $identicon.addEventListener('click', e => this._onIdenticonSelected(address, $identicon));
+        }
+
         setTimeout(e => this.$el.setAttribute('active', true), 100);
     }
 
-    _generateIdenticon(address) {
-        const $identicon = XIdenticon.createElement();
-        this.$container.appendChild($identicon.$el);
-        $identicon.address = address;
-        $identicon.addEventListener('click', e => this._onIdenticonSelected(address, $identicon));
+    async _generateIdenticons() {
+        this.actions.createVolatile(7);
     }
 
     _onIdenticonSelected(address, $identicon) {
@@ -81,21 +85,17 @@ class XIdenticons extends XElement {
     }
 
     async _onConfirm(address) {
-
-        if (await keyguard.persist(address)) {
-            XRouter.root.goTo('success');
-        } else {
-            XRouter.root.goTo('error');
-        }
+        // this.actions.confirm(password, label);
+        XRouter.root.goTo('persist');
     }
 }
 
 export default reduxify(
     store,
     state => ({
-        addresses: [...state.keys.volatileKeys].map(key => key.userFriendlyAddress)
+        addresses: [...state.keys.volatileKeys.keys()]
     }),
-    { addVolatile }
+    { createVolatile }
 )(XIdenticons);
 
 // Todo: [low priority] remove hack for overlay and find a general solution

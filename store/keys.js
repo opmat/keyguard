@@ -1,3 +1,5 @@
+import Key from '../keys/key.js';
+
 export const TypeKeys = {
     ADD: 'keys/add',
     CLEAR: 'keys/clear',
@@ -18,12 +20,12 @@ export function reducer(state, action) {
             const map = new Map(state.volatileKeys);
 
             for (const key of action.payload) {
-                map.set(key.userFriendlyAddress, ke)
+                map.set(key.userFriendlyAddress, key);
             }
 
             return {
                 ...state,
-                volatileKeys: new Map(state.volatileKeys).set(action.userFriendlyAddress, action.account)
+                volatileKeys: map
             };
 
         case TypeKeys.CLEAR:
@@ -76,11 +78,14 @@ export function clearPersist() {
 }
 
 export function createVolatile(number) {
-    for (let i = 0; i < number; i++) {
-        keys.push(Nimiq.Keypair.generate());
-        const account = new Account(keyPair);
+    const keys = [];
 
+    for (let i = 0; i < number; i++) {
+        const keyPair = Nimiq.KeyPair.generate();
+        const key = new Key(keyPair);
+        keys.push(key);
     }
+
     return {
         type: TypeKeys.ADD,
         payload: keys
