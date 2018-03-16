@@ -1,9 +1,9 @@
-import Account from './account.js';
+import Key from './key.js';
 
-class AccountStore {
+class KeyStore {
 
     static get instance() {
-        this._instance = this._instance || new AccountStore();
+        this._instance = this._instance || new KeyStore();
         return this._instance;
     }
 
@@ -12,14 +12,14 @@ class AccountStore {
      */
     constructor(dbName = 'accounts') {
         this._dbInitialized = new Promise((resolve, reject) => {
-            const request = self.indexedDB.open(dbName, AccountStore.VERSION);
+            const request = self.indexedDB.open(dbName, KeyStore.VERSION);
 
             request.onerror = () => reject(request.error);
 
             request.onupgradeneeded = () => {
                 this._db = request.result;
 
-                this._db.createObjectStore(AccountStore.ACCOUNT_DATABASE, { keyPath: 'userFriendlyAddress' });
+                this._db.createObjectStore(KeyStore.ACCOUNT_DATABASE, { keyPath: 'userFriendlyAddress' });
 
                 // todo later
                 this._multiSigStore = null;
@@ -52,11 +52,11 @@ class AccountStore {
     }
 
     get _accountStoreRead() {
-        return this._getStore(AccountStore.ACCOUNT_DATABASE, 'readonly');
+        return this._getStore(KeyStore.ACCOUNT_DATABASE, 'readonly');
     }
 
     get _accountStoreWrite() {
-        return this._getStore(AccountStore.ACCOUNT_DATABASE, 'readwrite');
+        return this._getStore(KeyStore.ACCOUNT_DATABASE, 'readwrite');
     }
 
     /**
@@ -195,8 +195,8 @@ class AccountStore {
     }
 }
 
-AccountStore.VERSION = 2;
-AccountStore.ACCOUNT_DATABASE = 'accounts';
-AccountStore.MULTISIG_WALLET_DATABASE = 'multisig-wallets';
+KeyStore.VERSION = 2;
+KeyStore.ACCOUNT_DATABASE = 'accounts';
+KeyStore.MULTISIG_WALLET_DATABASE = 'multisig-wallets';
 
-export default AccountStore.instance;
+export default KeyStore.instance;

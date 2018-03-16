@@ -3,6 +3,7 @@ import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '../../store/store.js';
 import { bindActionCreators } from '/libraries/redux/src/index.js';
 import { setPassword } from '../../store/user-inputs.js';
+import XRouter from '/elements/x-router/x-router.js';
 
 export default class XImportFile extends XElement {
 
@@ -23,6 +24,10 @@ export default class XImportFile extends XElement {
                 this.$xPasswordSetter.wrongPassphrase();*/
         });
 
+    }
+
+    onEntry() {
+        XRouter.root.goTo('persist');
     }
 
     listeners() {

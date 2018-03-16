@@ -2,7 +2,7 @@ import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
 import SafePolicy from '../access-control/safe-policy.js';
 import Policy from '../access-control/policy.js';
 import config from './config.js';
-import * as AccountType from '../accounts/account-type.js';
+import * as AccountType from '../keys/keytype.js';
 
 class Demo {
     constructor() {
