@@ -1,6 +1,6 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
 import Key from './keys/key.js';
-import * as AccountType from './keys/keytype.js';
+import * as Keytype from './keys/keytype.js';
 import keyStore from './keys/keystore.js';
 import store from './store/store.js';
 import { createVolatile, clearVolatile } from './store/keys.js';
@@ -20,60 +20,63 @@ export default class KeyguardApi {
         }, store.dispatch);
     }
 
-    // methods without UI
+    /** WITHOUT UI */
+
+    /** SAFE AND WALLET */
 
     async get() {
-        const accounts = await keyStore.list();
-        return accounts;
+        const keys = await keyStore.list();
+        return keys;
     }
 
-    // called by safe after back up file was downloaded
+    /** SAFE */
+
+    /**
+     * called by safe after back up file was downloaded
+     */
     async activate(userFriendlyAddress) {
         await keyStore.activate(userFriendlyAddress);
     }
 
-    // for wallet
+    /** WALLET */
+
     createVolatile(number) {
 
         this.actions.clearVolatile();
 
-        for (let i = 0; i < number; i++) {
-            const keyPair = Nimiq.KeyPair.generate();
-            const account = new Key(keyPair);
+        this.actions.createVolatile(number);
 
-            this.actions.addVolatile(account);
-        }
+        const keys = store.getState().keys.volatileKeys;
 
-        const accounts = store.getState().accounts.volatileKeys;
-
-        const publicKeys = [...accounts].map(([address, account]) => ([address, {
-            publicKey: account.keyPair.publicKey,
-        }]));
-
-        localStorage.setItem(KeyguardApi.VOLATILES, JSON.stringify(publicKeys));
-
-        return [...accounts.keys()];
+        return [...keys.keys()]; // = addresses
     }
 
-    // for wallet
     async persistWithPin(userFriendlyAddress, pin) {
 
-        const account = store.getState().accounts.volatileKeys.get(userFriendlyAddress);
+        const key = store.getState().keys.volatileKeys.get(userFriendlyAddress);
 
-        if (!account) throw new Error('Key not found');
+        if (!key) throw new Error('Key not found');
 
-        account._type = AccountType.low;
+        key._type = Keytype.low;
 
-        // todo encrypt key with pin
-
-        if (!await keyStore.put(account)) {
+        if (!await keyStore.put(key, pin)) {
             throw new Error('Key could not be persisted');
         }
 
         return true;
     }
 
-    // methods with UI
+    async lock(userFriendlyAddress, pin) {
+        const key = keyStore.get(userFriendlyAddress);
+        return key.lock(pin);
+    }
+
+    async unlock(userFriendlyAddress, pin) {
+        const key = keyStore.get(userFriendlyAddress);
+        return key.unlock(pin);
+    }
+
+    /** WITH UI */
 
     _startRequest(requestType) {
         return new Promise((resolve, reject) => {
@@ -104,20 +107,20 @@ export default class KeyguardApi {
         });
     }
 
+    /** SAFE */
 
-    // for safe
     async create() {
         return this._startRequest(RequestTypes.CREATE);
     }
 
-    // todo test if transaction or generic message and react accordingly
-    async sign(message) {
+    // todo later: test if transaction or generic message and react accordingly
+    /*async sign(message) {
         const {sender, recipient, value, fee} = message;
         const signature = 'mySign';
         return signature;
-    }
+    }*/
 
-    async _signTransaction(sender, recipient, amount, fee) {
+    async sign(sender, recipient, amount, fee) {
         return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
             sender,
             recipient,
@@ -126,43 +129,32 @@ export default class KeyguardApi {
         });
     }
 
-
-    importAccount() {
-        //router.navigate('import');
+    importFromFile(encryptedKey) {
+        return this._startRequest(RequestTypes.IMPORT_FILE, {
+            encryptedKey
+        });
     }
 
-    exportAccount(accountNumber) {
-        /*state.exportAccount.number = accountNumber;
-        state.exportAccount.promise = new Promise((resolve) => {
-            state.exportAccount.resolve = resolve;
-        });*/
-        //Router.navigate(`export/${accountNumber}`);
+    exportKey(userFriendlyAddress) {
+        return this._startRequest(RequestTypes.EXPORT, {
+            userFriendlyAddress
+        });
     }
-
 
     // old
 
-    async import(privateKey, persist = true) {
+    async import(privateKey) {
         if(typeof privateKey ===  'string') {
             privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
         }
         const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
-        const account = new Key(keyPair);
-        if (persist) {
-            await keyStore.put(account);
-        }
-        return account.userFriendlyAddress;
+        const key = new Key(keyPair);
+        await keyStore.put(account);
+
+        return key.userFriendlyAddress;
     }
 
-    async lock(accountNumber, pin) {
-        const account = keyStore.get(accountNumber);
-        return account.lock(pin);
-    }
 
-    async unlock(accountNumber, pin) {
-        const account = keyStore.get(accountNumber);
-        return account.unlock(pin);
-    }
 
     async importEncrypted(encryptedKey, password, persist = true) {
         encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey);

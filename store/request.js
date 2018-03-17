@@ -1,13 +1,14 @@
 import keystore from '../keys/keystore.js';
 import * as Keytype from '../keys/keytype.js';
+import Key from '../keys/key.js';
 
 // Requests which need UI
 export const RequestTypes = {
-    SIGN_TRANSACTION: 'signTransaction',
-    SIGN_MESSAGE: 'signMessage',
+    SIGN_TRANSACTION: 'sign-transaction',
+    SIGN_MESSAGE: 'sign-message',
     CREATE: 'create',
-    IMPORT_FILE: 'importFile',
-    IMPORT_WORDS: 'importWords',
+    IMPORT_FILE: 'import-file',
+    IMPORT_WORDS: 'import-words',
     EXPORT: 'export'
 };
 
@@ -169,6 +170,8 @@ export function setError(requestType, error) {
     }
 }
 
+// The following actions are async
+
 export function confirmPersist(passphrase, label = '') {
     return async (dispatch, getState) => {
         const state = getState();
@@ -188,6 +191,26 @@ export function confirmPersist(passphrase, label = '') {
         } else {
             dispatch(
                 setError(RequestTypes.CREATE, 'Key could not be persisted')
+            );
+        }
+    }
+}
+
+export function encryptAndPersist(passphrase) {
+    return async (dispatch, getState) => {
+        const state = getState();
+
+        try {
+            const encryptedKey = Nimiq.BufferUtils.fromBase64(state.request.data.encryptedKey);
+            const key = Key.loadEncrypted(encryptedKey, passphrase);
+            await keystore.put(encryptedKey);
+            dispatch(
+                setResult(RequestTypes.IMPORT_FILE, key.publicInformation)
+            );
+        } catch(e) {
+            // assume the password was wrong - are there other options?
+            dispatch(
+                setData(RequestTypes.IMPORT_FILE, { isWrongPassphrase: true })
             );
         }
     }

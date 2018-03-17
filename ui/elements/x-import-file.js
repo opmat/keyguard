@@ -1,11 +1,10 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import store from '../../store/store.js';
-import { bindActionCreators } from '/libraries/redux/src/index.js';
-import { setData } from '../../store/request.js';
-import XRouter from '/elements/x-router/x-router.js';
+import store from '/libraries/keyguard/store/store.js';
+import reduxify from '/libraries/redux/src/redux-x-element.js';
+import { RequestTypes, setData } from '/libraries/keyguard/store/request.js';
 
-export default class XImportFile extends XElement {
+class XImportFile extends XElement {
 
     html() { return `
         <h1>Enter your Passphrase</h1>
@@ -16,23 +15,31 @@ export default class XImportFile extends XElement {
         `;
     }
 
-    onCreate() {
-        //this.actions = bindActionCreators({setPassword}, store.dispatch);
-        store.subscribe(() => {
-            const state = store.getState();
-            /*if (state.feedback.wrongPassphrase)
-                this.$xPasswordSetter.wrongPassphrase();*/
-        });
-    }
-
-    listeners() {
-        return {
-            'x-password-setter-submitted': password => this.actions.setData(password)
-        }
-    }
-
     children() {
         return [ XPasswordSetter ];
     }
 
+    listeners() {
+        return {
+            'x-password-setter-submitted': passphrase => this.actions.setData(RequestTypes.IMPORT_FILE, { passphrase })
+        }
+    }
+
+    _onPropertiesChanged() {
+        const { isWrongPassphrase } = this.properties;
+
+        if (isWrongPassphrase) {
+            // todo show message in UI. Use html5 form validation api?
+           alert('wrong passphrase');
+           this.actions.setData(RequestTypes.IMPORT_FILE, { isWrongPassphrase: false });
+        }
+    }
 }
+
+export default reduxify(
+    store,
+    state => ({
+        wrongPassword: state.request.data.wrongPassword
+    }),
+    { setData }
+)(XImportFile)

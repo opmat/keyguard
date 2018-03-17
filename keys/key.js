@@ -44,8 +44,7 @@ export default class Key {
     /** Sign a generic message */
     sign(message) {
         if (this._isTransaction(message)) {
-            // todo implement
-            this.signTransaction(message);
+            this.createTransaction(message);
         } else {
            return Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, message);
         }
@@ -59,7 +58,7 @@ export default class Key {
      * @param {number} validityStartHeight The validityStartHeight for the transaction.
      * @returns {Transaction} A prepared and signed Transaction object. This still has to be sent to the network.
      */
-    createTransaction(recipient, value, fee, validityStartHeight) {
+    createTransaction(recipient, value, fee, validityStartHeight, format, network) {
         const transaction = new BasicTransaction(this._keyPair.publicKey, recipient, value, fee, validityStartHeight);
         transaction.signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
         return transaction;
