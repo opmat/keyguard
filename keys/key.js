@@ -1,31 +1,31 @@
-export default class Account {
+export default class Key {
     /**
      * @param {Uint8Array|string} buf
-     * @return {Account}
+     * @return {Key}
      */
     static loadPlain(buf) {
         if (typeof buf === 'string') buf = Nimiq.BufferUtils.fromHex(buf);
         if (!buf || buf.byteLength === 0) {
-            throw new Error('Invalid Account seed');
+            throw new Error('Invalid Key seed');
         }
-        return new Account(Nimiq.KeyPair.unserialize(new Nimiq.SerialBuffer(buf)));
+        return new Key(Nimiq.KeyPair.unserialize(new Nimiq.SerialBuffer(buf)));
     }
 
     /**
      * @param {Uint8Array|string} buf
      * @param {Uint8Array|string} password
-     * @return {Promise.<Account>}
+     * @return {Promise.<Key>}
      */
     static loadEncrypted(buf, password) {
         if (typeof buf === 'string') buf = Nimiq.BufferUtils.fromHex(buf);
         if (typeof password === 'string') password = Nimiq.BufferUtils.fromAscii(password);
-        return new Account(Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), password));
+        return new Key(Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), password));
     }
 
     /**
-     * Create a new Account object.
-     * @param {KeyPair} keyPair KeyPair owning this Account
-     * @returns {Account} A newly generated Account
+     * Create a new Key object.
+     * @param {KeyPair} keyPair KeyPair owning this Key
+     * @returns {Key} A newly generated Key
      */
     constructor(keyPair, type, label) {
         /** @type {KeyPair} */
@@ -52,7 +52,7 @@ export default class Account {
     }
 
     /**
-     * Sign Transaction that is signed by the owner of this Account
+     * Sign Transaction that is signed by the owner of this Key
      * @param {Address} recipient Address of the transaction receiver
      * @param {number} value Number of Satoshis to send.
      * @param {number} fee Number of Satoshis to donate to the Miner.
@@ -111,15 +111,15 @@ export default class Account {
     }
 
     /**
-     * @param {Account} o
+     * @param {Key} o
      * @return {boolean}
      */
     equals(o) {
-        return o instanceof Account && this.keyPair.equals(o.keyPair) && this.address.equals(o.address);
+        return o instanceof Key && this.keyPair.equals(o.keyPair) && this.address.equals(o.address);
     }
 
     /**
-     * The public key of the Account owner
+     * The public key of the Key owner
      * @type {PublicKey}
      */
     get publicKey() {

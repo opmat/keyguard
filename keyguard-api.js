@@ -1,9 +1,9 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-import Account from './accounts/account.js';
-import * as AccountType from './accounts/account-type.js';
-import accountStore from './accounts/account-store.js';
+import Key from './keys/key.js';
+import * as AccountType from './keys/keytype.js';
+import keyStore from './keys/keystore.js';
 import store from './store/store.js';
-import { addVolatile, clearVolatile, requestPersist } from './store/accounts.js';
+import { addVolatile, clearVolatile, requestPersist } from './store/keys.js';
 import { clear as clearUserInputs } from './store/user-inputs.js';
 import XRouter from '/elements/x-router/x-router.js';
 
@@ -27,7 +27,7 @@ export default class KeyguardApi {
 
     // dummy
     async get() {
-        const accounts = await accountStore.list();
+        const accounts = await keyStore.list();
         return accounts;
     }
 
@@ -56,12 +56,12 @@ export default class KeyguardApi {
 
         for (let i = 0; i < number; i++) {
             const keyPair = Nimiq.KeyPair.generate();
-            const account = new Account(keyPair);
+            const account = new Key(keyPair);
 
             this.actions.addVolatile(account);
         }
 
-        const accounts = store.getState().accounts.volatileAccounts;
+        const accounts = store.getState().accounts.volatileKeys;
 
         const publicKeys = [...accounts].map(([key, value]) => ([key, {
             publicKey: value.keyPair.publicKey,
@@ -81,7 +81,7 @@ export default class KeyguardApi {
 
         const account = storedVolatiles.get(userFriendlyAddress);
 
-        if (!account) throw new Error('Account not found');
+        if (!account) throw new Error('Key not found');
 
         this.actions.requestPersist(userFriendlyAddress);
 
@@ -137,16 +137,16 @@ export default class KeyguardApi {
 
     async persistWithPin(userFriendlyAddress, pin) {
 
-        const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+        const account = store.getState().accounts.volatileKeys.get(userFriendlyAddress);
 
-        if (!account) throw new Error('Account not found');
+        if (!account) throw new Error('Key not found');
 
         account._type = AccountType.low;
 
         // todo encrypt key with pin
 
-        if (!await accountStore.put(account)) {
-            throw new Error('Account could not be persisted');
+        if (!await keyStore.put(account)) {
+            throw new Error('Key could not be persisted');
         }
 
         return true;
@@ -166,34 +166,34 @@ export default class KeyguardApi {
             privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
         }
         const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
-        const account = new Account(keyPair);
+        const account = new Key(keyPair);
         if (persist) {
-            await accountStore.put(account);
+            await keyStore.put(account);
         }
         return account.userFriendlyAddress;
     }
 
     async lock(accountNumber, pin) {
-        const account = accountStore.get(accountNumber);
+        const account = keyStore.get(accountNumber);
         return account.lock(pin);
     }
 
     async unlock(accountNumber, pin) {
-        const account = accountStore.get(accountNumber);
+        const account = keyStore.get(accountNumber);
         return account.unlock(pin);
     }
 
     async importEncrypted(encryptedKey, password, persist = true) {
         encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey);
-        const account = Account.loadEncrypted(encryptedKey, password);
+        const account = Key.loadEncrypted(encryptedKey, password);
         if (persist) {
-            accountStore.put(account);
+            keyStore.put(account);
         }
         return account.userFriendlyAddress;
     }
 
     async exportEncrypted(password) {
-        const exportedWallet = Account.exportEncrypted(password);
+        const exportedWallet = Key.exportEncrypted(password);
         return Nimiq.BufferUtils.toBase64(exportedWallet);
     }
 

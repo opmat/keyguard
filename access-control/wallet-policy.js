@@ -1,5 +1,5 @@
 import BasePolicy from './base-policy.js';
-import * as AccountType from '../accounts/account-type.js';
+import * as AccountType from '../keys/keytype.js';
 
 export default class WalletPolicy extends BasePolicy {
     constructor(limit) {

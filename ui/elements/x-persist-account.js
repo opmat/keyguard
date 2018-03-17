@@ -53,7 +53,7 @@ class XPersistAccount extends XElement {
 export default reduxify(
     store,
     state => ({
-        userFriendlyAddress: state.accounts.toBePersisted
+        userFriendlyAddress: state.keys.toBePersisted
     }),
     { confirmPersist }
 )(XPersistAccount)

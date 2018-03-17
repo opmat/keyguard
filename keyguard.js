@@ -5,7 +5,7 @@ import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
 import store from './store/store.js';
-import accountStore from './accounts/account-store.js';
+import accountStore from './keys/keystore.js';
 import XKeyguardApp from './ui/x-keyguard-app.js';
 import { KeyNotFoundError } from './errors/index.js';
 
@@ -46,7 +46,7 @@ class Keyguard {
         const { userFriendlyAddress, password, type, label } = JSON.parse(newValue);
 
         // get account which shall be persisted
-        const account = store.getState().accounts.volatileAccounts.get(userFriendlyAddress);
+        const account = store.getState().accounts.volatileKeys.get(userFriendlyAddress);
         if (!account) throw new KeyNotFoundError();
 
         account.type = type;
