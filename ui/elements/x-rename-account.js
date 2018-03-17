@@ -1,8 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
-import store from '../../store/store.js';
-// import { confirmRename } from '../../store/user-inputs.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
+import store from '/libraries/keyguard/store/store.js';
+import { RequestTypes, confirm } from '/libraries/keyguard/store/request.js';
 
 export default class XRenameAccount extends XElement {
 
@@ -44,12 +44,12 @@ export default class XRenameAccount extends XElement {
 
 
 /* connect the element to the redux store */
-// TODO [max] conntect
-// export default reduxify(
-//     store,
-//     state => ({
-//         address: ...
-//         label: ...
-//     }),
-//     { confirmRename }
-// )(XRenameAccount)
+/* export default reduxify(
+     store,
+     state => ({
+         address: ...
+         label: ...
+     }),
+     { confirm }
+ )(XRenameAccount)
+*/

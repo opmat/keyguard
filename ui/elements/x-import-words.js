@@ -1,8 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMnemonicInput from '/elements/x-mnemonic-input/x-mnemonic-input.js';
-import store from '../../store/store.js';
-import { bindActionCreators } from '/libraries/redux/src/index.js';
-import { setData } from '../../store/request.js';
+import reduxify from '/libraries/redux/src/redux-x-element.js';
+import store from '/libraries/keyguard/store/store.js';
+import { RequestTypes, deny, setData } from '/libraries/keyguard/store/request.js';
 
 // TODO remove for production
 window.test = async () => {
@@ -22,10 +22,9 @@ window.test = async () => {
         putWord(field, testPassphrase[index], index);
     });
     document.querySelectorAll('button').forEach(button => button.setAttribute('disabled', 'disabled'));
-}
-// /remove
+};
 
-export default class XImportWords extends XElement {
+class XImportWords extends XElement {
 
     html() { return `
         <h1>Account Recovery</h1>
@@ -38,14 +37,10 @@ export default class XImportWords extends XElement {
         `;
     }
 
-    onCreate() {
-        //this.actions = bindActionCreators({setPassword}, store.dispatch);
-    }
-
     listeners() {
         return {
             'x-mnemonic-input': key => console.log('success', key),
-            'click button': e => console.log('cancelled')
+            'click button': () => this.actions.deny(RequestTypes.IMPORT_FROM_WORDS)
         }
     }
 
@@ -53,3 +48,9 @@ export default class XImportWords extends XElement {
         return [ XMnemonicInput ];
     }
 }
+
+export default reduxify(
+    store,
+    null,
+    { setData, deny }
+)(XImportWords)
