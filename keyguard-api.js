@@ -3,9 +3,10 @@ import Key from './keys/key.js';
 import * as AccountType from './keys/keytype.js';
 import keyStore from './keys/keystore.js';
 import store from './store/store.js';
-import { addVolatile, clearVolatile, requestPersist } from './store/keys.js';
-import { clear as clearUserInputs } from './store/user-inputs.js';
+import { createVolatile, clearVolatile } from './store/keys.js';
+import { start } from './store/request.js';
 import XRouter from '/elements/x-router/x-router.js';
+import { RequestTypes } from './store/request.js';
 
 export default class KeyguardApi {
 
@@ -13,17 +14,41 @@ export default class KeyguardApi {
 
     constructor() {
         this.actions = bindActionCreators({
-            addVolatile,
+            createVolatile,
             clearVolatile,
-            requestPersist,
-            clearUserInputs,
+            start,
         }, store.dispatch);
     }
 
-    /*
-     triggerImport
-     sign
-     */
+    _startRequest(requestType) {
+        return new Promise((resolve, reject) => {
+
+            if (store.getState().request.started) {
+                throw new Error('Request already started');
+            }
+
+            this.actions.start(requestType);
+
+            // wait until the ui dispatches the user's feedback
+            store.subscribe(() => {
+                const request = store.getState().request;
+
+                if (!request.completed && !request.error) return;
+
+                if (request.confirmed) {
+                    // return created key
+                    resolve(request.result);
+                } else if(request.error) {
+                    reject(new Error(request.error));
+                } else {
+                    //user denied
+                    resolve(null);
+                }
+            });
+
+            XRouter.root.goTo(requestType);
+        });
+    }
 
     // dummy
     async get() {
@@ -50,6 +75,7 @@ export default class KeyguardApi {
         return signature;
     }
 
+    // for wallet
     createVolatile(number) {
 
         this.actions.clearVolatile();
@@ -63,78 +89,30 @@ export default class KeyguardApi {
 
         const accounts = store.getState().accounts.volatileKeys;
 
-        const publicKeys = [...accounts].map(([key, value]) => ([key, {
-            publicKey: value.keyPair.publicKey,
-
+        const publicKeys = [...accounts].map(([address, account]) => ([address, {
+            publicKey: account.keyPair.publicKey,
         }]));
 
         localStorage.setItem(KeyguardApi.VOLATILES, JSON.stringify(publicKeys));
 
-        return [...accounts.keys()]
+        return [...accounts.keys()];
     }
 
-    async persist(userFriendlyAddress, accountType) {
-
-        const storedVolatiles = new Map(JSON.parse(localStorage.getItem(KeyguardApi.VOLATILES)));
-
-        localStorage.removeItem(KeyguardApi.VOLATILES);
-
-        const account = storedVolatiles.get(userFriendlyAddress);
-
-        if (!account) throw new Error('Key not found');
-
-        this.actions.requestPersist(userFriendlyAddress);
-
-
-        // todo get both password and label (const [password, label] = ...)
-        const password = await new Promise((resolve, reject) => {
-
-            // wait until the ui dispatches the user's feedback
-            store.subscribe(() => {
-                const state = store.getState();
-
-                const passwordFromUI = state.userInputs.password;
-                const confirmed = state.userInputs.confirmed;
-
-                if (confirmed && passwordFromUI) {
-                    this.actions.clearUserInputs();
-                    resolve(passwordFromUI);
-                }
-
-                if (confirmed === false) {
-                    this.actions.clearUserInputs();
-                    reject(new Error('User denied action'));
-                }
-            });
-
-            XRouter.root.goTo('persist');
-        });
-
-        // todo encypt password with public key
-
-        // wait for response from iframe...
-        const response = new Promise(resolve => {
-            const listener = ({ key, newValue }) => {
-                if (key !== KeyguardApi.PERSIST_RESPONSE || newValue === '') return;
-                self.removeEventListener('storage', listener);
-                localStorage.removeItem(KeyguardApi.PERSIST_RESPONSE);
-                resolve(newValue);
-            }
-
-            self.addEventListener('storage', listener);
-
-            // ...to this request
-            localStorage.setItem(KeyguardApi.PERSIST, JSON.stringify({
-                userFriendlyAddress,
-                password,
-                accountType,
-            }));
-        });
-
-        // return 0=false or 1=true
-        return parseInt(await response);
+    // for safe
+    async create() {
+        return this._startRequest(RequestTypes.CREATE);
     }
 
+    async signTransaction(sender, recipient, amount, fee) {
+        return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
+            sender,
+            recipient,
+            amount,
+            fee
+        });
+    }
+
+    // for wallet
     async persistWithPin(userFriendlyAddress, pin) {
 
         const account = store.getState().accounts.volatileKeys.get(userFriendlyAddress);
@@ -153,13 +131,6 @@ export default class KeyguardApi {
     }
 
     // old
-
-    async createTransaction(recipient, value, validityStartHeight, fee = 0) {
-        const recipientAddr = Nimiq.Address.fromUserFriendlyAddress(recipient);
-        value = Math.round(Number(value) * KeyguardApi.satoshis);
-        fee = Math.round(Number(fee) * KeyguardApi.satoshis);
-        return Nimiq.wallet.createTransaction(recipientAddr, value, fee, validityStartHeight);
-    }
 
     async import(privateKey, persist = true) {
         if(typeof privateKey ===  'string') {
@@ -240,7 +211,3 @@ export default class KeyguardApi {
         return parseInt(tmp);
     }
 }
-
-KeyguardApi.PERSIST = 'persist';
-KeyguardApi.PERSIST_RESPONSE = 'persistResponse';
-KeyguardApi.VOLATILES = 'volatiles';

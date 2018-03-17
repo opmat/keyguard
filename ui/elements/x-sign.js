@@ -1,8 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import store from '../../store/store.js';
-import { confirmPersist } from '../../store/user-inputs.js';
+import store from '/libraries/keyguard/store/store.js';
+import { RequestTypes, confirm } from '/libraries/keyguard/store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XSign extends XElement {
@@ -21,13 +21,14 @@ class XSign extends XElement {
         `;
     }
 
-    onCreate() { this._onPropertiesChanged(); }
+    onCreate() {
+        this.setProperties({ sender: 'monkey pie', recipient: 'uncle sam', value: 1.06e6, fee: 101, validity: 15000 });
+    }
 
     _onPropertiesChanged() {
-        // TODO [max] hook in state, when done, remove test call in onCreate
-        const properties = this.properties.length > 0 ? this.properties : { sender: 'monkey pie', recipient: 'uncle sam', value: 1.06e6, fee: 101, validity: 15000 }
-        const { sender, recipient,  value, fee, validity } = properties;
+        const { requestType, sender, recipient,  value, fee, validity } = this.properties;
 
+        if (requestType !== RequestTypes.SIGN_TRANSACTION) return;
 
         this.$identicon[0].address = sender;
         this.$identicon[1].address = recipient;
@@ -38,8 +39,8 @@ class XSign extends XElement {
     }
 
     listeners() {
-        return { // TODO [max] put result into state
-            'click button': _ => console.log('XSign confirmed')
+        return {
+            'click button': _ => this.actions.confirm(RequestTypes.SIGN_TRANSACTION)
         }
     }
 
@@ -48,12 +49,19 @@ class XSign extends XElement {
     }
 }
 
-
 /* connect the element to the redux store */
 export default reduxify(
     store,
-    state => ({
-        userFriendlyAddress: state.accounts.toBePersisted
-    }),
-    { confirmPersist }
+    state => {
+        const data = state.request.data;
+        return {
+            sender: data.sender,
+            recipient: data.recipient,
+            value: data.value,
+            requestType: state.request.requestType
+        };
+    },
+    { confirm }
 )(XSign)
+
+// Todo confirm with passphrase: confirm

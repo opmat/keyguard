@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '../../store/store.js';
-import { confirmPersist } from '../../store/user-inputs.js';
+import { RequestTypes, confirm, confirmPersist } from '../../store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XPersistAccount extends XElement {
@@ -39,7 +39,7 @@ class XPersistAccount extends XElement {
 
     listeners() {
         return {
-            'x-password-setter-submitted': password => this.actions.confirmPersist(password)
+            'x-password-setter-submitted': passphrase => this.actions.confirmPersist(passphrase)
         }
     }
 
@@ -53,7 +53,7 @@ class XPersistAccount extends XElement {
 export default reduxify(
     store,
     state => ({
-        userFriendlyAddress: state.keys.toBePersisted
+        userFriendlyAddress: state.request.data.address
     }),
-    { confirmPersist }
+    { confirm, confirmPersist }
 )(XPersistAccount)

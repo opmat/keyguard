@@ -1,17 +1,15 @@
 import Key from '../keys/key.js';
+import { RequestTypes } from './request.js';
 
 export const TypeKeys = {
     ADD: 'keys/add',
-    CLEAR: 'keys/clear',
-    REQUEST_PERSIST: 'keys/requestPersist',
-    CLEAR_PERSIST: 'keys/requestPersist'
+    CLEAR: 'keys/clear'
 };
 
 export function reducer(state, action) {
     if (state === undefined) {
         return {
-            volatileKeys: new Map(),
-            toBePersisted: null
+            volatileKeys: new Map()
         }
     }
 
@@ -34,46 +32,15 @@ export function reducer(state, action) {
                 volatileKeys: new Map()
             };
 
-        case TypeKeys.REQUEST_PERSIST:
-            return {
-                ...state,
-                toBePersisted: action.userFriendlyAddress
-            };
-
-        case TypeKeys.CLEAR_PERSIST:
-            return {
-                ...state,
-                toBePersisted: null
-            };
-
         default:
             return state
     }
 }
 
-export function addVolatile(key) {
-    return {
-        type: TypeKeys.ADD,
-        key
-    }
-}
-
 export function clearVolatile() {
     return {
-        type: TypeKeys.CLEAR
-    }
-}
-
-export function requestPersist(userFriendlyAddress) {
-    return {
-        type: TypeKeys.REQUEST_PERSIST,
-        userFriendlyAddress
-    }
-}
-
-export function clearPersist() {
-    return {
-        type: TypeKeys.CLEAR_PERSIST,
+        type: TypeKeys.CLEAR,
+        requestType: RequestTypes.CREATE
     }
 }
 
@@ -88,9 +55,7 @@ export function createVolatile(number) {
 
     return {
         type: TypeKeys.ADD,
-        payload: keys
+        payload: keys,
+        requestType: RequestTypes.CREATE
     }
 }
-
-
-// move toBePersisted to request (userinput) store

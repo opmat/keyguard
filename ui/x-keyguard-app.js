@@ -1,9 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
-// TODO what to do when the user reloads the page and the state is not initialized again?? > persist the state on unload
 import XRouter from '/elements/x-router/x-router.js';
 import XPersistAccount from './elements/x-persist-account.js';
 import XIdenticons from './elements/x-identicons/x-identicons.js';
-import XImportFile from './elements/x-import-file.js';
 import XImportWords from './elements/x-import-words.js';
 import XSign from './elements/x-sign.js';
 import XRenameAccount from './elements/x-rename-account.js';
@@ -49,3 +47,5 @@ export default class XKeyguardApp extends XElement {
 }
 
 // TODO catch errors in a top level error panel catching all previously uncaught exceptions > XApp
+// TODO what to do when the user reloads the page and the state is not initialized again?? > persist the state on unload
+// that means we would have to put rpc requests in store and open new promises for unresponsed requests

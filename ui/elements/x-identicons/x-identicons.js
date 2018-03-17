@@ -1,9 +1,10 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
+import XRouter from '/elements/x-router/x-router.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 import store from '/libraries/keyguard/store/store.js';
-import XRouter from '/elements/x-router/x-router.js';
-import { createVolatile } from '/libraries/keyguard/store/keys.js';
+import { createVolatile, clearVolatile } from '/libraries/keyguard/store/keys.js';
+import { RequestTypes, setData } from '/libraries/keyguard/store/request.js';
 
 class XIdenticons extends XElement {
 
@@ -45,11 +46,16 @@ class XIdenticons extends XElement {
     }
 
     onExit(){
-        this._clearIdenticons();
+        this.$container.textContent = '';
     }
 
-    _onPropertiesChanged() {
-        const { addresses } = this.properties;
+    _onPropertiesChanged(changedProperties) {
+        // todo use deepdiff in setProperties
+        //if (!changedProperties.includes('addresses')) return;
+
+        const { requestType, addresses } = this.properties;
+
+        if (requestType !== RequestTypes.CREATE) return;
 
         this.$container.textContent = '';
 
@@ -64,6 +70,7 @@ class XIdenticons extends XElement {
     }
 
     async _generateIdenticons() {
+        this.actions.clearVolatile();
         this.actions.createVolatile(7);
     }
 
@@ -85,7 +92,7 @@ class XIdenticons extends XElement {
     }
 
     async _onConfirm(address) {
-        // this.actions.confirm(password, label);
+        this.actions.setData(RequestTypes.CREATE, { address } );
         XRouter.root.goTo('persist');
     }
 }
@@ -93,11 +100,21 @@ class XIdenticons extends XElement {
 export default reduxify(
     store,
     state => ({
-        addresses: [...state.keys.volatileKeys.keys()]
+        // volatileKeys is a map whose keys are addresses ;)
+        addresses: [...state.keys.volatileKeys.keys()],
+        requestType: state.request.requestType
     }),
-    { createVolatile }
+    { createVolatile, clearVolatile, setData }
 )(XIdenticons);
 
 // Todo: [low priority] remove hack for overlay and find a general solution
 
 // Todo: use store provider which recursively sets store in all children? Or decouple store import in a different way
+
+/*  For accounts component:
+            const $identicon = reduxify(
+              store,
+               state => ({
+                    balance: state.accounts.entries.get(address).balance
+                })
+            )(XIdenticon).createElement();*/
