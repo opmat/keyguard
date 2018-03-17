@@ -20,59 +20,16 @@ export default class KeyguardApi {
         }, store.dispatch);
     }
 
-    _startRequest(requestType) {
-        return new Promise((resolve, reject) => {
+    // methods without UI
 
-            if (store.getState().request.started) {
-                throw new Error('Request already started');
-            }
-
-            this.actions.start(requestType);
-
-            // wait until the ui dispatches the user's feedback
-            store.subscribe(() => {
-                const request = store.getState().request;
-
-                if (!request.completed && !request.error) return;
-
-                if (request.confirmed) {
-                    // return created key
-                    resolve(request.result);
-                } else if(request.error) {
-                    reject(new Error(request.error));
-                } else {
-                    //user denied
-                    resolve(null);
-                }
-            });
-
-            XRouter.root.goTo(requestType);
-        });
-    }
-
-    // dummy
     async get() {
         const accounts = await keyStore.list();
         return accounts;
     }
 
-    importAccount() {
-        //router.navigate('import');
-    }
-
-    exportAccount(accountNumber) {
-        /*state.exportAccount.number = accountNumber;
-        state.exportAccount.promise = new Promise((resolve) => {
-            state.exportAccount.resolve = resolve;
-        });*/
-        //Router.navigate(`export/${accountNumber}`);
-    }
-
-    // dummy
-    // todo test if transaction or generic message
-    async sign({sender, recipient, value, fee}) {
-        const signature = 'mySign';
-        return signature;
+    // called by safe after back up file was downloaded
+    async activate(userFriendlyAddress) {
+        await keyStore.activate(userFriendlyAddress);
     }
 
     // for wallet
@@ -98,20 +55,6 @@ export default class KeyguardApi {
         return [...accounts.keys()];
     }
 
-    // for safe
-    async create() {
-        return this._startRequest(RequestTypes.CREATE);
-    }
-
-    async signTransaction(sender, recipient, amount, fee) {
-        return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
-            sender,
-            recipient,
-            amount,
-            fee
-        });
-    }
-
     // for wallet
     async persistWithPin(userFriendlyAddress, pin) {
 
@@ -129,6 +72,73 @@ export default class KeyguardApi {
 
         return true;
     }
+
+    // methods with UI
+
+    _startRequest(requestType) {
+        return new Promise((resolve, reject) => {
+
+            if (store.getState().request.started) {
+                throw new Error('Request already started');
+            }
+
+            this.actions.start(requestType);
+
+            // wait until the ui dispatches the user's feedback
+            store.subscribe(() => {
+                const request = store.getState().request;
+
+                if (!request.completed && !request.error) return;
+
+                if (request.confirmed) {
+                    resolve(request.result);
+                } else if(request.error) {
+                    reject(new Error(request.error));
+                } else {
+                    //user denied
+                    resolve(null);
+                }
+            });
+
+            XRouter.root.goTo(requestType);
+        });
+    }
+
+
+    // for safe
+    async create() {
+        return this._startRequest(RequestTypes.CREATE);
+    }
+
+    // todo test if transaction or generic message and react accordingly
+    async sign(message) {
+        const {sender, recipient, value, fee} = message;
+        const signature = 'mySign';
+        return signature;
+    }
+
+    async _signTransaction(sender, recipient, amount, fee) {
+        return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
+            sender,
+            recipient,
+            amount,
+            fee
+        });
+    }
+
+
+    importAccount() {
+        //router.navigate('import');
+    }
+
+    exportAccount(accountNumber) {
+        /*state.exportAccount.number = accountNumber;
+        state.exportAccount.promise = new Promise((resolve) => {
+            state.exportAccount.resolve = resolve;
+        });*/
+        //Router.navigate(`export/${accountNumber}`);
+    }
+
 
     // old
 

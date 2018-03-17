@@ -92,6 +92,7 @@ class KeyStore {
      */
     async put(account, key, unlockKey) {
         await this._dbInitialized;
+        // todo
         /*const base64Address = account.address.toBase64();
         /** @type {Uint8Array} */
         /*let buf = null;
@@ -135,6 +136,16 @@ class KeyStore {
         }));
 
         return result;
+    }
+
+    /**
+     * After account was successfully backuped, allow its use
+     *
+     * @param userFriendlyAddress
+     * @return {Promise<void>}
+     */
+    async activate(userFriendlyAddress) {
+        // todo implement
     }
 
     /**

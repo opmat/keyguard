@@ -10,12 +10,12 @@ import { reducer as requestReducer } from './request.js';
 const reducers = {
     keys: keyReducer,
     request: requestReducer
-}
+};
 
 const logger = createLogger({
     collapsed: true,
     predicate: (getState, action) => true
-})
+});
 
 export default function configureStore(initialState) {
 

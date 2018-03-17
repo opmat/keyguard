@@ -23,7 +23,6 @@ export default class XImportFile extends XElement {
             /*if (state.feedback.wrongPassphrase)
                 this.$xPasswordSetter.wrongPassphrase();*/
         });
-
     }
 
     listeners() {
