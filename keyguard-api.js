@@ -24,7 +24,7 @@ export default class KeyguardApi {
 
     /** SAFE AND WALLET */
 
-    async get() {
+    async list() {
         const keys = await keyStore.list();
         return keys;
     }

@@ -1,5 +1,5 @@
 import BasePolicy from './base-policy.js';
-import * as AccountType from '../keys/keytype.js';
+import * as Keytype from '../keys/keytype.js';
 
 export default class WalletPolicy extends BasePolicy {
     constructor(limit) {
@@ -15,13 +15,13 @@ export default class WalletPolicy extends BasePolicy {
         switch (method) {
             case 'triggerImport':
             case 'persist':
-            case 'get':
+            case 'list':
             case 'createVolatile':
                 return true;
             case 'sign':
                 const { accountNumber, recipient, value, fee } = args;
-                const account = state.accounts.get(accountNumber);
-                if (account && account.type === AccountType.Low) return true;
+                const key = state.keys.get(accountNumber);
+                if (key && key.type === Keytype.LOW) return true;
                 return false;
             default:
                 throw new Error(`Unhandled method: ${method}`);
@@ -32,7 +32,7 @@ export default class WalletPolicy extends BasePolicy {
         switch (method) {
             case 'triggerImport':
             case 'persist':
-            case 'get':
+            case 'list':
             case 'createVolatile':
                 return false;
             case 'sign':

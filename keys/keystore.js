@@ -51,58 +51,49 @@ class KeyStore {
         });
     }
 
-    get _accountStoreRead() {
+    get _keyStoreRead() {
         return this._getStore(KeyStore.ACCOUNT_DATABASE, 'readonly');
     }
 
-    get _accountStoreWrite() {
+    get _keyStoreWrite() {
         return this._getStore(KeyStore.ACCOUNT_DATABASE, 'readwrite');
     }
 
     /**
-     * @param {Address} address
-     * @param {Uint8Array|string} key
+     * @param {string} userFriendlyAddress
+     * @param {Uint8Array|string} passphrase
      * @returns {Promise.<Wallet>}
      */
-    async get(address, key) {
+    async get(userFriendlyAddress, passphrase) {
         await this._dbInitialized;
-        const request = (await this._accountStoreRead).get(address);
-        const account = await this._getResult(request);
+        const request = (await this._keyStoreRead).get(userFriendlyAddress);
+        const key = await this._getResult(request);
 
-        return account;
-
-        /*
-        const buf = await new Promise (async (resolve, reject)=> {
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });*/
-
-        if (key) {
-            return Account.loadEncrypted(buf, key);
-        }
-
-        return Account.loadPlain(buf);
+        return Key.loadEncrypted(key._keyPair, passphrase);
     }
 
     /**
-     * @param {Wallet} account
-     * @param {Uint8Array|string} [key]
+     * @param {Key} key
+     * @param {Uint8Array|string} [passphrase]
      * @param {Uint8Array|string} [unlockKey]
      * @returns {Promise}
      */
-    async put(account, key, unlockKey) {
+    async put(key, passphrase, unlockKey) {
         await this._dbInitialized;
-        // todo
-        /*const base64Address = account.address.toBase64();
-        /** @type {Uint8Array} */
-        /*let buf = null;
-        if (key) {
-            buf = await account.exportEncrypted(key, unlockKey);
-        } else {
-            buf = account.exportPlain();
-        }*/
 
-        const request = (await this._accountStoreWrite).put(account);
+        console.log(key);
+        console.log(key.address);
+        console.log(key.address.serialize);
+
+        /** @type {Uint8Array} */
+        key._keyPair = await key.exportEncrypted(passphrase, unlockKey);
+
+        const request = (await this._keyStoreWrite).put({
+            _keyPair: key._keyPair,
+            userFriendlyAddress: key.userFriendlyAddress,
+            type: key.type,
+            label: key.label,
+        });
 
         return await this._getResult(request);
     }
@@ -114,7 +105,7 @@ class KeyStore {
     async remove(address) {
         await this._dbInitialized;
 
-        const request = (await this._accountStoreWrite).remove(address);
+        const request = (await this._keyStoreWrite).remove(address);
 
         return await this._getResult(request);
     }
@@ -125,14 +116,15 @@ class KeyStore {
     async list() {
         await this._dbInitialized;
 
-        const request = (await this._accountStoreRead).getAll();
+        const request = (await this._keyStoreRead).getAll();
 
-        const accounts = await this._getResult(request);
+        const keys = await this._getResult(request);
 
-        const result = [...accounts].map(account => ({
-            userFriendlyAddress: account.userFriendlyAddress,
-            address: account.address,
-            type: account.type
+        // Because: To use Key.getPublicInfo(), we would need to create Key instances out of the key object that we receive from the DB
+        const result = [...keys].map(key => ({
+            address: key.userFriendlyAddress,
+            type: key.type,
+            label: key.label
         }));
 
         return result;

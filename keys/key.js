@@ -65,13 +65,6 @@ export default class Key {
     }
 
     /**
-     * @returns {Uint8Array}
-     */
-    exportPlain() {
-        return this._keyPair.serialize();
-    }
-
-    /**
      * @param {Uint8Array|string} key
      * @param {Uint8Array|string} [unlockKey]
      * @return {Promise.<Uint8Array>}
@@ -115,6 +108,17 @@ export default class Key {
      */
     equals(o) {
         return o instanceof Key && this.keyPair.equals(o.keyPair) && this.address.equals(o.address);
+    }
+
+    /**
+     * @returns {object}
+     */
+    getPublicInfo() {
+        return {
+            address: this.userFriendlyAddress,
+            type: this.type,
+            label: this.label
+        }
     }
 
     /**
