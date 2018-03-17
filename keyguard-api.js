@@ -89,14 +89,13 @@ export default class KeyguardApi {
 
         const accounts = store.getState().accounts.volatileKeys;
 
-        const publicKeys = [...accounts].map(([key, value]) => ([key, {
-            publicKey: value.keyPair.publicKey,
-
+        const publicKeys = [...accounts].map(([address, account]) => ([address, {
+            publicKey: account.keyPair.publicKey,
         }]));
 
         localStorage.setItem(KeyguardApi.VOLATILES, JSON.stringify(publicKeys));
 
-        return [...accounts.keys()]
+        return [...accounts.keys()];
     }
 
     // for safe

@@ -29,7 +29,7 @@ export default class XKeyguardApp extends XElement {
           <main x-route="/">
             <x-loading-animation></x-loading-animation>
             <h2>Calling keyguard</h2>
-            <a x-href="import-from-file">persist</a>
+            <a x-href="import-from-file">import from file</a>
             <a x-href="persist">persist</a>
           </main>
         </x-router>
