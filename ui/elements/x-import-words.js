@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XMnemonicInput from '/elements/x-mnemonic-input/x-mnemonic-input.js';
 import store from '../../store/store.js';
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-import { setPassword } from '../../store/user-inputs.js';
+import { setData } from '../../store/request.js';
 
 // TODO remove for production
 window.test = async () => {

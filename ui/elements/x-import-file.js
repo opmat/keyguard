@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '../../store/store.js';
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-import { setPassword } from '../../store/user-inputs.js';
+import { setData } from '../../store/request.js';
 import XRouter from '/elements/x-router/x-router.js';
 
 export default class XImportFile extends XElement {
@@ -17,7 +17,7 @@ export default class XImportFile extends XElement {
     }
 
     onCreate() {
-        this.actions = bindActionCreators({setPassword}, store.dispatch);
+        //this.actions = bindActionCreators({setPassword}, store.dispatch);
         store.subscribe(() => {
             const state = store.getState();
             /*if (state.feedback.wrongPassphrase)
@@ -26,13 +26,9 @@ export default class XImportFile extends XElement {
 
     }
 
-    onEntry() {
-        XRouter.root.goTo('persist');
-    }
-
     listeners() {
         return {
-            'x-password-setter-submitted': password => this.actions.setPassword(password)
+            'x-password-setter-submitted': password => this.actions.setData(password)
         }
     }
 

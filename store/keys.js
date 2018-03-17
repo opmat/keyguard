@@ -51,13 +51,6 @@ export function reducer(state, action) {
     }
 }
 
-export function addVolatile(key) {
-    return {
-        type: TypeKeys.ADD,
-        key
-    }
-}
-
 export function clearVolatile() {
     return {
         type: TypeKeys.CLEAR
