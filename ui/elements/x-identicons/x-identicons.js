@@ -3,7 +3,7 @@ import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XRouter from '/elements/x-router/x-router.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 import store from '/libraries/keyguard/store/store.js';
-import { createVolatile, clearVolatile, requestPersist } from '/libraries/keyguard/store/keys.js';
+import { createVolatile, clearVolatile } from '/libraries/keyguard/store/keys.js';
 import { RequestTypes, setData } from '/libraries/keyguard/store/request.js';
 
 class XIdenticons extends XElement {
@@ -50,9 +50,12 @@ class XIdenticons extends XElement {
     }
 
     _onPropertiesChanged(changedProperties) {
-        if (!changedProperties.includes('addresses')) return;
+        // todo use deepdiff in setProperties
+        //if (!changedProperties.includes('addresses')) return;
 
-        const { addresses } = this.properties;
+        const { requestType, addresses } = this.properties;
+
+        if (requestType !== RequestTypes.CREATE) return;
 
         this.$container.textContent = '';
 
@@ -98,9 +101,10 @@ export default reduxify(
     store,
     state => ({
         // volatileKeys is a map whose keys are addresses ;)
-        addresses: [...state.keys.volatileKeys.keys()]
+        addresses: [...state.keys.volatileKeys.keys()],
+        requestType: state.request.requestType
     }),
-    { createVolatile, clearVolatile, requestPersist, setData }
+    { createVolatile, clearVolatile, setData }
 )(XIdenticons);
 
 // Todo: [low priority] remove hack for overlay and find a general solution

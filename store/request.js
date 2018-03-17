@@ -1,4 +1,3 @@
-import store from './store.js';
 import keystore from '../keys/keystore.js';
 import * as Keytype from '../keys/keytype.js';
 
@@ -17,7 +16,8 @@ export const TypeKeys = {
     SET_DATA: 'request/setData',
     CONFIRM: 'request/confirm',
     DENY: 'request/deny',
-    SET_RESULT: 'request/result'
+    SET_RESULT: 'request/result',
+    SET_ERROR: 'request/error'
 };
 
 export function reducer(state, action) {
@@ -25,7 +25,7 @@ export function reducer(state, action) {
         requestType: undefined,
         completed: false,
         confirmed: undefined,
-        data: undefined,
+        data: {},
         result: undefined
     };
 
@@ -53,7 +53,10 @@ export function reducer(state, action) {
             return {
                 ...state,
                 requestType: action.requestType,
-                data: action.data
+                data: {
+                    ...state.data,
+                    ...action.data
+                }
             };
 
         case TypeKeys.CONFIRM:
@@ -100,6 +103,20 @@ export function reducer(state, action) {
                 confirmed: false
             };
 
+        case TypeKeys.SET_RESULT:
+            return {
+                ...state,
+                completed: true,
+                confirmed: true,
+                result: action.result
+            };
+
+        case TypeKeys.SET_ERROR:
+            return {
+                ...state,
+                error: action.error
+            };
+
         default:
             return state
     }
@@ -144,19 +161,34 @@ export function setResult(requestType, result) {
     }
 }
 
-export async function confirmPersist(passphrase, label = '') {
+export function setError(requestType, error) {
+    return {
+        type: TypeKeys.SET_ERROR,
+        requestType,
+        error
+    }
+}
 
-    const state = store.getState();
-    const key = state.keys.volatileKeys.get(state.request.key)
+export function confirmPersist(passphrase, label = '') {
+    return async (dispatch, getState) => {
+        const state = getState();
+        const key = state.keys.volatileKeys.get(state.request.data.address);
 
-    key.type = Keytype.high;
-    key.label = label;
+        key.type = Keytype.high;
+        key.label = label;
 
-    if (await keystore.put(key, passphrase)) {
-        return setResult(RequestTypes.CREATE, {
-            address: key.address,
-            label: key.label,
-            publicKey: key.keyPair.publicKey
-        });
+        if (await keystore.put(key, passphrase)) {
+            dispatch(
+                setResult(RequestTypes.CREATE, {
+                    address: key.address,
+                    label: key.label,
+                    publicKey: key.keyPair.publicKey
+                })
+            );
+        } else {
+            dispatch(
+                setError(RequestTypes.CREATE, 'Key could not be persisted')
+            );
+        }
     }
 }

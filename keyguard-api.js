@@ -3,41 +3,10 @@ import Key from './keys/key.js';
 import * as AccountType from './keys/keytype.js';
 import keyStore from './keys/keystore.js';
 import store from './store/store.js';
-import { createVolatile, clearVolatile, requestPersist } from './store/keys.js';
+import { createVolatile, clearVolatile } from './store/keys.js';
 import { start } from './store/request.js';
 import XRouter from '/elements/x-router/x-router.js';
 import { RequestTypes } from './store/request.js';
-
-// todo find nicer place for this lonely method which should not be visible for RPCClients
-function startRequest(requestType) {
-    return new Promise((resolve, reject) => {
-
-        if (store.getState().request.started) {
-            throw new Error('Request already started');
-        }
-
-        this.actions.start(requestType);
-
-        // wait until the ui dispatches the user's feedback
-        store.subscribe(() => {
-            const request = store.getState().request;
-
-            if (!request.completed && !request.error) return;
-
-            if (request.confirmed) {
-                // return created key
-                resolve(request.result);
-            } else if(request.error) {
-                reject(new Error(request.error));
-            } else {
-                //user denied
-                resolve(null);
-            }
-        });
-
-        XRouter.root.goTo(requestType);
-    });
-}
 
 export default class KeyguardApi {
 
@@ -47,15 +16,39 @@ export default class KeyguardApi {
         this.actions = bindActionCreators({
             createVolatile,
             clearVolatile,
-            requestPersist,
             start,
         }, store.dispatch);
     }
 
-    /*
-     triggerImport
-     sign
-     */
+    _startRequest(requestType) {
+        return new Promise((resolve, reject) => {
+
+            if (store.getState().request.started) {
+                throw new Error('Request already started');
+            }
+
+            this.actions.start(requestType);
+
+            // wait until the ui dispatches the user's feedback
+            store.subscribe(() => {
+                const request = store.getState().request;
+
+                if (!request.completed && !request.error) return;
+
+                if (request.confirmed) {
+                    // return created key
+                    resolve(request.result);
+                } else if(request.error) {
+                    reject(new Error(request.error));
+                } else {
+                    //user denied
+                    resolve(null);
+                }
+            });
+
+            XRouter.root.goTo(requestType);
+        });
+    }
 
     // dummy
     async get() {
@@ -108,11 +101,11 @@ export default class KeyguardApi {
 
     // for safe
     async create() {
-        return startRequest(RequestTypes.CREATE);
+        return this._startRequest(RequestTypes.CREATE);
     }
 
     async signTransaction(sender, recipient, amount, fee) {
-        return startRequest(RequestTypes.SIGN_TRANSACTION, {
+        return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
             sender,
             recipient,
             amount,
