@@ -3,6 +3,7 @@ import XRouter from '/elements/x-router/x-router.js';
 import XPersistAccount from './elements/x-persist-account.js';
 import XIdenticons from './elements/x-identicons/x-identicons.js';
 import XImportWords from './elements/x-import-words.js';
+import XImportFile from './elements/x-import-file.js';
 import XSign from './elements/x-sign.js';
 import XRenameAccount from './elements/x-rename-account.js';
 

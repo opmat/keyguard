@@ -7,8 +7,8 @@ export const RequestTypes = {
     SIGN_TRANSACTION: 'sign-transaction',
     SIGN_MESSAGE: 'sign-message',
     CREATE: 'create',
-    IMPORT_FILE: 'import-file',
-    IMPORT_WORDS: 'import-words',
+    IMPORT_FROM_FILE: 'import-from-file',
+    IMPORT_FROM_WORDS: 'import-from-words',
     EXPORT: 'export'
 };
 

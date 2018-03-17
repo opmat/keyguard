@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '/libraries/keyguard/store/store.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
-import { RequestTypes, setData } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, setData, encryptAndPersist } from '/libraries/keyguard/store/request.js';
 
 class XImportFile extends XElement {
 
@@ -21,7 +21,7 @@ class XImportFile extends XElement {
 
     listeners() {
         return {
-            'x-password-setter-submitted': passphrase => this.actions.setData(RequestTypes.IMPORT_FILE, { passphrase })
+            'x-password-setter-submitted': passphrase => this.actions.encryptAndPersist(passphrase)
         }
     }
 
@@ -31,7 +31,7 @@ class XImportFile extends XElement {
         if (isWrongPassphrase) {
             // todo show message in UI. Use html5 form validation api?
            alert('wrong passphrase');
-           this.actions.setData(RequestTypes.IMPORT_FILE, { isWrongPassphrase: false });
+           this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
         }
     }
 }
@@ -39,7 +39,7 @@ class XImportFile extends XElement {
 export default reduxify(
     store,
     state => ({
-        wrongPassword: state.request.data.wrongPassword
+        isWrongPassphrase: state.request.data.isWrongPassphrase
     }),
-    { setData }
+    { setData, encryptAndPersist }
 )(XImportFile)

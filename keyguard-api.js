@@ -130,9 +130,13 @@ export default class KeyguardApi {
     }
 
     importFromFile(encryptedKey) {
-        return this._startRequest(RequestTypes.IMPORT_FILE, {
+        return this._startRequest(RequestTypes.IMPORT_FROM_FILE, {
             encryptedKey
         });
+    }
+
+    importFromWords() {
+        return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);
     }
 
     exportKey(userFriendlyAddress) {

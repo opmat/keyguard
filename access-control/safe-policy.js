@@ -4,7 +4,8 @@ import * as AccountType from '../keys/keytype.js';
 export default class SafePolicy extends BasePolicy {
     allows(method, args, state) {
         switch (method) {
-            case 'triggerImport':
+            case 'importFromFile':
+            case 'importFromWords':
             case 'get':
             case 'createVolatile':
             case 'create':
@@ -25,7 +26,8 @@ export default class SafePolicy extends BasePolicy {
             case 'createVolatile':
                 return false;
             case 'create':
-            case 'triggerImport':
+            case 'importFromFile':
+            case 'importFromWords':
             case 'sign':
                 return true;
             default:
