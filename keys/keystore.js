@@ -62,14 +62,24 @@ class KeyStore {
     /**
      * @param {string} userFriendlyAddress
      * @param {Uint8Array|string} passphrase
-     * @returns {Promise.<Wallet>}
+     * @returns {Promise.<Key>}
      */
     async get(userFriendlyAddress, passphrase) {
         await this._dbInitialized;
         const request = (await this._keyStoreRead).get(userFriendlyAddress);
         const key = await this._getResult(request);
 
-        return Key.loadEncrypted(key._keyPair, passphrase);
+        return Key.loadEncrypted(key.encryptedKeyPair, passphrase);
+    }
+
+    /**
+     * @param {string} userFriendlyAddress
+     * @returns {Promise.<object>}
+     */
+    async getPlain(userFriendlyAddress) {
+        await this._dbInitialized;
+        const request = (await this._keyStoreRead).get(userFriendlyAddress);
+        return await this._getResult(request);
     }
 
     /**
@@ -81,15 +91,11 @@ class KeyStore {
     async put(key, passphrase, unlockKey) {
         await this._dbInitialized;
 
-        console.log(key);
-        console.log(key.address);
-        console.log(key.address.serialize);
-
         /** @type {Uint8Array} */
-        key._keyPair = await key.exportEncrypted(passphrase, unlockKey);
+        const encryptedKeyPair = await key.exportEncrypted(passphrase, unlockKey);
 
         const request = (await this._keyStoreWrite).put({
-            _keyPair: key._keyPair,
+            encryptedKeyPair: encryptedKeyPair,
             userFriendlyAddress: key.userFriendlyAddress,
             type: key.type,
             label: key.label,

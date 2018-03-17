@@ -181,7 +181,7 @@ export function confirmPersist(passphrase, label = '') {
         key.label = label;
 
         if (await keystore.put(key, passphrase)) {
-            const encryptedKeyPair = (await keystore.get(key.userFriendlyAddress))._keyPair;
+            const encryptedKeyPair = (await keystore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
                 setResult(RequestTypes.CREATE, {
                     ...key.getPublicInfo(),
