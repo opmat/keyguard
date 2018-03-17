@@ -5,8 +5,8 @@ import XPersistAccount from './elements/x-persist-account.js';
 import XIdenticons from './elements/x-identicons/x-identicons.js';
 import XImportFile from './elements/x-import-file.js';
 import XImportWords from './elements/x-import-words.js';
-import XImportFile from './elements/x-import-file.js';
 import XSign from './elements/x-sign.js';
+import XRenameAccount from './elements/x-rename-account.js';
 
 export default class XKeyguardApp extends XElement {
 
@@ -27,19 +27,24 @@ export default class XKeyguardApp extends XElement {
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
           <x-sign x-route="sign"> Sign aka createTransaction </x-sign>
           <main x-route="export"> Export aka backup </main>
-          <main x-route="rename"> Rename account </main>
+          <x-rename-account x-route="rename"> Rename account </x-rename-account>
           <main x-route="/">
             <x-loading-animation></x-loading-animation>
             <h2>Calling keyguard</h2>
-            <a x-href="import-from-file">persist</a>
-            <a x-href="persist">persist</a>
+            <a x-href="persist">persist volatile account</a>
+            <a x-href="create">create account</a>
+            <a x-href="import-from-words">import account with words</a>
+            <a x-href="import-from-file">import account from file</a>
+            <a x-href="sign">sign transaction</a>
+            <a x-href="export">export account</a>
+            <a x-href="rename">rename account</a>
           </main>
         </x-router>
         `;
     }
 
     children() {
-        return [ XRouter, XPersistAccount, XIdenticons, XImportWords, XImportFile, XSign ];
+        return [ XRouter, XPersistAccount, XIdenticons, XImportWords, XImportFile, XSign, XRenameAccount ];
     }
 }
 
