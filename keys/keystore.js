@@ -82,7 +82,7 @@ class KeyStore {
             encryptedKeyPair: encryptedKeyPair,
             userFriendlyAddress: key.userFriendlyAddress,
             type: key.type,
-            label: key.label,
+            label: key.label
         };
 
         const db = await this.connect();
