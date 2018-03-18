@@ -37,7 +37,6 @@ export function reducer(state, action) {
     // check if request type of action matches running request, if present
     if (action.type !== TypeKeys.START && state.requestType !== action.requestType) {
         return {
-            ...initialState,
             error: 'Request type does not match'
         };
     }
@@ -207,12 +206,12 @@ export function encryptAndPersist(passphrase) {
             const key = Key.loadEncrypted(encryptedKey, passphrase);
             await keystore.put(encryptedKey);
             dispatch(
-                setResult(RequestTypes.IMPORT_FILE, key.publicInformation)
+                setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
             );
         } catch(e) {
             // assume the password was wrong - are there other options?
             dispatch(
-                setData(RequestTypes.IMPORT_FILE, { isWrongPassphrase: true })
+                setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: true })
             );
         }
     }
