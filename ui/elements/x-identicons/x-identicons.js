@@ -110,11 +110,3 @@ export default reduxify(
 // Todo: [low priority] remove hack for overlay and find a general solution
 
 // Todo: use store provider which recursively sets store in all children? Or decouple store import in a different way
-
-/*  For accounts component:
-            const $identicon = reduxify(
-              store,
-               state => ({
-                    balance: state.accounts.entries.get(address).balance
-                })
-            )(XIdenticon).createElement();*/
