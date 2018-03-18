@@ -1,2 +1,2 @@
-export const High = 'high';
-export const Low = 'low';
+export const HIGH = 'high';
+export const LOW = 'low';

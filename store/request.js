@@ -177,15 +177,15 @@ export function confirmPersist(passphrase, label = '') {
         const state = getState();
         const key = state.keys.volatileKeys.get(state.request.data.address);
 
-        key.type = Keytype.high;
+        key.type = Keytype.HIGH;
         key.label = label;
 
         if (await keystore.put(key, passphrase)) {
+            const encryptedKeyPair = (await keystore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
                 setResult(RequestTypes.CREATE, {
-                    address: key.address,
-                    label: key.label,
-                    publicKey: key.keyPair.publicKey
+                    ...key.getPublicInfo(),
+                    encryptedKeyPair
                 })
             );
         } else {
