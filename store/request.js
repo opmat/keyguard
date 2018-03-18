@@ -217,3 +217,21 @@ export function encryptAndPersist(passphrase) {
         }
     }
 }
+
+export function decryptKey(passphrase) {
+    return async (dispatch, getState) => {
+        const state = getState();
+
+        try {
+            const key = await keystore.get(state.address, passphrase);
+            dispatch(
+                setData(RequestTypes.EXPORT, { privateKey: key.keyPair.privateKey })
+            );
+        } catch(e) {
+            // assume the password was wrong - are there other options? Nope.
+            dispatch(
+                setData(RequestTypes.EXPORT, { isWrongPassphrase: true })
+            );
+        }
+    }
+}

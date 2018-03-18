@@ -6,10 +6,10 @@ import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 
 import store from '../../store/store.js';
-import { RequestTypes, confirm, confirmPersist } from '../../store/request.js';
+import { RequestTypes, c } from '../../store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
-export default class XExport extends XElement {
+class XExport extends XElement {
 
     html() { return `
         <section x-route="export-key-phrase">
@@ -48,8 +48,8 @@ export default class XExport extends XElement {
     listeners() {
         return {
             'x-password-setter-submitted': passphrase => {
-                // TODO store and test passphrase
                 console.log(`Export: Got passphrase ${passphrase}`);
+                this.actions.decryptKey(passphrase);
                 XRouter.root.goTo('export-key-warning');
             },
             'x-surrounding-checked': e => XRouter.root.goTo('export-key-phrase'),
@@ -64,10 +64,11 @@ export default class XExport extends XElement {
 
 
 /* connect the element to the redux store */
-// export default reduxify(
-//     store,
-//     state => ({
-//         userFriendlyAddress: state.request.data.address
-//     }),
-//     { confirm, confirmPersist }
-// )(XPersistAccount)
+export default reduxify(
+    store,
+    state => ({
+        address: state.request.data.address,
+        privateKey: state.request.data.privateKey
+    }),
+    { decryptKey }
+)(XExport)

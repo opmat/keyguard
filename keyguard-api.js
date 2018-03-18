@@ -139,9 +139,9 @@ export default class KeyguardApi {
         return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);
     }
 
-    exportKey(userFriendlyAddress) {
+    exportKey(address) {
         return this._startRequest(RequestTypes.EXPORT, {
-            userFriendlyAddress
+            address
         });
     }
 
