@@ -180,6 +180,8 @@ export function confirmPersist(passphrase, label = '') {
         key.type = Keytype.HIGH;
         key.label = label;
 
+        if (!key.label) key.label = key.userFriendlyAddress.slice(0, 9);
+
         if (await keystore.put(key, passphrase)) {
             const encryptedKeyPair = (await keystore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
