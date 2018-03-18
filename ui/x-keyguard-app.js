@@ -5,6 +5,7 @@ import XIdenticons from './elements/x-identicons/x-identicons.js';
 import XImportWords from './elements/x-import-words.js';
 import XImportFile from './elements/x-import-file.js';
 import XSign from './elements/x-sign.js';
+import XExport from './elements/x-export.js';
 import XRenameAccount from './elements/x-rename-account.js';
 
 export default class XKeyguardApp extends XElement {
@@ -25,7 +26,7 @@ export default class XKeyguardApp extends XElement {
           <x-import-words x-route="import-from-words"> Import via mnemonic phrase </x-import-words>
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
           <x-sign x-route="sign"> Sign aka createTransaction </x-sign>
-          <main x-route="export"> Export aka backup </main>
+          <x-export> Export aka backup </x-export>
           <x-rename-account x-route="rename"> Rename account </x-rename-account>
           <main x-route="/">
             <x-loading-animation></x-loading-animation>
@@ -43,7 +44,7 @@ export default class XKeyguardApp extends XElement {
     }
 
     children() {
-        return [ XRouter, XPersistAccount, XIdenticons, XImportWords, XImportFile, XSign, XRenameAccount ];
+        return [ XRouter, XPersistAccount, XIdenticons, XImportWords, XImportFile, XSign, XExport, XRenameAccount ];
     }
 }
 
