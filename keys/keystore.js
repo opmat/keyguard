@@ -8,55 +8,55 @@ class KeyStore {
     }
 
     /**
+     * @param {string} dbName
      * @constructor
      */
     constructor(dbName = 'accounts') {
-        this._dbInitialized = new Promise((resolve, reject) => {
-            const request = self.indexedDB.open(dbName, KeyStore.VERSION);
+        this._dbName = dbName;
+        this._db = null;
+        this._connected = false;
+    }
 
-            request.onerror = () => reject(request.error);
+    /**
+     * @returns {Promise.<IDBDatabase>}
+     * @private
+     */
+    connect() {
+        if (this._connected) return Promise.resolve(this._db);
 
-            request.onupgradeneeded = () => {
-                this._db = request.result;
-
-                this._db.createObjectStore(KeyStore.ACCOUNT_DATABASE, { keyPath: 'userFriendlyAddress' });
-
-                // todo later
-                this._multiSigStore = null;
-            };
+        return new Promise((resolve, reject) => {
+            const request = self.indexedDB.open(this._dbName, KeyStore.VERSION);
 
             request.onsuccess = () => {
+                this._connected = true;
                 this._db = request.result;
-                resolve();
+                resolve(this._db);
             }
-        });
-    }
 
-    _getStore(storeName, mode) {
-        return new Promise(async (resolve, reject) => {
-            await this._dbInitialized;
-
-            const transaction = this._db.transaction([storeName], mode)
-
-            transaction.onerror = () => reject(transaction.error);
-
-            resolve(transaction.objectStore(storeName));
-        });
-    }
-
-    _getResult(request) {
-        return new Promise (async (resolve, reject)=> {
-            request.onsuccess = () => resolve(request.result);
             request.onerror = () => reject(request.error);
+            request.onupgradeneeded = event => {
+                const db = event.target.result;
+                db.createObjectStore(KeyStore.ACCOUNT_DATABASE, { keyPath: 'userFriendlyAddress' });
+                // TODO: multiSigStore
+            };
         });
     }
 
-    get _keyStoreRead() {
-        return this._getStore(KeyStore.ACCOUNT_DATABASE, 'readonly');
-    }
-
-    get _keyStoreWrite() {
-        return this._getStore(KeyStore.ACCOUNT_DATABASE, 'readwrite');
+    /**
+     * @param {string} userFriendlyAddress
+     * @returns {Promise.<object>}
+     */
+    async getPlain(userFriendlyAddress) {
+        const db = await this.connect();
+        return new Promise((resolve, reject) => {
+            const getTx = db.transaction([KeyStore.ACCOUNT_DATABASE])
+                .objectStore(KeyStore.ACCOUNT_DATABASE)
+                .get(userFriendlyAddress);
+            getTx.onsuccess = event => {
+                resolve(event.target.result);
+            };
+            getTx.onerror = reject;
+        });
     }
 
     /**
@@ -65,21 +65,8 @@ class KeyStore {
      * @returns {Promise.<Key>}
      */
     async get(userFriendlyAddress, passphrase) {
-        await this._dbInitialized;
-        const request = (await this._keyStoreRead).get(userFriendlyAddress);
-        const key = await this._getResult(request);
-
+        const key = await this.getPlain(userFriendlyAddress);
         return Key.loadEncrypted(key.encryptedKeyPair, passphrase);
-    }
-
-    /**
-     * @param {string} userFriendlyAddress
-     * @returns {Promise.<object>}
-     */
-    async getPlain(userFriendlyAddress) {
-        await this._dbInitialized;
-        const request = (await this._keyStoreRead).get(userFriendlyAddress);
-        return await this._getResult(request);
     }
 
     /**
@@ -89,51 +76,70 @@ class KeyStore {
      * @returns {Promise}
      */
     async put(key, passphrase, unlockKey) {
-        await this._dbInitialized;
-
         /** @type {Uint8Array} */
         const encryptedKeyPair = await key.exportEncrypted(passphrase, unlockKey);
-
-        const request = (await this._keyStoreWrite).put({
+        const keyInfo = {
             encryptedKeyPair: encryptedKeyPair,
             userFriendlyAddress: key.userFriendlyAddress,
             type: key.type,
             label: key.label,
-        });
+        };
 
-        return await this._getResult(request);
+        const db = await this.connect();
+        return new Promise((resolve, reject) => {
+            const putTx = db.transaction([KeyStore.ACCOUNT_DATABASE], 'readwrite')
+                .objectStore(KeyStore.ACCOUNT_DATABASE)
+                .put(keyInfo);
+            putTx.onsuccess = event => resolve(event.target.result);
+            putTx.onerror = reject;
+        });
     }
 
     /**
-     * @param {Address} address
+     * @param {string} userFriendlyAddress
      * @returns {Promise}
      */
-    async remove(address) {
-        await this._dbInitialized;
-
-        const request = (await this._keyStoreWrite).remove(address);
-
-        return await this._getResult(request);
+    async remove(userFriendlyAddress) {
+        const db = await this.connect();
+        return new Promise((resolve, reject) => {
+            const deleteTx = db.transaction([KeyStore.ACCOUNT_DATABASE], 'readwrite')
+                .objectStore(KeyStore.ACCOUNT_DATABASE)
+                .delete(userFriendlyAddress);
+            deleteTx.onsuccess = event => resolve(event.target.result);
+            deleteTx.onerror = reject;
+        });
     }
 
     /**
-     * @returns {Address[]}
+     * @returns {Array.<object>}
      */
     async list() {
-        await this._dbInitialized;
+        const db = await this.connect();
+        return new Promise((resolve, reject) => {
+            const results = [];
+            const openCursorRequest = db.transaction([KeyStore.ACCOUNT_DATABASE], 'readonly')
+                .objectStore(KeyStore.ACCOUNT_DATABASE)
+                .openCursor();
+            openCursorRequest.onsuccess = event => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const key = cursor.value;
 
-        const request = (await this._keyStoreRead).getAll();
+                    // Because: To use Key.getPublicInfo(), we would need to create Key instances out of the key object that we receive from the DB.
+                    const keyInfo = {
+                        address: key.userFriendlyAddress,
+                        type: key.type,
+                        label: key.label
+                    };
 
-        const keys = await this._getResult(request);
-
-        // Because: To use Key.getPublicInfo(), we would need to create Key instances out of the key object that we receive from the DB
-        const result = [...keys].map(key => ({
-            address: key.userFriendlyAddress,
-            type: key.type,
-            label: key.label
-        }));
-
-        return result;
+                    results.push(keyInfo);
+                    cursor.continue();
+                } else {
+                    resolve(results);
+                }
+            };
+            openCursorRequest.onerror = () => reject(openCursorRequest.error);
+        });
     }
 
     /**
@@ -143,63 +149,11 @@ class KeyStore {
      * @return {Promise<void>}
      */
     async activate(userFriendlyAddress) {
-        // todo implement
+        // TODO: implement
     }
 
-    /**
-     * @param {Address} address
-     * @param {Uint8Array|string} [key]
-     * @returns {Promise.<MultiSigWallet>}
-     */
-    /*async getMultiSig(address, key) {
-        await this._dbInitialized;
-        const base64Address = address.toBase64();
-        const buf = await this._multiSigStore.get(base64Address);
-        if (key) {
-            return MultiSigWallet.loadEncrypted(buf, key);
-        }
-        return MultiSigWallet.loadPlain(buf);
-    }*/
-
-    /**
-     * @param {MultiSigWallet} wallet
-     * @param {Uint8Array|string} [key]
-     * @param {Uint8Array|string} [unlockKey]
-     * @returns {Promise}
-     */
-    /*async putMultiSig(wallet, key, unlockKey) {
-        await this._dbInitialized;
-        const base64Address = wallet.address.toBase64();
-        /** @type {Uint8Array} */
-        /*let buf = null;
-        if (key) {
-            buf = await wallet.exportEncrypted(key, unlockKey);
-        } else {
-            buf = wallet.exportPlain();
-        }
-        return this._multiSigStore.put(base64Address, buf);
-    }*/
-
-    /**
-     * @param {Address} address
-     * @returns {Promise}
-     */
-    /*async removeMultiSig(address) {
-        await this._dbInitialized;
-        const base64Address = address.toBase64();
-        return this._multiSigStore.remove(base64Address);
-    }*/
-
-    /**
-     * @returns {Promise<Array.<Address>>}
-     */
-    /*async listMultiSig() {
-        await this._dbInitialized;
-        const keys = await this._multiSigStore.keys();
-        return Array.from(keys).map(key => Nimiq.Address.fromBase64(key));
-    }*/
-
     close() {
+        if (!this._connected) return;
         return this._db.close();
     }
 }
