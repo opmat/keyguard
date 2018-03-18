@@ -31,7 +31,7 @@ class KeyStore {
                 this._connected = true;
                 this._db = request.result;
                 resolve(this._db);
-            }
+            };
 
             request.onerror = () => reject(request.error);
             request.onupgradeneeded = event => {
