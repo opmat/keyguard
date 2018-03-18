@@ -5,8 +5,8 @@ import store from '/libraries/keyguard/store/store.js';
 import { RequestTypes, deny, setData } from '/libraries/keyguard/store/request.js';
 
 // TODO remove for production
+import MnemonicPhrase from '/libraries/mnemonic-phrase/mnemonic-phrase.min.js';
 window.test = async () => {
-    const MnemonicPhrase = (await import('/libraries/mnemonic-phrase/mnemonic-phrase.min.js')).default;
     const randomKey = window.crypto.getRandomValues(new Uint8Array(32));
     const hexKey = MnemonicPhrase._arrayToHex(randomKey);
     const testPassphrase = MnemonicPhrase.keyToMnemonic(hexKey).split(' ');
