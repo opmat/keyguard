@@ -59,9 +59,19 @@ export default class Key {
      * @returns {Transaction} A prepared and signed Transaction object. This still has to be sent to the network.
      */
     createTransaction(recipient, value, fee, validityStartHeight, format, network) {
-        const transaction = new BasicTransaction(this._keyPair.publicKey, recipient, value, fee, validityStartHeight);
+        const transaction = new Nimiq.BasicTransaction(this._keyPair.publicKey, recipient, value, fee, validityStartHeight);
         transaction.signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
         return transaction;
+    }
+
+    /**
+     * Sign a transaction by the owner of this Wallet.
+     * @param {Transaction} transaction The transaction to sign.
+     * @returns {SignatureProof} A signature proof for this transaction.
+     */
+    signTransaction(transaction) {
+        const signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
+        return Nimiq.SignatureProof.singleSig(this._keyPair.publicKey, signature);
     }
 
     /**
