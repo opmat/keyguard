@@ -28,7 +28,7 @@ class XSign extends XElement {
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 
-        if (requestType !== RequestTypes.SIGN_TRANSACTION) return;
+        if (requestType !== RequestTypes.SIGN_TRANSACTION || !changes.transaction) return;
 
         const { transaction: { sender, recipient, value, fee, validity } } = changes;
 
@@ -47,7 +47,7 @@ class XSign extends XElement {
     }
 
     children() {
-        return [ XIdenticon ];
+        return [ XIdenticon, XPasswordSetter ];
     }
 }
 

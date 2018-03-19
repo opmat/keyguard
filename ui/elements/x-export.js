@@ -5,8 +5,8 @@ import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 
-import store from '../../store/store.js';
-import { RequestTypes, decryptKey } from '../../store/request.js';
+import store from '/libraries/keyguard/store/store.js';
+import { RequestTypes, decryptKey } from '/libraries/keyguard/store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XExport extends XElement {

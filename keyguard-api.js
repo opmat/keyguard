@@ -78,14 +78,23 @@ export default class KeyguardApi {
 
     /** WITH UI */
 
-    _startRequest(requestType) {
+    /** Set request state to started and wait for UI to set the result
+     *
+     * @param { RequestType} requestType
+     * @param { Object } data - additional request data
+     * @return {Promise<any>} - answer for calling app
+     * @private
+     */
+    _startRequest(requestType, data = {}) {
         return new Promise((resolve, reject) => {
 
-            if (store.getState().request.started) {
+            // only one request at a time
+            if (store.getState().request.requestType) {
                 throw new Error('Request already started');
             }
 
-            this.actions.start(requestType);
+            // set request state to started
+            this.actions.start(requestType, data);
 
             // wait until the ui dispatches the user's feedback
             store.subscribe(() => {
@@ -100,6 +109,7 @@ export default class KeyguardApi {
                 }
             });
 
+            // open corresponding UI
             XRouter.root.goTo(requestType);
         });
     }

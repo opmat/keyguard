@@ -48,7 +48,7 @@ export function reducer(state, action) {
     // check if request type of action matches running request, if present
     if (action.type !== TypeKeys.START && state.requestType !== action.requestType) {
         return {
-            error:  new Error('Request type does not match')
+            error: new Error('Request type does not match')
         };
     }
 
@@ -239,10 +239,10 @@ export function signTransaction(passphrase) {
         dispatch( setExecuting(RequestTypes.SIGN_TRANSACTION) );
 
         const state = getState();
-        const transaction = state.data.transaction;
+        const { transaction, address } = state.request.data;
 
         try {
-            const key = await keystore.get(state.data.address, passphrase);
+            const key = await keystore.get(address, passphrase);
             const signature = key.signTransaction(transaction);
 
             dispatch(
