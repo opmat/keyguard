@@ -9,7 +9,8 @@ export const RequestTypes = {
     CREATE: 'create',
     IMPORT_FROM_FILE: 'import-from-file',
     IMPORT_FROM_WORDS: 'import-from-words',
-    EXPORT: 'export'
+    EXPORT: 'export',
+    RENAME: 'rename'
 };
 
 export const TypeKeys = {
@@ -230,6 +231,23 @@ export function decryptKey(passphrase) {
             // assume the password was wrong - are there other options? Nope.
             dispatch(
                 setData(RequestTypes.EXPORT, { isWrongPassphrase: true })
+            );
+        }
+    }
+}
+
+export function loadAccountData(requestType) {
+    return async (dispatch, getState) => {
+        const state = getState();
+
+        try {
+            const key = await keystore.get(state.address);
+            dispatch(
+                setData(requestType, { ...key.getPublicInfo() })
+            );
+        } catch(e) {
+            dispatch(
+                setError(requestType, `Account ${address} does not exist`)
             );
         }
     }

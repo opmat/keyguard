@@ -145,6 +145,15 @@ export default class KeyguardApi {
         });
     }
 
+    rename(address) {
+        const request = this._startRequest(RequestTypes.RENAME, {
+            address
+        });
+        // TODO [max] theoretically, we need the label every time we use an address.
+        this.actions.loadAccountData(RequestType.RENAME);
+        return request;
+    }
+
     // old
 
     async import(privateKey) {

@@ -4,7 +4,7 @@ import reduxify from '/libraries/redux/src/redux-x-element.js';
 import store from '/libraries/keyguard/store/store.js';
 import { RequestTypes, confirm } from '/libraries/keyguard/store/request.js';
 
-export default class XRenameAccount extends XElement {
+class XRenameAccount extends XElement {
 
     html() { return `
         <h1>Rename your Account</h1>
@@ -19,21 +19,20 @@ export default class XRenameAccount extends XElement {
 
     onCreate() {
         this.$input = this.$('input');
-        // TODO remove after reduxify
-        this._onPropertiesChanged();
     }
 
-    _onPropertiesChanged() {
-        const properties = this.properties.length > 0 ? this.properties : { address: 'monkey pie', label: 'old name' };
-        const { address, label } = properties;
+    _onPropertiesChanged(changes) {
+        const { address, label } = this.properties;
 
-        this.$identicon.address = address;
+        this.$identicon.setProperty('address', address);
         this.$input.value = label;
     }
 
     listeners() {
         return { // TODO [max] connect
-            'click button': e => console.log(`${this.constructor.name}: account renamed to ${ this.$input.value}`)
+            'click button': e => {
+                console.log(`${this.constructor.name}: account renamed to ${ this.$input.value}`)
+            }
         }
     }
 
@@ -44,12 +43,11 @@ export default class XRenameAccount extends XElement {
 
 
 /* connect the element to the redux store */
-/* export default reduxify(
-     store,
-     state => ({
-         address: ...
-         label: ...
-     }),
-     { confirm }
- )(XRenameAccount)
-*/
+export default reduxify(
+    store,
+    state => ({
+        address: state.request.data.address,
+        label: state.request.data.label
+    }),
+    { confirm }
+)(XRenameAccount)
