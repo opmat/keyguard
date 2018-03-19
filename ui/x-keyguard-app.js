@@ -25,8 +25,8 @@ export default class XKeyguardApp extends XElement {
           <x-identicons x-route="create"></x-identicons>
           <x-import-words x-route="import-from-words"> Import via mnemonic phrase </x-import-words>
           <x-import-file x-route="import-from-file"> Import via backup file </x-import-file>
-          <x-sign x-route="sign"> Sign aka createTransaction </x-sign>
-          <x-export> Export aka backup </x-export>
+          <x-sign x-route="sign"></x-sign>
+          <x-export></x-export>
           <x-rename-account x-route="rename"> Rename account </x-rename-account>
           <main x-route="/">
             <x-loading-animation></x-loading-animation>

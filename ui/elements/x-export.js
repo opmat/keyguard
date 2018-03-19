@@ -6,7 +6,7 @@ import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 
 import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, decryptKey, setData } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, decryptKey, setData, exportFile } from '/libraries/keyguard/store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XExport extends XElement {
@@ -22,7 +22,7 @@ class XExport extends XElement {
             <h1>Backup your Account</h1>
             <x-privacy-agent></x-privacy-agent>
         </section>
-        <section x-route="export-key">
+        <section x-route="export">
             <h1>Backup your Account</h1>
             <x-identicon></x-identicon>
             <section>
@@ -33,24 +33,23 @@ class XExport extends XElement {
         `;
     }
 
-    _onPropertiesChanged() {
-        const { address, privateKey, requestType } = this.properties;
+    _onPropertiesChanged(changes) {
+        const { requestType } = this.properties;
 
         if (requestType !== RequestTypes.EXPORT) return;
 
+        const { address, privateKey, isWrongPassphrase } = changes;
+
+        this.$passwordSetter.setProperty('isWrongPassphrase', isWrongPassphrase);
         this.$identicon.setProperty('address', address);
         this.$mnemonicPhrase.setProperty('privateKey', privateKey);
     }
 
     listeners() {
         return {
-            'x-password-setter-submitted': passphrase => {
-                console.log(`Export: Got passphrase ${passphrase}`);
-                this.actions.decryptKey(passphrase);
-                XRouter.root.goTo('export-key-warning');
-            },
-            'x-surrounding-checked': e => XRouter.root.goTo('export-key-phrase'),
-            'click button.last': e => console.log("Export: done")
+            'x-password-setter-submitted': passphrase => this.actions.decryptKey(passphrase),
+            'x-surrounding-checked': () => XRouter.root.goTo('export-key-phrase'),
+            'click button.last': () => this.actions.exportFile()
         }
     }
 
@@ -66,7 +65,8 @@ export default reduxify(
     state => ({
         requestType: state.request.requestType,
         address: state.request.data.address,
-        privateKey: state.request.data.privateKey
+        privateKey: state.request.data.privateKey,
+        isWrongPassphrase: state.request.data.isWrongPassphrase
     }),
-    { decryptKey, setData }
+    { decryptKey, setData, exportFile }
 )(XExport)

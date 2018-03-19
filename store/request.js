@@ -1,6 +1,7 @@
 import keystore from '../keys/keystore.js';
 import * as Keytype from '../keys/keytype.js';
 import Key from '../keys/key.js';
+import XRouter from '/elements/x-router/x-router.js';
 
 // Requests which need UI
 export const RequestTypes = {
@@ -204,14 +205,13 @@ export function decryptKey(passphrase) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.EXPORT) );
 
-        const state = getState();
-
         try {
-            const key = await keystore.get(state.address, passphrase);
+            const key = await keystore.get(getState().request.data.address, passphrase);
 
             dispatch(
                 setData(RequestTypes.EXPORT, { privateKey: key.keyPair.privateKey })
             );
+            XRouter.root.goTo('export-key-warning');
         } catch (e) {
             // assume the password was wrong
             dispatch(
@@ -226,9 +226,7 @@ export function exportFile() {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.EXPORT) );
 
-        const state = getState();
-
-        const { encryptedKeyPair } = await keystore.getPlain(state.address);
+        const { encryptedKeyPair } = await keystore.getPlain(getState().request.data.address);
 
         dispatch(
             setResult(RequestTypes.EXPORT, encryptedKeyPair)
@@ -239,10 +237,8 @@ export function exportFile() {
 // load public key info to data, so we can show it in UI.
 export function loadAccountData(requestType) {
     return async (dispatch, getState) => {
-        const state = getState();
-
         try {
-            const key = await keystore.get(state.address);
+            const key = await keystore.get(getState().request.data.address);
             dispatch(
                 setData(requestType, { ...key.getPublicInfo() })
             );
@@ -259,8 +255,7 @@ export function signTransaction(passphrase) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.SIGN_TRANSACTION) );
 
-        const state = getState();
-        const { transaction: { recipient, value, fee, validityStartHeight }, address } = state.request.data;
+        const { transaction: { recipient, value, fee, validityStartHeight }, address } = getState().request.data;
 
         try {
             const key = await keystore.get(address, passphrase);

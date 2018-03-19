@@ -4,7 +4,7 @@ import * as Keytype from './keys/keytype.js';
 import keyStore from './keys/keystore.js';
 import store from './store/store.js';
 import { createVolatile, clearVolatile } from './store/keys.js';
-import { start } from './store/request.js';
+import { start, loadAccountData } from './store/request.js';
 import XRouter from '/elements/x-router/x-router.js';
 import { RequestTypes } from './store/request.js';
 
@@ -17,6 +17,7 @@ export default class KeyguardApi {
             createVolatile,
             clearVolatile,
             start,
+            loadAccountData
         }, store.dispatch);
     }
 
@@ -144,7 +145,7 @@ export default class KeyguardApi {
         return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);
     }
 
-    exportKey(address) {
+    export(address) {
         return this._startRequest(RequestTypes.EXPORT, {
             address
         });
