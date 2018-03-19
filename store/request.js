@@ -156,7 +156,9 @@ export function confirmPersist(passphrase, label = '') {
         key.type = Keytype.HIGH;
         key.label = label;
 
-        if (!key.label) key.label = key.userFriendlyAddress.slice(0, 9);
+        if (!key.label) {
+            key.label = key.userFriendlyAddress.slice(0, 9);
+        }
 
         if (await keystore.put(key, passphrase)) {
             const encryptedKeyPair = (await keystore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
@@ -189,7 +191,7 @@ export function encryptAndPersist(passphrase) {
                 setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
             );
         } catch (e) {
-            // assume the password was wrong - are there other options?
+            // assume the password was wrong
             dispatch(
                 setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: true })
             );
@@ -197,22 +199,40 @@ export function encryptAndPersist(passphrase) {
     }
 }
 
-// called when doing backup process
+// called when doing backup process, after entering passphrase
 export function decryptKey(passphrase) {
     return async (dispatch, getState) => {
+        dispatch( setExecuting(RequestTypes.EXPORT) );
+
         const state = getState();
 
         try {
             const key = await keystore.get(state.address, passphrase);
+
             dispatch(
                 setData(RequestTypes.EXPORT, { privateKey: key.keyPair.privateKey })
             );
-        } catch(e) {
-            // assume the password was wrong - are there other options? Nope.
+        } catch (e) {
+            // assume the password was wrong
             dispatch(
                 setData(RequestTypes.EXPORT, { isWrongPassphrase: true })
             );
         }
+    }
+}
+
+// called when doing backup process, after seeing recovery words
+export function exportFile() {
+    return async (dispatch, getState) => {
+        dispatch( setExecuting(RequestTypes.EXPORT) );
+
+        const state = getState();
+
+        const { encryptedKeyPair } = await keystore.getPlain(state.address);
+
+        dispatch(
+            setResult(RequestTypes.EXPORT, encryptedKeyPair)
+        );
     }
 }
 
@@ -226,7 +246,7 @@ export function loadAccountData(requestType) {
             dispatch(
                 setData(requestType, { ...key.getPublicInfo() })
             );
-        } catch(e) {
+        } catch (e) {
             dispatch(
                 setError(requestType, `Account ${address} does not exist`)
             );
@@ -250,7 +270,7 @@ export function signTransaction(passphrase) {
                 setResult(RequestTypes.SIGN_TRANSACTION, signature)
             )
         } catch (e) {
-            // assume the password was wrong - are there other options?
+            // assume the password was wrong
             dispatch(
                 setData(RequestTypes.SIGN_TRANSACTION, { isWrongPassphrase: true })
             );
