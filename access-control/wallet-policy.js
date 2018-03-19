@@ -44,3 +44,5 @@ export default class WalletPolicy extends BasePolicy {
         }
     }
 }
+
+// todo update

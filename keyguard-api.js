@@ -91,15 +91,12 @@ export default class KeyguardApi {
             store.subscribe(() => {
                 const request = store.getState().request;
 
-                if (!request.completed && !request.error) return;
+                if (request.error) {
+                    reject(request.error);
+                }
 
-                if (request.confirmed) {
+                if (request.result) {
                     resolve(request.result);
-                } else if(request.error) {
-                    reject(new Error(request.error));
-                } else {
-                    //user denied
-                    resolve(null);
                 }
             });
 
@@ -120,12 +117,9 @@ export default class KeyguardApi {
         return signature;
     }*/
 
-    async sign(sender, recipient, amount, fee) {
+    async sign(transaction) {
         return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
-            sender,
-            recipient,
-            amount,
-            fee
+            transaction
         });
     }
 

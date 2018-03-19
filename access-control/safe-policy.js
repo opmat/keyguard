@@ -12,10 +12,11 @@ export default class SafePolicy extends BasePolicy {
             case 'create':
                 return true;
             case 'sign':
-                const [ userFriendlyAddress, recipient, value, fee ] = args;
-                const key = state.keys.get(userFriendlyAddress);
-                if (key.type === Keytype.HIGH) return true;
-                break;
+                // for now, assume there are only keys we are able to use in safe app
+                return true;
+                /*const [ userFriendlyAddress, recipient, value, fee ] = args;
+                const key = (state.keys || state.accounts.entries).get(userFriendlyAddress);
+                if (key.type === Keytype.HIGH) return true; */
             default:
                 throw new Error(`Unhandled method: ${method}`);
         }

@@ -1,8 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import store from '../../store/store.js';
-import { RequestTypes, confirm, confirmPersist } from '../../store/request.js';
+import store from '/libraries/keyguard/store/store.js';
+import { RequestTypes, confirm, confirmPersist } from '/libraries/keyguard/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XPersistAccount extends XElement {

@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, confirm } from '/libraries/keyguard/store/request.js';
+import { rename } from '/libraries/keyguard/store/request.js';
 
 class XRenameAccount extends XElement {
 
@@ -13,7 +13,7 @@ class XRenameAccount extends XElement {
             <label>Name</label>
             <input type="text" placeholder="Account name">
         </section>
-        <button>Rename</button>
+        <x-password-setter buttonLabel="Import" showIndicator="false"></x-password-setter>
         `;
     }
 
@@ -30,9 +30,7 @@ class XRenameAccount extends XElement {
 
     listeners() {
         return { // TODO [max] connect
-            'click button': e => {
-                console.log(`${this.constructor.name}: account renamed to ${ this.$input.value}`)
-            }
+            'x-password-setter-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
         }
     }
 
@@ -49,5 +47,5 @@ export default reduxify(
         address: state.request.data.address,
         label: state.request.data.label
     }),
-    { confirm }
+    { rename }
 )(XRenameAccount)

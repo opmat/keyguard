@@ -13,22 +13,32 @@ export const RequestTypes = {
     RENAME: 'rename'
 };
 
+// basic action types
 export const TypeKeys = {
     START: 'request/start',
     SET_DATA: 'request/setData',
-    CONFIRM: 'request/confirm',
-    DENY: 'request/deny',
+    SET_EXECUTING: 'request/executing',
     SET_RESULT: 'request/result',
-    SET_ERROR: 'request/error'
+    SET_ERROR: 'request/error',
 };
 
 export function reducer(state, action) {
     const initialState = {
-        requestType: undefined,
-        completed: false,
-        confirmed: undefined,
-        data: {},
-        result: undefined
+        requestType: undefined, // type of current request, set when it starts and won't change
+
+        executing: false, // true if we are doing async actions which can take longer, like storing in keystore
+
+        error: undefined, // setting an error here will throw it at the calling app
+
+        result: undefined, // result which is returned to calling app (keyguard-api will be notified when state changes)
+
+        data: { // additional request data specific to some request types
+            address: undefined, // the address of the account we are using for this request
+            isWrongPassphrase: undefined, // boolean set to true after user tried wrong passphrase
+            privateKey: undefined, // unencrypted; we need it to show mnemonic phrase
+            label: undefined, // label BEFORE rename
+            type: undefined // key type (high/low)
+        }
     };
 
     if (state === undefined) {
@@ -38,39 +48,23 @@ export function reducer(state, action) {
     // check if request type of action matches running request, if present
     if (action.type !== TypeKeys.START && state.requestType !== action.requestType) {
         return {
-            error: 'Request type does not match'
+            error:  new Error('Request type does not match')
         };
     }
 
+    // describe state changes for each possible action
     switch (action.type) {
         case TypeKeys.START:
             if (state.requestType) {
                 return {
                     ...initialState,
-                    error: 'Multiple Requests'
+                    error: new Error('Multiple Requests')
                 };
             }
 
             return {
                 ...state,
                 requestType: action.requestType,
-                data: {
-                    ...state.data,
-                    ...action.data
-                }
-            };
-
-        case TypeKeys.CONFIRM:
-            if (state.requestType !== action.requestType) {
-                return {
-                    ...initialState,
-                    error: 'Request type does not match'
-                };
-            }
-
-            return {
-                completed: true,
-                confirmed: true,
                 data: {
                     ...state.data,
                     ...action.data
@@ -86,29 +80,10 @@ export function reducer(state, action) {
                 }
             };
 
-        case TypeKeys.CONFIRM:
-            return {
-                ...state,
-                confirmed: true,
-                data: {
-                    ...state.data,
-                    password: action.password,
-                    label: action.label
-                }
-            };
-
-        case TypeKeys.DENY:
-            return {
-                ...state,
-                completed: true,
-                confirmed: false
-            };
-
         case TypeKeys.SET_RESULT:
             return {
                 ...state,
                 completed: true,
-                confirmed: true,
                 result: action.result
             };
 
@@ -139,19 +114,8 @@ export function setData(requestType, data) {
     };
 }
 
-export function confirm(requestType, data) {
-    return {
-        type: TypeKeys.CONFIRM,
-        requestType,
-        data
-    }
-}
-
 export function deny(requestType) {
-    return {
-        type: TypeKeys.DENY,
-        requestType
-    };
+    return setError(requestType, new Error('Denied by user'));
 }
 
 export function setResult(requestType, result) {
@@ -170,12 +134,23 @@ export function setError(requestType, error) {
     }
 }
 
+export function setExecuting(requestType) {
+    return {
+        type: TypeKeys.SET_EXECUTING,
+        requestType
+    }
+}
+
 // The following actions are async
 
+// called in account creation after choosing identicon and entering passphrase (and label)
 export function confirmPersist(passphrase, label = '') {
     return async (dispatch, getState) => {
+        dispatch( setExecuting(RequestTypes.CREATE) );
+
         const state = getState();
-        const key = state.keys.volatileKeys.get(state.request.data.address);
+        const { address } = state.request.data;
+        const key = state.keys.volatileKeys.get(address);
 
         key.type = Keytype.HIGH;
         key.label = label;
@@ -198,18 +173,21 @@ export function confirmPersist(passphrase, label = '') {
     }
 }
 
+// called when importing from file after entering the passphrase
 export function encryptAndPersist(passphrase) {
     return async (dispatch, getState) => {
-        const state = getState();
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
         try {
-            const encryptedKey = Nimiq.BufferUtils.fromBase64(state.request.data.encryptedKey);
+            // get encrypted key from request data set with _startRequest in keyguard-api
+            const encryptedKey64 = getState().request.data.encryptedKey;
+            const encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey64);
             const key = Key.loadEncrypted(encryptedKey, passphrase);
             await keystore.put(encryptedKey);
             dispatch(
                 setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
             );
-        } catch(e) {
+        } catch (e) {
             // assume the password was wrong - are there other options?
             dispatch(
                 setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: true })
@@ -218,6 +196,7 @@ export function encryptAndPersist(passphrase) {
     }
 }
 
+// called when doing backup process
 export function decryptKey(passphrase) {
     return async (dispatch, getState) => {
         const state = getState();
@@ -236,6 +215,7 @@ export function decryptKey(passphrase) {
     }
 }
 
+// load public key info to data, so we can show it in UI.
 export function loadAccountData(requestType) {
     return async (dispatch, getState) => {
         const state = getState();
@@ -248,6 +228,30 @@ export function loadAccountData(requestType) {
         } catch(e) {
             dispatch(
                 setError(requestType, `Account ${address} does not exist`)
+            );
+        }
+    }
+}
+
+// called after confirming a transaction sign request
+export function signTransaction(passphrase) {
+    return async (dispatch, getState) => {
+        dispatch( setExecuting(RequestTypes.SIGN_TRANSACTION) );
+
+        const state = getState();
+        const transaction = state.data.transaction;
+
+        try {
+            const key = await keystore.get(state.data.address, passphrase);
+            const signature = key.signTransaction(transaction);
+
+            dispatch(
+                setResult(RequestTypes.SIGN_TRANSACTION, signature)
+            )
+        } catch (e) {
+            // assume the password was wrong - are there other options?
+            dispatch(
+                setData(RequestTypes.SIGN_TRANSACTION, { isWrongPassphrase: true })
             );
         }
     }
