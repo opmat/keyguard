@@ -129,7 +129,8 @@ export default class KeyguardApi {
 
     async sign(transaction) {
         return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
-            transaction
+            transaction,
+            address: transaction.sender // for basic transactions, todo generalize
         });
     }
 
@@ -185,11 +186,6 @@ export default class KeyguardApi {
     async exportEncrypted(password) {
         const exportedWallet = Key.exportEncrypted(password);
         return Nimiq.BufferUtils.toBase64(exportedWallet);
-    }
-
-    /** @param {string} friendlyAddress */
-    async getUnfriendlyAddress(friendlyAddress) {
-        return Nimiq.Address.fromUserFriendlyAddress(friendlyAddress);
     }
 
     static validateAddress(address) {

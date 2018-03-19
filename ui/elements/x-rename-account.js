@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 import store from '/libraries/keyguard/store/store.js';
-import { rename } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, rename, setData } from '/libraries/keyguard/store/request.js';
 
 class XRenameAccount extends XElement {
 
@@ -22,7 +22,9 @@ class XRenameAccount extends XElement {
     }
 
     _onPropertiesChanged(changes) {
-        const { address, label } = this.properties;
+        const { requestType, address, label } = this.properties;
+
+        if (requestType !== RequestTypes.RENAME) return;
 
         this.$identicon.setProperty('address', address);
         this.$input.value = label;
@@ -44,8 +46,9 @@ class XRenameAccount extends XElement {
 export default reduxify(
     store,
     state => ({
+        requestType: state.request.requestType,
         address: state.request.data.address,
         label: state.request.data.label
     }),
-    { rename }
+    { rename, setData }
 )(XRenameAccount)

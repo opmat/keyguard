@@ -48,6 +48,5 @@ export default class XKeyguardApp extends XElement {
     }
 }
 
-// TODO catch errors in a top level error panel catching all previously uncaught exceptions > XApp
 // TODO what to do when the user reloads the page and the state is not initialized again?? > persist the state on unload
 // that means we would have to put rpc requests in store and open new promises for unresponsed requests

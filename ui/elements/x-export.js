@@ -6,7 +6,7 @@ import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 
 import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, decryptKey } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, decryptKey, setData } from '/libraries/keyguard/store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XExport extends XElement {
@@ -34,7 +34,9 @@ class XExport extends XElement {
     }
 
     _onPropertiesChanged() {
-        const { address, privateKey } = this.properties;
+        const { address, privateKey, requestType } = this.properties;
+
+        if (requestType !== RequestTypes.EXPORT) return;
 
         this.$identicon.setProperty('address', address);
         this.$mnemonicPhrase.setProperty('privateKey', privateKey);
@@ -62,8 +64,9 @@ class XExport extends XElement {
 export default reduxify(
     store,
     state => ({
+        requestType: state.request.requestType,
         address: state.request.data.address,
         privateKey: state.request.data.privateKey
     }),
-    { decryptKey }
+    { decryptKey, setData }
 )(XExport)

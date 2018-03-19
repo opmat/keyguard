@@ -74,6 +74,7 @@ export function reducer(state, action) {
         case TypeKeys.SET_DATA:
             return {
                 ...state,
+                executing: false,
                 data: {
                     ...state.data,
                     ...action.data
@@ -233,17 +234,17 @@ export function loadAccountData(requestType) {
     }
 }
 
-// called after confirming a transaction sign request
+// called after confirming a transaction sign request (BASIC transaction)
 export function signTransaction(passphrase) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.SIGN_TRANSACTION) );
 
         const state = getState();
-        const { transaction, address } = state.request.data;
+        const { transaction: { recipient, value, fee, validityStartHeight }, address } = state.request.data;
 
         try {
             const key = await keystore.get(address, passphrase);
-            const signature = key.signTransaction(transaction);
+            const signature = await key.createTransaction(recipient, value, fee, validityStartHeight, 'basic');
 
             dispatch(
                 setResult(RequestTypes.SIGN_TRANSACTION, signature)

@@ -29,12 +29,10 @@ class XPersistAccount extends XElement {
         `;
     }
 
-    _onPropertiesChanged() {
-        const { userFriendlyAddress } = this.properties;
+    _onPropertiesChanged(changes) {
+        const { address } = changes;
 
-        if (userFriendlyAddress) {
-            this.$identicon.address = userFriendlyAddress;
-        }
+        this.$identicon.setProperty('address', address);
     }
 
     listeners() {
@@ -53,6 +51,7 @@ class XPersistAccount extends XElement {
 export default reduxify(
     store,
     state => ({
+        requestType: state.request.requestType,
         address: state.request.data.address
     }),
     { confirmPersist }

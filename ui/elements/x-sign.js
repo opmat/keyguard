@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, signTransaction } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, signTransaction, setData } from '/libraries/keyguard/store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XSign extends XElement {
@@ -28,16 +28,25 @@ class XSign extends XElement {
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 
-        if (requestType !== RequestTypes.SIGN_TRANSACTION || !changes.transaction) return;
+        if (requestType !== RequestTypes.SIGN_TRANSACTION) return;
 
-        const { transaction: { sender, recipient, value, fee, validity } } = changes;
+        const { transaction, isWrongPassphrase } = changes;
 
-        this.$identicon[0].address = sender;
-        this.$identicon[1].address = recipient;
+        if (transaction) {
+            const { sender, recipient, value, fee, validity } = transaction;
 
-        this.$('.value').textContent = (value/1e5).toString();
-        this.$('.fee').textContent = fee;
-        this.$('.validity').textContent = validity;
+            this.$identicon[0].address = sender;
+            this.$identicon[1].address = recipient;
+
+            this.$('.value').textContent = (value/1e5).toString();
+            this.$('.fee').textContent = fee;
+            this.$('.validity').textContent = validity;
+        }
+
+        if (isWrongPassphrase) {
+            this.$passwordSetter.setProperties('isWrongPassphrase', isWrongPassphrase);
+            this.actions.setData(RequestTypes.SIGN_TRANSACTION, { isWrongPassphrase: false });
+        }
     }
 
     listeners() {
@@ -56,11 +65,12 @@ export default reduxify(
     store,
     state => {
         return {
+            requestType: state.request.requestType,
             transaction: state.request.data.transaction,
-            requestType: state.request.requestType
+            isWrongPassphrase: state.request.data.isWrongPassphrase
         };
     },
-    { signTransaction }
+    { signTransaction, setData }
 )(XSign)
 
 // Todo confirm with passphrase: confirm

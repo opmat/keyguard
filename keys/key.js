@@ -16,10 +16,16 @@ export default class Key {
      * @param {Uint8Array|string} password
      * @return {Promise.<Key>}
      */
-    static loadEncrypted(buf, password) {
+    static async loadEncrypted(buf, password) {
         if (typeof buf === 'string') buf = Nimiq.BufferUtils.fromHex(buf);
         if (typeof password === 'string') password = Nimiq.BufferUtils.fromAscii(password);
-        return new Key(Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), password));
+        return new Key(await Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), password));
+    }
+
+
+    /** @param {string} friendlyAddress */
+    static async getUnfriendlyAddress(friendlyAddress) {
+        return Nimiq.Address.fromUserFriendlyAddress(friendlyAddress);
     }
 
     /**
@@ -56,12 +62,21 @@ export default class Key {
      * @param {number} value Number of Satoshis to send.
      * @param {number} fee Number of Satoshis to donate to the Miner.
      * @param {number} validityStartHeight The validityStartHeight for the transaction.
+     * @param {string} format basic or extended
      * @returns {Transaction} A prepared and signed Transaction object. This still has to be sent to the network.
      */
-    createTransaction(recipient, value, fee, validityStartHeight, format, network) {
-        const transaction = new Nimiq.BasicTransaction(this._keyPair.publicKey, recipient, value, fee, validityStartHeight);
-        transaction.signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
-        return transaction;
+    async createTransaction(recipient, value, fee, validityStartHeight, format) {
+        if (typeof recipient === 'string') {
+            recipient = await Key.getUnfriendlyAddress(recipient);
+        }
+
+        if (format === 'basic') {
+            const transaction = new Nimiq.BasicTransaction(this._keyPair.publicKey, recipient, value, fee, validityStartHeight);
+            transaction.signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
+            return transaction;
+        }
+
+        // todo extended transactions
     }
 
     /**
@@ -143,4 +158,5 @@ export default class Key {
     get keyPair() {
         return this._keyPair;
     }
+
 }

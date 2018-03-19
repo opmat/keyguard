@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XMnemonicInput from '/elements/x-mnemonic-input/x-mnemonic-input.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, deny, setData } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, deny } from '/libraries/keyguard/store/request.js';
 
 // TODO remove for production
 import MnemonicPhrase from '/libraries/mnemonic-phrase/mnemonic-phrase.min.js';
@@ -51,6 +51,8 @@ class XImportWords extends XElement {
 
 export default reduxify(
     store,
-    null,
-    { setData, deny }
+    state => ({
+        requestType: state.request.requestType,
+    }),
+    { deny }
 )(XImportWords)

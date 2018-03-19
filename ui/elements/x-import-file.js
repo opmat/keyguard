@@ -25,12 +25,14 @@ class XImportFile extends XElement {
         }
     }
 
-    _onPropertiesChanged() {
-        const { isWrongPassphrase } = this.properties;
+    _onPropertiesChanged(changes) {
+        const { requestType } = this.properties;
 
-        if (isWrongPassphrase) {
+        if (requestType !== RequestTypes.IMPORT_FROM_FILE) return;
+
+        if (changes.isWrongPassphrase) {
             // todo show message in UI. Use html5 form validation api?
-           alert('wrong passphrase');
+           alert('wrong passphrase')
            this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
         }
     }
@@ -39,6 +41,7 @@ class XImportFile extends XElement {
 export default reduxify(
     store,
     state => ({
+        requestType: state.request.requestType,
         isWrongPassphrase: state.request.data.isWrongPassphrase
     }),
     { setData, encryptAndPersist }
