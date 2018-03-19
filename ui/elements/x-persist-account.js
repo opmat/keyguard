@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, confirm, confirmPersist } from '/libraries/keyguard/request.js';
+import { RequestTypes, confirmPersist } from '/libraries/keyguard/store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XPersistAccount extends XElement {
@@ -55,5 +55,5 @@ export default reduxify(
     state => ({
         userFriendlyAddress: state.request.data.address
     }),
-    { confirm, confirmPersist }
+    { confirmPersist }
 )(XPersistAccount)

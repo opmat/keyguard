@@ -256,3 +256,10 @@ export function signTransaction(passphrase) {
         }
     }
 }
+
+export function rename(passphrase) {
+    return async (dispatch, getState) => {
+        dispatch( setExecuting(RequestTypes.RENAME) );
+        // todo implement
+    }
+}
