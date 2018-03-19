@@ -8,6 +8,7 @@ import store from './store/store.js';
 import accountStore from './keys/keystore.js';
 import XKeyguardApp from './ui/x-keyguard-app.js';
 import { KeyNotFoundError } from './errors/index.js';
+import keyStore from './keys/keystore.js';
 
 class Keyguard {
     constructor() {
@@ -30,7 +31,8 @@ class Keyguard {
         ];
 
         // start postMessage RPC server
-        RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
+        this._api = RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
+        this._keyStore = keyStore;
     }
 }
 

@@ -6,7 +6,7 @@ import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 
 import store from '../../store/store.js';
-import { RequestTypes, c } from '../../store/request.js';
+import { RequestTypes, decryptKey } from '../../store/request.js';
 import reduxify from '/libraries/redux/src/redux-x-element.js';
 
 class XExport extends XElement {
@@ -33,16 +33,11 @@ class XExport extends XElement {
         `;
     }
 
-    onCreate() {
-        this._properties = { address: 'monkey pie', privateKey: window.crypto.getRandomValues(new Uint8Array(32)) };
-        this._onPropertiesChanged();
-    }
-
     _onPropertiesChanged() {
         const { address, privateKey } = this.properties;
 
-        this.$identicon.address = address;
-        this.$mnemonicPhrase.privateKey = privateKey;
+        this.$identicon.setProperty('address', address);
+        this.$mnemonicPhrase.setProperty('privateKey', privateKey);
     }
 
     listeners() {
