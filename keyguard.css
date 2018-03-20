@@ -1,2 +1,12 @@
 @import "/libraries/nimiq-style/nimiq-style.css";
-@import "./ui/x-keyguard-app.css";
+@import "ui/x-keyguard.css";
+
+.x-loading {
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    max-width: var(--max-width);
+}

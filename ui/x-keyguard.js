@@ -7,16 +7,9 @@ import XImportFile from './elements/x-import-file.js';
 import XSign from './elements/x-sign.js';
 import XExport from './elements/x-export.js';
 import XRenameAccount from './elements/x-rename-account.js';
+import XClose from '/elements/x-close/x-close.js';
 
-export default class XKeyguardApp extends XElement {
-
-    // TODO [sven] move to new XApp class
-    static launch() {
-        if (document.readyState === 'complete') return new this();
-        else window.addEventListener('load', () => new this());
-    }
-
-    get __tagName() { return 'body' }
+export default class XKeyguard extends XElement {
 
     html() {
         return `
@@ -28,25 +21,17 @@ export default class XKeyguardApp extends XElement {
           <x-sign x-route="sign"></x-sign>
           <x-export></x-export>
           <x-rename-account x-route="rename"> Rename account </x-rename-account>
-          <main x-route="/">
-            <x-loading-animation></x-loading-animation>
-            <h2>Calling keyguard</h2>
-            <a x-href="persist">persist volatile account</a>
-            <a x-href="create">create account</a>
-            <a x-href="import-from-words">import account with words</a>
-            <a x-href="import-from-file">import account from file</a>
-            <a x-href="sign">sign transaction</a>
-            <a x-href="export">export account</a>
-            <a x-href="rename">rename account</a>
-          </main>
+          <x-close x-route="/"></x-close>
         </x-router>
         `;
     }
 
     children() {
-        return [ XRouter, XPersistAccount, XIdenticons, XImportWords, XImportFile, XSign, XExport, XRenameAccount ];
+        return [ XRouter, XClose, XPersistAccount, XIdenticons, XImportWords, XImportFile, XSign, XExport, XRenameAccount ];
     }
 }
 
 // TODO what to do when the user reloads the page and the state is not initialized again?? > persist the state on unload
 // that means we would have to put rpc requests in store and open new promises for unresponsed requests
+
+// todo avoid that going back to loading/home screen is possible

@@ -5,7 +5,7 @@ import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
 import store from './store/store.js';
-import XKeyguardApp from './ui/x-keyguard-app.js';
+import XKeyguard from './ui/x-keyguard.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import keyStore from './keys/keystore.js';
 
@@ -14,8 +14,16 @@ class Keyguard {
 
         // show UI if we are not embedded
         if (self === top) {
+            const $appContainer = document.querySelector('#app');
             MixinRedux.store = store;
-            window.app = XKeyguardApp.launch();
+            // wait until request is started
+            const unsubscribe = store.subscribe(() => {
+                const state = store.getState();
+                if (state.request.requestType) {
+                    window.app = new XKeyguard($appContainer);
+                    unsubscribe()
+                }
+            });
         }
 
         // configure access control

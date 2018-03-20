@@ -20,8 +20,14 @@
     <link rel="apple-touch-icon" href="pwa/icons/apple-touch-icon.png">
     <link rel="apple-touch-startup-image" href="pwa/icons/icon-512x512.png">
     <link rel="stylesheet" href="keyguard.css">
-    <script src="keyguard.js" type="module"></script>
 </head>
 <body>
+<div id="app">
+    <div class="x-loading">
+        <x-loading-animation></x-loading-animation>
+        <h2>Processing request</h2>
+    </div>
+</div>
+<script src="keyguard.js" type="module"></script>
 </body>
 </html>
