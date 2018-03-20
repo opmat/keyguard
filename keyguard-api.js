@@ -94,8 +94,8 @@ export default class KeyguardApi {
                 throw new Error('Request already started');
             }
 
-            // set request state to started
-            this.actions.start(requestType, data);
+            // Set request state to started. Save reject so we can cancel the request when the window is closed
+            this.actions.start(requestType, reject, data);
 
             // wait until the ui dispatches the user's feedback
             store.subscribe(() => {

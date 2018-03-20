@@ -38,6 +38,13 @@ class Keyguard {
             }
         ];
 
+        // cancel request when window is closed
+        self.onunload = () => {
+            const reject = store.getState().request.reject;
+            if (reject) reject(new Error('window was closed'));
+        };
+
+
         // start postMessage RPC server
         this._api = RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
         this._keyStore = keyStore;

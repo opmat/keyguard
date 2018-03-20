@@ -33,6 +33,8 @@ export function reducer(state, action) {
 
         result: undefined, // result which is returned to calling app (keyguard-api will be notified when state changes)
 
+        reject: undefined, // used to cancel the request when the window is closed
+
         data: { // additional request data specific to some request types
             address: undefined, // the address of the account we are using for this request
             isWrongPassphrase: undefined, // boolean set to true after user tried wrong passphrase
@@ -66,6 +68,7 @@ export function reducer(state, action) {
             return {
                 ...state,
                 requestType: action.requestType,
+                reject: action.reject,
                 data: {
                     ...state.data,
                     ...action.data
@@ -85,7 +88,6 @@ export function reducer(state, action) {
         case TypeKeys.SET_RESULT:
             return {
                 ...state,
-                completed: true,
                 result: action.result
             };
 
@@ -100,10 +102,11 @@ export function reducer(state, action) {
     }
 }
 
-export function start(requestType, data) {
+export function start(requestType, reject, data) {
     return {
         type: TypeKeys.START,
         requestType,
+        reject,
         data
     };
 }
