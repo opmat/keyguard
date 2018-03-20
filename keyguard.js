@@ -5,9 +5,8 @@ import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
 import store from './store/store.js';
-import accountStore from './keys/keystore.js';
 import XKeyguardApp from './ui/x-keyguard-app.js';
-import { KeyNotFoundError } from './errors/index.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import keyStore from './keys/keystore.js';
 
 class Keyguard {
@@ -15,6 +14,7 @@ class Keyguard {
 
         // show UI if we are not embedded
         if (self === top) {
+            MixinRedux.store = store;
             window.app = XKeyguardApp.launch();
         }
 

@@ -1,11 +1,10 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import store from '/libraries/keyguard/store/store.js';
 import { RequestTypes, signTransaction, setData } from '/libraries/keyguard/store/request.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-class XSign extends XElement {
+export default class XSign extends MixinRedux(XElement) {
 
     html() { return `
         <x-identicon></x-identicon>
@@ -21,8 +20,16 @@ class XSign extends XElement {
         `;
     }
 
-    onCreate() {
-        this.setProperties({ sender: 'monkey pie', recipient: 'uncle sam', value: 1.06e6, fee: 101, validity: 15000 });
+    static mapStateToProps(state) {
+        return {
+            requestType: state.request.requestType,
+            transaction: state.request.data.transaction,
+            isWrongPassphrase: state.request.data.isWrongPassphrase
+        };
+    }
+
+    static get actions() {
+        return { signTransaction, setData };
     }
 
     _onPropertiesChanged(changes) {
@@ -59,18 +66,5 @@ class XSign extends XElement {
         return [ XIdenticon, XPasswordSetter ];
     }
 }
-
-/* connect the element to the redux store */
-export default reduxify(
-    store,
-    state => {
-        return {
-            requestType: state.request.requestType,
-            transaction: state.request.data.transaction,
-            isWrongPassphrase: state.request.data.isWrongPassphrase
-        };
-    },
-    { signTransaction, setData }
-)(XSign)
 
 // Todo confirm with passphrase: confirm

@@ -1,10 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import store from '/libraries/keyguard/store/store.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData, encryptAndPersist } from '/libraries/keyguard/store/request.js';
 
-class XImportFile extends XElement {
+export default class XImportFile extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Enter your Passphrase</h1>
@@ -22,7 +21,18 @@ class XImportFile extends XElement {
     listeners() {
         return {
             'x-password-setter-submitted': passphrase => this.actions.encryptAndPersist(passphrase)
-        }
+        };
+    }
+
+    static mapStateToProps(state) {
+        return {
+            requestType: state.request.requestType,
+            isWrongPassphrase: state.request.data.isWrongPassphrase
+        };
+    }
+
+    static get actions() {
+        return { setData, encryptAndPersist };
     }
 
     _onPropertiesChanged(changes) {
@@ -37,12 +47,3 @@ class XImportFile extends XElement {
         }
     }
 }
-
-export default reduxify(
-    store,
-    state => ({
-        requestType: state.request.requestType,
-        isWrongPassphrase: state.request.data.isWrongPassphrase
-    }),
-    { setData, encryptAndPersist }
-)(XImportFile)

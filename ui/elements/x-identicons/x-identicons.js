@@ -1,12 +1,11 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XRouter from '/elements/x-router/x-router.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
-import store from '/libraries/keyguard/store/store.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { createVolatile, clearVolatile } from '/libraries/keyguard/store/keys.js';
 import { RequestTypes, setData } from '/libraries/keyguard/store/request.js';
 
-class XIdenticons extends XElement {
+export default class XIdenticons extends MixinRedux(XElement) {
 
     html() {
         return `
@@ -24,10 +23,11 @@ class XIdenticons extends XElement {
                 <a button>Confirm</a>
                 <a secondary>Back</a>
             </x-backdrop>
-            `
+            `;
     }
 
     onCreate() {
+        super.onCreate();
         this.$container = this.$('x-container');
         this.$loading = this.$('#loading');
         this.$address = this.$('x-address');
@@ -38,15 +38,19 @@ class XIdenticons extends XElement {
         return {
             'click .generate-more': e => this._generateIdenticons(),
             'click x-backdrop': e => this._clearSelection()
-        }
+        };
     }
 
-    onEntry() {
-        this._generateIdenticons();
+    static mapStateToProps(state) {
+        return {
+            // volatileKeys is a map whose keys are addresses ;)
+            addresses: [...state.keys.volatileKeys.keys()],
+            requestType: state.request.requestType
+        };
     }
 
-    onExit(){
-        this.$container.textContent = '';
+    static get actions() {
+        return { createVolatile, clearVolatile, setData };
     }
 
     _onPropertiesChanged(changedProperties) {
@@ -67,6 +71,14 @@ class XIdenticons extends XElement {
         }
 
         setTimeout(e => this.$el.setAttribute('active', true), 100);
+    }
+
+    onEntry() {
+        this._generateIdenticons();
+    }
+
+    onExit(){
+        this.$container.textContent = '';
     }
 
     async _generateIdenticons() {
@@ -96,16 +108,6 @@ class XIdenticons extends XElement {
         XRouter.root.goTo('persist');
     }
 }
-
-export default reduxify(
-    store,
-    state => ({
-        // volatileKeys is a map whose keys are addresses ;)
-        addresses: [...state.keys.volatileKeys.keys()],
-        requestType: state.request.requestType
-    }),
-    { createVolatile, clearVolatile, setData }
-)(XIdenticons);
 
 // Todo: [low priority] remove hack for overlay and find a general solution
 

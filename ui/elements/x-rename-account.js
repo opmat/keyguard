@@ -1,10 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
-import store from '/libraries/keyguard/store/store.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, rename, setData } from '/libraries/keyguard/store/request.js';
 
-class XRenameAccount extends XElement {
+export default class XRenameAccount extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Rename your Account</h1>
@@ -18,7 +17,20 @@ class XRenameAccount extends XElement {
     }
 
     onCreate() {
+        super.onCreate();
         this.$input = this.$('input');
+    }
+
+    static mapStateToProps(state) {
+        return {
+            requestType: state.request.requestType,
+            address: state.request.data.address,
+            label: state.request.data.label
+        };
+    }
+
+    static get actions() {
+        return { rename, setData };
     }
 
     _onPropertiesChanged(changes) {
@@ -40,15 +52,3 @@ class XRenameAccount extends XElement {
         return [ XIdenticon ];
     }
 }
-
-
-/* connect the element to the redux store */
-export default reduxify(
-    store,
-    state => ({
-        requestType: state.request.requestType,
-        address: state.request.data.address,
-        label: state.request.data.label
-    }),
-    { rename, setData }
-)(XRenameAccount)

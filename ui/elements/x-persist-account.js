@@ -1,11 +1,10 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import store from '/libraries/keyguard/store/store.js';
-import { RequestTypes, confirmPersist } from '/libraries/keyguard/store/request.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
+import { confirmPersist } from '/libraries/keyguard/store/request.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-class XPersistAccount extends XElement {
+export default class XPersistAccount extends MixinRedux(XElement) {
 
     html() { return `
         <x-identicon></x-identicon>
@@ -29,6 +28,17 @@ class XPersistAccount extends XElement {
         `;
     }
 
+    static mapStateToProps(state) {
+        return {
+            requestType: state.request.requestType,
+            address: state.request.data.address
+        };
+    }
+
+    static get actions() {
+        return { confirmPersist };
+    }
+
     _onPropertiesChanged(changes) {
         const { address } = changes;
 
@@ -45,14 +55,3 @@ class XPersistAccount extends XElement {
         return [ XIdenticon, XPasswordSetter ];
     }
 }
-
-
-/* connect the element to the redux store */
-export default reduxify(
-    store,
-    state => ({
-        requestType: state.request.requestType,
-        address: state.request.data.address
-    }),
-    { confirmPersist }
-)(XPersistAccount)

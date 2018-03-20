@@ -4,12 +4,10 @@ import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
-
-import store from '/libraries/keyguard/store/store.js';
 import { RequestTypes, decryptKey, setData, exportFile } from '/libraries/keyguard/store/request.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-class XExport extends XElement {
+export default class XExport extends MixinRedux(XElement) {
 
     html() { return `
         <section x-route="export-key-phrase">
@@ -33,6 +31,31 @@ class XExport extends XElement {
         `;
     }
 
+    children() {
+        return [ XIdenticon, XPasswordSetter, XPrivacyAgent, XMnemonicPhrase ];
+    }
+
+    listeners() {
+        return {
+            'x-password-setter-submitted': passphrase => this.actions.decryptKey(passphrase),
+            'x-surrounding-checked': () => XRouter.root.goTo('export-key-phrase'),
+            'click button.last': () => this.actions.exportFile()
+        };
+    }
+
+    static mapStateToProps(state) {
+        return {
+            requestType: state.request.requestType,
+            address: state.request.data.address,
+            privateKey: state.request.data.privateKey,
+            isWrongPassphrase: state.request.data.isWrongPassphrase
+        };
+    }
+
+    static get actions() {
+        return { decryptKey, setData, exportFile };
+    }
+
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 
@@ -44,31 +67,6 @@ class XExport extends XElement {
         this.$identicon.setProperty('address', address);
         this.$mnemonicPhrase.setProperty('privateKey', privateKey);
     }
-
-    listeners() {
-        return {
-            'x-password-setter-submitted': passphrase => this.actions.decryptKey(passphrase),
-            'x-surrounding-checked': () => XRouter.root.goTo('export-key-phrase'),
-            'click button.last': () => this.actions.exportFile()
-        }
-    }
-
-    children() {
-        return [ XIdenticon, XPasswordSetter, XPrivacyAgent, XMnemonicPhrase ];
-    }
 }
-
-
-/* connect the element to the redux store */
-export default reduxify(
-    store,
-    state => ({
-        requestType: state.request.requestType,
-        address: state.request.data.address,
-        privateKey: state.request.data.privateKey,
-        isWrongPassphrase: state.request.data.isWrongPassphrase
-    }),
-    { decryptKey, setData, exportFile }
-)(XExport)
 
 // todo fix key -> mnemonic phrase

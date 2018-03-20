@@ -1,7 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMnemonicInput from '/elements/x-mnemonic-input/x-mnemonic-input.js';
-import reduxify from '/libraries/redux/src/redux-x-element.js';
-import store from '/libraries/keyguard/store/store.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, deny } from '/libraries/keyguard/store/request.js';
 
 // TODO remove for production
@@ -24,7 +23,7 @@ window.test = async () => {
     document.querySelectorAll('button').forEach(button => button.setAttribute('disabled', 'disabled'));
 };
 
-class XImportWords extends XElement {
+export default class XImportWords extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Account Recovery</h1>
@@ -35,6 +34,16 @@ class XImportWords extends XElement {
         <x-mnemonic-input class="x-recovery-phrase"></x-mnemonic-input>
         <button>Cancel</button>
         `;
+    }
+
+    static mapStateToProps(state) {
+        return {
+            requestType: state.request.requestType,
+        };
+    }
+
+    static get actions() {
+        return { deny };
     }
 
     listeners() {
@@ -48,11 +57,3 @@ class XImportWords extends XElement {
         return [ XMnemonicInput ];
     }
 }
-
-export default reduxify(
-    store,
-    state => ({
-        requestType: state.request.requestType,
-    }),
-    { deny }
-)(XImportWords)
