@@ -70,3 +70,5 @@ export default reduxify(
     }),
     { decryptKey, setData, exportFile }
 )(XExport)
+
+// todo fix key -> mnemonic phrase
