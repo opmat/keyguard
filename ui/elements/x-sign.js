@@ -55,7 +55,7 @@ export default class XSign extends MixinRedux(XElement) {
         }
 
         if (isWrongPassphrase) {
-            this.$passwordSetter.setProperties('isWrongPassphrase', isWrongPassphrase);
+            this.$passwordSetter.wrongPassphrase();
             this.actions.setData(RequestTypes.SIGN_TRANSACTION, { isWrongPassphrase: false });
         }
     }
