@@ -85,6 +85,12 @@ export function reducer(state, action) {
                 }
             };
 
+        case TypeKeys.SET_EXECUTING:
+            return {
+                ...state,
+                executing: true
+            };
+
         case TypeKeys.SET_RESULT:
             return {
                 ...state,

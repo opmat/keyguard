@@ -5,6 +5,7 @@
 @import  '/elements/x-mnemonic-phrase/x-mnemonic-phrase.css';
 @import './elements/x-identicons/x-identicons.css';
 @import '/elements/nimiq-logo/nimiq-logo.css';
+@import '/elements/x-loader/x-loader.css';
 
 body x-router, body x-router [x-route] {
     flex-direction: column;

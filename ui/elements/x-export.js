@@ -63,9 +63,17 @@ export default class XExport extends MixinRedux(XElement) {
 
         const { address, privateKey, isWrongPassphrase } = changes;
 
-        this.$passwordSetter.setProperty('isWrongPassphrase', isWrongPassphrase);
-        this.$identicon.setProperty('address', address);
-        this.$mnemonicPhrase.setProperty('privateKey', privateKey);
+        if (isWrongPassphrase !== undefined) {
+            this.$passwordSetter.setProperty('isWrongPassphrase', isWrongPassphrase);
+        }
+
+        if (address) {
+            this.$identicon.address = address;
+        }
+
+        if (privateKey) {
+            this.$mnemonicPhrase.setProperty('privateKey', privateKey);
+        }
     }
 }
 

@@ -27,11 +27,11 @@ export default class XIdenticons extends MixinRedux(XElement) {
     }
 
     onCreate() {
-        super.onCreate();
         this.$container = this.$('x-container');
         this.$loading = this.$('#loading');
         this.$address = this.$('x-address');
         this.$confirmButton = this.$('x-backdrop [button]');
+        super.onCreate();
     }
 
     listeners() {

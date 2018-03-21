@@ -17,8 +17,8 @@ export default class XRenameAccount extends MixinRedux(XElement) {
     }
 
     onCreate() {
-        super.onCreate();
         this.$input = this.$('input');
+        super.onCreate();
     }
 
     static mapStateToProps(state) {

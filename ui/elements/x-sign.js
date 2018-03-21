@@ -20,6 +20,10 @@ export default class XSign extends MixinRedux(XElement) {
         `;
     }
 
+    children() {
+        return [ XIdenticon, XPasswordSetter ];
+    }
+
     static mapStateToProps(state) {
         return {
             requestType: state.request.requestType,
@@ -61,10 +65,4 @@ export default class XSign extends MixinRedux(XElement) {
             'x-password-setter-submitted': passphrase => this.actions.signTransaction(passphrase)
         }
     }
-
-    children() {
-        return [ XIdenticon, XPasswordSetter ];
-    }
 }
-
-// Todo confirm with passphrase: confirm
