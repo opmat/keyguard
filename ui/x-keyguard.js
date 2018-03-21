@@ -47,6 +47,13 @@ export default class XKeyguard extends MixinRedux(XElement) {
         if (changes.executing !== undefined) {
             this.$loader.loading = changes.executing;
         }
+
+        if (changes.isWrongPassphrase) {
+            const activePasswordSetter = XElement.elementMap(this.$('.in x-password-setter'));
+            if (activePasswordSetter) {
+                activePasswordSetter.wrongPassphrase();
+            }
+        }
     }
 }
 

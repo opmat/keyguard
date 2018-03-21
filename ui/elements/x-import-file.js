@@ -41,9 +41,8 @@ export default class XImportFile extends MixinRedux(XElement) {
         if (requestType !== RequestTypes.IMPORT_FROM_FILE) return;
 
         if (changes.isWrongPassphrase) {
-            // todo show message in UI. Use html5 form validation api?
-           alert('wrong passphrase')
-           this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
+            this.$passwordSetter.wrongPassphrase();
+            this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
         }
     }
 }
