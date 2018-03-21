@@ -100,6 +100,13 @@ export default class Key {
         return this._keyPair.exportEncrypted(key, unlockKey);
     }
 
+    /**
+     * @returns {Uint8Array}
+     */
+    exportPlain() {
+        return this._keyPair.serialize();
+    }
+
     /** @type {boolean} */
     get isLocked() {
         return this.keyPair.isLocked;

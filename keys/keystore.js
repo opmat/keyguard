@@ -78,6 +78,7 @@ class KeyStore {
     async put(key, passphrase, unlockKey) {
         /** @type {Uint8Array} */
         const encryptedKeyPair = await key.exportEncrypted(passphrase, unlockKey);
+
         const keyInfo = {
             encryptedKeyPair: encryptedKeyPair,
             userFriendlyAddress: key.userFriendlyAddress,
@@ -85,6 +86,10 @@ class KeyStore {
             label: key.label
         };
 
+        await this.putPlain(keyInfo);
+    }
+
+    async putPlain(keyInfo) {
         const db = await this.connect();
         return new Promise((resolve, reject) => {
             const putTx = db.transaction([KeyStore.ACCOUNT_DATABASE], 'readwrite')
