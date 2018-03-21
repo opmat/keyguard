@@ -154,8 +154,8 @@ export function setExecuting(requestType) {
 
 // The following actions are async
 
-// called in account creation after choosing identicon and entering passphrase (and label)
-export function confirmPersist(passphrase, label = '') {
+// called in account creation after choosing identicon and entering passphrase and label
+export function createPersistent(passphrase, label = '') {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.CREATE) );
 
@@ -187,7 +187,7 @@ export function confirmPersist(passphrase, label = '') {
 }
 
 // called when importing from file after entering the passphrase
-export function encryptAndPersist(passphrase, label) {
+export function importFromFile(passphrase, label) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
@@ -306,5 +306,42 @@ export function rename(passphrase) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.RENAME) );
         // todo implement
+    }
+}
+
+export function importFromWords(passphrase, label) {
+    return async (dispatch, getState) => {
+        dispatch(setExecuting(RequestTypes.IMPORT_FROM_WORDS));
+
+        try {
+            const hexKey = getState().request.data.hexKey;
+
+            const serializedKey = new Nimiq.SerialBuffer(Nimiq.BufferUtils.fromHex(hexKey));
+
+            const privateKey = Nimiq.PrivateKey.unserialize(serializedKey);
+
+            const keyPair = Nimiq.KeyPair.derive(privateKey);
+
+            const key = await Key.loadPlain(keyPair.serialize());
+
+            key.type = Keytype.HIGH;
+            key.label = label;
+
+            if (!key.label) {
+                // todo get from ui
+                key.label = key.userFriendlyAddress.slice(0, 9);
+            }
+
+            // actual import
+            await keystore.put(key, passphrase);
+
+            dispatch(
+                setResult(RequestTypes.IMPORT_FROM_WORDS, key.getPublicInfo())
+            );
+        } catch (e) {
+            dispatch(
+                setError(RequestTypes.IMPORT_FROM_WORDS, e)
+            );
+        }
     }
 }

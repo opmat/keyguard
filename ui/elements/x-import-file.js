@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, setData, encryptAndPersist } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, setData, importFromFile } from '/libraries/keyguard/store/request.js';
 
 export default class XImportFile extends MixinRedux(XElement) {
 
@@ -32,7 +32,7 @@ export default class XImportFile extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { setData, encryptAndPersist };
+        return { setData, encryptAndPersist: importFromFile };
     }
 
     _onPropertiesChanged(changes) {

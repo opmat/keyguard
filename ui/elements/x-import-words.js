@@ -1,7 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
+import XRouter from '/elements/x-router/x-router.js';
 import XMnemonicInput from '/elements/x-mnemonic-input/x-mnemonic-input.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, deny } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, deny, setData } from '/libraries/keyguard/store/request.js';
 
 // TODO remove for production
 import MnemonicPhrase from '/libraries/mnemonic-phrase/mnemonic-phrase.min.js';
@@ -36,6 +37,10 @@ export default class XImportWords extends MixinRedux(XElement) {
         `;
     }
 
+    children() {
+        return [ XMnemonicInput ];
+    }
+
     static mapStateToProps(state) {
         return {
             requestType: state.request.requestType,
@@ -43,17 +48,18 @@ export default class XImportWords extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { deny };
+        return { deny, setData };
     }
 
     listeners() {
         return {
-            'x-mnemonic-input': key => console.log('success', key),
+            'x-mnemonic-input': this._onSuccess.bind(this),
             'click button': () => this.actions.deny(RequestTypes.IMPORT_FROM_WORDS)
         }
     }
 
-    children() {
-        return [ XMnemonicInput ];
+    _onSuccess(hexKey) {
+        this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { hexKey });
+        XRouter.root.goTo('save-recovered');
     }
 }
