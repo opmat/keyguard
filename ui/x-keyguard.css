@@ -2,7 +2,8 @@
 @import '/elements/x-loading-animation/x-loading-animation.css';
 @import '/elements/x-password-setter/x-password-setter.css';
 @import '/elements/x-mnemonic-input/x-mnemonic-input.css';
-@import  '/elements/x-mnemonic-phrase/x-mnemonic-phrase.css';
+@import '/elements/x-mnemonic-phrase/x-mnemonic-phrase.css';
+@import '/elements/x-privacy-agent/x-privacy-agent.css';
 @import './elements/x-identicons/x-identicons.css';
 @import '/elements/nimiq-logo/nimiq-logo.css';
 @import '/elements/x-loader/x-loader.css';

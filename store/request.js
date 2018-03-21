@@ -218,7 +218,7 @@ export function decryptKey(passphrase) {
             const key = await keystore.get(getState().request.data.address, passphrase);
 
             dispatch(
-                setData(RequestTypes.EXPORT, { privateKey: key.keyPair.privateKey })
+                setData(RequestTypes.EXPORT, { privateKey: key.keyPair.privateKey.toHex() })
             );
             XRouter.root.goTo('export-key-warning');
         } catch (e) {
@@ -238,7 +238,7 @@ export function exportFile() {
         const { encryptedKeyPair } = await keystore.getPlain(getState().request.data.address);
 
         dispatch(
-            setResult(RequestTypes.EXPORT, encryptedKeyPair)
+            setResult(RequestTypes.EXPORT, Nimiq.BufferUtils.toBase64(encryptedKeyPair))
         );
     }
 }
