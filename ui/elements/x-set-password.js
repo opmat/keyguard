@@ -3,7 +3,7 @@ import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPassphraseTipps from '/elements/x-passphrase-tipps/x-passphrase-tipps.js';
 
-export default class XInputKeyInfo extends XElement {
+export default class XSetPassword extends XElement {
 
     html() { return `
         <x-identicon></x-identicon>

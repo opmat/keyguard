@@ -1,8 +1,8 @@
 import { createPersistent } from '/libraries/keyguard/store/request.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import XInputKeyInfo from './x-input-key-info.js';
+import XSetPassword from './x-set-password.js';
 
-export default class XPersistAccount extends MixinRedux(XInputKeyInfo) {
+export default class XPersistAccount extends MixinRedux(XSetPassword) {
 
     static mapStateToProps(state) {
         return {

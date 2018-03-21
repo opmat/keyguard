@@ -16,7 +16,7 @@ export default class XSign extends MixinRedux(XElement) {
             <p><span class="fee"></span> satoshis fee</p>
             <p>Valid until block #<span class="validity"></span></p>
         </section>
-        <x-password-setter buttonLabel="Import" showIndicator="false"></x-password-setter>
+        <x-password-setter buttonLabel="Confirm" showIndicator="false"></x-password-setter>
         `;
     }
 
