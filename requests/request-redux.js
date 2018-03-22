@@ -10,7 +10,8 @@ export const RequestTypes = {
     CREATE: 'create',
     IMPORT_FROM_FILE: 'import-from-file',
     IMPORT_FROM_WORDS: 'import-from-words',
-    EXPORT: 'export',
+    EXPORT_FILE: 'export-file',
+    EXPORT_WORDS: 'export-words',
     RENAME: 'rename'
 };
 
@@ -156,40 +157,6 @@ export function setExecuting(requestType) {
 
 // The following actions are async
 
-
-// called when doing backup process, after entering passphrase
-export function decryptKey(passphrase) {
-    return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.EXPORT) );
-
-        try {
-            const key = await keystore.get(getState().request.data.address, passphrase);
-
-            dispatch(
-                setData(RequestTypes.EXPORT, { privateKey: key.keyPair.privateKey.toHex() })
-            );
-            XRouter.root.goTo('export-key-warning');
-        } catch (e) {
-            // assume the password was wrong
-            dispatch(
-                setData(RequestTypes.EXPORT, { isWrongPassphrase: true })
-            );
-        }
-    }
-}
-
-// called when doing backup process, after seeing recovery words
-export function exportFile() {
-    return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.EXPORT) );
-
-        const { encryptedKeyPair } = await keystore.getPlain(getState().request.data.address);
-
-        dispatch(
-            setResult(RequestTypes.EXPORT, Nimiq.BufferUtils.toBase64(encryptedKeyPair))
-        );
-    }
-}
 
 // load public key info to data, so we can show it in UI.
 export function loadAccountData(requestType) {

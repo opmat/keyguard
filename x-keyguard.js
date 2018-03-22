@@ -3,12 +3,11 @@ import XRouter from '/elements/x-router/x-router.js';
 import XLoader from '/elements/x-loader/x-loader.js';
 import XCreate from './requests/create/x-create.js';
 import XImportWords from './requests/import-words/x-enter-phrase.js';
-import XSaveRecovered from './requests/import-words/x-save-recovered.js';
-import XImportFile from './requests/import-file/x-import-file.js';
+import XImportFile from './requests/import-file/x-unlock.js';
 import XSign from './requests/sign/x-sign.js';
 import XExportFile from './requests/export-file/x-export-file.js';
 import XExportWords from './requests/export-words/x-export-words.js';
-import XRenameAccount from './requests/rename/x-rename-account.js';
+import XRename from './requests/rename/x-rename.js';
 import XClose from '/elements/x-close/x-close.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
@@ -21,18 +20,17 @@ export default class XKeyguard extends MixinRedux(XElement) {
           <x-create></x-create> 
           <x-export-words></x-export-words>
           <x-export-file></x-export-file>
-          
-          
-          <x-import-file x-route="import-from-file"></x-import-file>
+          <x-import-file></x-import-file>
+          <x-import-words></x-import-words>
           <x-sign x-route="sign"></x-sign>
-          <x-rename-account x-route="rename"></x-rename-account>
+          <x-rename x-route="rename"></x-rename>
           <x-close x-route="/"></x-close>
         </x-router>
         `;
     }
 
     children() {
-        return [ XLoader, XRouter, XClose, XCreate, XImportWords, XSaveRecovered,  XImportFile, XSign, XExportWords, XExportFile, XRenameAccount ];
+        return [ XLoader, XRouter, XClose, XCreate, XImportWords, XRename,  XImportFile, XSign, XExportWords, XExportFile ];
     }
 
     static mapStateToProps(state) {

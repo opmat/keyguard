@@ -5,7 +5,7 @@ import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
 import { rename } from './actions.js';
 
-export default class XRenameAccount extends MixinRedux(XElement) {
+export default class XRename extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Rename your Account</h1>

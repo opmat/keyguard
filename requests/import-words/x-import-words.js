@@ -4,14 +4,15 @@ import XPersistAccount from './requests/create/x-persist-account.js';
 import XIdenticons from './requests/create/x-identicons/x-identicons.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
-import { createPersistent } from './actions.js';
+import { importFromWords } from './actions.js';
+import XRouter from '/elements/x-router/x-router.js';
 
 export default class XCreate extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
     html() { return `
-          <x-persist-account x-route="create/persist"></x-persist-account>
-          <x-save-recovered x-route="import-from-words/set-label"></x-save-recovered>
+          <x-set-label x-route="import-from-words/set-label"></x-set-label>
+          <x-set-passphrase x-route="import-from-words/set-passphrase"></x-set-passphrase>
           <x-enter-phrase x-route="import-from-words"></x-enter-phrase>
         `;
     }
@@ -21,17 +22,23 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { setData, createPersistent };
+        return { setData, importFromWords };
     }
 
     listeners() {
         return {
+            'x-set-passphrase': this._onSetPassphrase.bind(this),
             'x-set-label': this._onSetLabel.bind(this)
         }
     }
 
+    _onSetPassphrase(passphrase) {
+        this.actions.setData(RequestTypes.CREATE, { passphrase });
+        XRouter.root.goTo('import-from-words/set-label');
+    }
+
     _onSetLabel(label) {
         this.actions.setData(RequestTypes.CREATE, { label });
-        this.actions.createPersistent();
+        this.actions.importFromWords();
     }
 }

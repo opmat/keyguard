@@ -60,6 +60,6 @@ export default class XEnterPhrase extends MixinRedux(XElement) {
 
     _onSuccess(hexKey) {
         this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { hexKey });
-        XRouter.root.goTo('save-recovered');
+        XRouter.root.goTo('import-from-words/set-passphrase');
     }
 }

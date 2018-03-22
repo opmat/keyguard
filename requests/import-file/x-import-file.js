@@ -1,54 +1,29 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import XRouter from '/elements/x-router/x-router.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { importFromFile } from './actions.js';
 
 export default class XImportFile extends MixinRedux(XElement) {
 
-    html() { return `
-        <h1>Enter your Passphrase</h1>
-        <section>
-            <p>Please enter your passphrase to unlock your Account Access File.</p>
-        </section>
-        <x-password-setter buttonLabel="Import" showIndicator="false"></x-password-setter>
-        `;
+    html() {
+        return `
+            <x-set-label x-route="import-file/set-label"></x-set-label>
+            <x-unlock x-route="import-file"></x-unlockx>
+        `
     }
 
-    children() {
-        return [ XPasswordSetter ];
+    static get actions() {
+        return { setData, importFromFile };
     }
 
     listeners() {
         return {
-            'x-password-setter-submitted': this._onSubmit.bind(this)
-        };
-    }
-
-    static mapStateToProps(state) {
-        return {
-            requestType: state.request.requestType,
-            isWrongPassphrase: state.request.data.isWrongPassphrase
-        };
-    }
-
-    static get actions() {
-        return { setData };
-    }
-
-    _onPropertiesChanged(changes) {
-        const { requestType } = this.properties;
-
-        if (requestType !== RequestTypes.IMPORT_FROM_FILE) return;
-
-        if (changes.isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
-            this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
+            'x-set-label': this._onSetLabel.bind(this)
         }
     }
 
-    _onSubmit(passphrase) {
-        this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { passphrase });
-        XRouter.root.goTo('import-from-file-set-label');
+    _onSetLabel(label) {
+        this.actions.setData(RequestTypes.CREATE, { label });
+        this.actions.importFromFile();
     }
 }
