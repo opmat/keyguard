@@ -4,10 +4,10 @@ import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
-import { RequestTypes, decryptKey, setData, exportFile } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, decryptKey, setData, exportFile } from '/libraries/keyguard/requests/request-redux.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-export default class XExport extends MixinRedux(XElement) {
+export default class XExportFile extends MixinRedux(XElement) {
 
     html() { return `
         <section x-route="export-key-phrase">

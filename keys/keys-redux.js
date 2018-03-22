@@ -1,5 +1,5 @@
-import Key from '../keys/key.js';
-import { RequestTypes } from './request.js';
+import Key from './key.js';
+import { RequestTypes } from '../requests/request-redux.js';
 
 export const TypeKeys = {
     ADD: 'keys/add',

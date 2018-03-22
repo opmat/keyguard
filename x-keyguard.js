@@ -1,15 +1,15 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XLoader from '/elements/x-loader/x-loader.js';
-import XIdenticons from './elements/x-identicons/x-identicons.js';
-import XPersistAccount from './elements/x-persist-account.js';
 import XSetLabel from './elements/x-set-label.js';
-import XImportWords from './elements/x-import-words.js';
-import XSaveRecovered from './elements/x-save-recovered.js';
-import XImportFile from './elements/x-import-file.js';
-import XSign from './elements/x-sign.js';
-import XExport from './elements/x-export.js';
-import XRenameAccount from './elements/x-rename-account.js';
+import XPersistAccount from './requests/create/x-persist-account.js';
+import XIdenticons from './requests/create/x-identicons/x-identicons.js';
+import XImportWords from './requests/import-words/x-import-words.js';
+import XSaveRecovered from './requests/import-words/x-save-recovered.js';
+import XImportFile from './requests/import-file/x-import-file.js';
+import XSign from './requests/sign/x-sign.js';
+import XExport from './requests/export-file/x-export.js';
+import XRenameAccount from './requests/rename/x-rename-account.js';
 import XClose from '/elements/x-close/x-close.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
@@ -27,7 +27,7 @@ export default class XKeyguard extends MixinRedux(XElement) {
           <x-import-file x-route="import-from-file"></x-import-file>
           <x-sign x-route="sign"></x-sign>
           <x-export></x-export>
-          <x-rename-account x-route="rename"> Rename account </x-rename-account>
+          <x-rename-account x-route="rename"></x-rename-account>
           <x-close x-route="/"></x-close>
         </x-router>
         `;

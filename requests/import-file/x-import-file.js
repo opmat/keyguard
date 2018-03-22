@@ -1,7 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
+import XRouter from '/elements/x-router/x-router.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, setData, importFromFile } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
 
 export default class XImportFile extends MixinRedux(XElement) {
 
@@ -20,7 +21,7 @@ export default class XImportFile extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-password-setter-submitted': passphrase => this.actions.encryptAndPersist(passphrase)
+            'x-password-setter-submitted': this._onSubmit.bind(this)
         };
     }
 
@@ -32,7 +33,7 @@ export default class XImportFile extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { setData, encryptAndPersist: importFromFile };
+        return { setData };
     }
 
     _onPropertiesChanged(changes) {
@@ -44,5 +45,10 @@ export default class XImportFile extends MixinRedux(XElement) {
             this.$passwordSetter.wrongPassphrase();
             this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
         }
+    }
+
+    _onSubmit(passphrase) {
+        this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { passphrase });
+        XRouter.root.goTo('import-from-file-set-label');
     }
 }

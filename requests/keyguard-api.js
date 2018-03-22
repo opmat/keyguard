@@ -1,12 +1,12 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-import Key from './keys/key.js';
-import * as Keytype from './keys/keytype.js';
-import keyStore from './keys/keystore.js';
-import store from './store/store.js';
-import { createVolatile, clearVolatile } from './store/keys.js';
-import { start, loadAccountData } from './store/request.js';
+import Key from '../keys/key.js';
+import * as Keytype from '../keys/keytype.js';
+import keyStore from '../keys/keystore.js';
+import store from '../store.js';
+import { createVolatile, clearVolatile } from '../keys/keys-redux.js';
+import { start, loadAccountData } from './request-redux.js';
 import XRouter from '/elements/x-router/x-router.js';
-import { RequestTypes } from './store/request.js';
+import { RequestTypes } from './request-redux.js';
 
 export default class KeyguardApi {
 

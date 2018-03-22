@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware, compose, combineReducers } from '/libraries/redux/src/index.js';
 import { createLogger } from '/libraries/redux-logger/src/index.js';
 import thunk from '/libraries/redux/src/redux-thunk.js';
-import { reducer as keyReducer } from './keys.js';
-import { reducer as requestReducer } from './request.js';
+import { reducer as keyReducer } from './keys/keys-redux.js';
+import { reducer as requestReducer } from './requests/request-redux.js';
 
 const reducers = {
     keys: keyReducer,

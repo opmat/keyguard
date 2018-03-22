@@ -2,7 +2,8 @@ import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, rename, setData } from '/libraries/keyguard/store/request.js';
+import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { rename } from './actions.js';
 
 export default class XRenameAccount extends MixinRedux(XElement) {
 
@@ -13,8 +14,12 @@ export default class XRenameAccount extends MixinRedux(XElement) {
             <label>Name</label>
             <input type="text" placeholder="Account name">
         </section>
-        <x-password-setter buttonLabel="Import" showIndicator="false"></x-password-setter>
+        <x-password-setter button-label="Import" show-indicator="false"></x-password-setter>
         `;
+    }
+
+    children() {
+        return [ XIdenticon, XPasswordSetter ];
     }
 
     onCreate() {
@@ -35,21 +40,24 @@ export default class XRenameAccount extends MixinRedux(XElement) {
     }
 
     _onPropertiesChanged(changes) {
-        const { requestType, address, label } = this.properties;
+        const { requestType } = this.properties;
 
         if (requestType !== RequestTypes.RENAME) return;
 
-        this.$identicon.setProperty('address', address);
-        this.$input.value = label;
+        const { address, label } = changes;
+
+        if (address) {
+            this.$identicon.address = address;
+        }
+
+        if (label) {
+            this.$input.value = label;
+        }
     }
 
     listeners() {
         return {
             'x-password-setter-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
         }
-    }
-
-    children() {
-        return [ XIdenticon ];
     }
 }

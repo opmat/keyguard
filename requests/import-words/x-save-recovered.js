@@ -1,6 +1,6 @@
-import { importFromWords } from '/libraries/keyguard/store/request.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import XSetPassword from './x-set-password.js';
+import XSetPassword from '../../common-elements/x-set-password.js';
+import { importFromWords } from './actions.js';
 
 export default class XSaveRecovered extends MixinRedux(XSetPassword) {
 
@@ -15,3 +15,5 @@ export default class XSaveRecovered extends MixinRedux(XSetPassword) {
         return { onSubmit: importFromWords };
     }
 }
+
+// todo goto set-label. Generic wrapper for setPassword AND setLabel as one?

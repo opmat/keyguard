@@ -1,11 +1,11 @@
 import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
-import KeyguardApi from './keyguard-api.js';
+import KeyguardApi from './requests/keyguard-api.js';
 import AccessControl from './access-control/access-control.js';
 import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
-import store from './store/store.js';
-import XKeyguard from './ui/x-keyguard.js';
+import store from './store.js';
+import XKeyguard from './x-keyguard.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import keyStore from './keys/keystore.js';
 
@@ -56,6 +56,7 @@ class Keyguard {
     await Nimiq.load();
     Nimiq.GenesisConfig.bounty();
 
+    //setTimeout(() => window.keyguard = new Keyguard(), 200);
     window.keyguard = new Keyguard();
 })();
 

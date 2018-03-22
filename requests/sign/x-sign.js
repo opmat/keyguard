@@ -1,8 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import { RequestTypes, signTransaction, setData } from '/libraries/keyguard/store/request.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { signTransaction } from './actions.js';
 
 export default class XSign extends MixinRedux(XElement) {
 
