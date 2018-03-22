@@ -38,6 +38,7 @@ export function importFromFile() {
                 setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
             );
         } catch (e) {
+            console.error(e);
             // assume the password was wrong
             dispatch(
                 setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: true })

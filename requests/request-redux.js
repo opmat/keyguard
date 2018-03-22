@@ -91,7 +91,11 @@ export function reducer(state, action) {
         case TypeKeys.SET_EXECUTING:
             return {
                 ...state,
-                executing: true
+                executing: true,
+                data: {
+                    ...state.data,
+                    isWrongPassphrase: false
+                }
             };
 
         case TypeKeys.SET_RESULT:

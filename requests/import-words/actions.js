@@ -31,6 +31,7 @@ export function importFromWords(passphrase, label) {
                 setResult(RequestTypes.IMPORT_FROM_WORDS, key.getPublicInfo())
             );
         } catch (e) {
+            console.error(e);
             dispatch(
                 setError(RequestTypes.IMPORT_FROM_WORDS, e)
             );

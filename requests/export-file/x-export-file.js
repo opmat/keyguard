@@ -50,10 +50,6 @@ export default class XExportFile extends MixinRedux(XElement) {
         if (address) {
             this.$identicon.address = address;
         }
-
-        if (privateKey) {
-            this.$mnemonicPhrase.setProperty('privateKey', privateKey);
-        }
     }
 
     listeners() {

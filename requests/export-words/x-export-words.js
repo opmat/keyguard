@@ -52,7 +52,7 @@ export default class XExportWords extends MixinRedux(XElement) {
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 
-        if (requestType !== RequestTypes.EXPORT) return;
+        if (requestType !== RequestTypes.EXPORT_WORDS) return;
 
         const { address, privateKey, isWrongPassphrase } = changes;
 
@@ -77,6 +77,4 @@ export default class XExportWords extends MixinRedux(XElement) {
         };
     }
 }
-
-// todo implement flow
 
