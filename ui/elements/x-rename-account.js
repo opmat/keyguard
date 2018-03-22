@@ -1,5 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
+import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, rename, setData } from '/libraries/keyguard/store/request.js';
 
@@ -43,7 +44,7 @@ export default class XRenameAccount extends MixinRedux(XElement) {
     }
 
     listeners() {
-        return { // TODO [max] connect
+        return {
             'x-password-setter-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
         }
     }

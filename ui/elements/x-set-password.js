@@ -14,7 +14,7 @@ export default class XSetPassword extends XElement {
     }
 
     children() {
-        return [ XPassphraseTipps ];
+        return [ XIdenticon, XPassphraseTipps, XPasswordSetter ];
     }
 
     _onPropertiesChanged(changes) {
@@ -27,9 +27,5 @@ export default class XSetPassword extends XElement {
         return {
             'x-password-setter-submitted': passphrase => this.actions.onSubmit(passphrase)
         }
-    }
-
-    children() {
-        return [ XIdenticon, XPasswordSetter ];
     }
 }
