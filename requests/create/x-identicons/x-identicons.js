@@ -53,17 +53,18 @@ export default class XIdenticons extends MixinRedux(XElement) {
         return { createVolatile, clearVolatile, setData };
     }
 
-    _onPropertiesChanged(changedProperties) {
-        // todo use deepdiff in setProperties
-        //if (!changedProperties.includes('addresses')) return;
-
-        const { requestType, addresses } = this.properties;
+    _onPropertiesChanged(changes) {
+        const { requestType } = this.properties;
 
         if (requestType !== RequestTypes.CREATE) return;
 
+        const { addresses } = changes;
+
+        if (!addresses) return;
+
         this.$container.textContent = '';
 
-        for (const address of addresses) {
+        for (const address of this.properties.addresses) {
             const $identicon = XIdenticon.createElement();
             this.$container.appendChild($identicon.$el);
             $identicon.address = address;
@@ -88,7 +89,7 @@ export default class XIdenticons extends MixinRedux(XElement) {
 
     _onIdenticonSelected(address, $identicon) {
         this.$('x-identicon.returning') && this.$('x-identicon.returning').classList.remove('returning');
-        this.$confirmButton.onclick = () => this._onConfirm(address);
+        this.$confirmButton.onclick = () => this.fire('x-choose-identicon', address);
         this._selectedIdenticon = $identicon;
         this.$el.setAttribute('selected', true);
         $identicon.$el.setAttribute('selected', true);
@@ -102,13 +103,6 @@ export default class XIdenticons extends MixinRedux(XElement) {
         this.$el.removeAttribute('selected');
         this._selectedIdenticon.$el.removeAttribute('selected');
     }
-
-    async _onConfirm(address) {
-        this.actions.setData(RequestTypes.CREATE, { address } );
-        XRouter.root.goTo('persist');
-    }
 }
 
 // Todo: [low priority] remove hack for overlay and find a general solution
-
-// Todo: use store provider which recursively sets store in all children? Or decouple store import in a different way

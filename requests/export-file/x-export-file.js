@@ -76,5 +76,3 @@ export default class XExportFile extends MixinRedux(XElement) {
         }
     }
 }
-
-// todo fix key -> mnemonic phrase

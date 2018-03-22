@@ -1,14 +1,13 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XLoader from '/elements/x-loader/x-loader.js';
-import XSetLabel from './common-elements/x-set-label.js';
-import XPersistAccount from './requests/create/x-persist-account.js';
-import XIdenticons from './requests/create/x-identicons/x-identicons.js';
-import XImportWords from './requests/import-words/x-import-words.js';
+import XCreate from './requests/create/x-create.js';
+import XImportWords from './requests/import-words/x-enter-phrase.js';
 import XSaveRecovered from './requests/import-words/x-save-recovered.js';
 import XImportFile from './requests/import-file/x-import-file.js';
 import XSign from './requests/sign/x-sign.js';
-import XExport from './requests/export-file/x-export.js';
+import XExportFile from './requests/export-file/x-export-file.js';
+import XExportWords from './requests/export-words/x-export-words.js';
 import XRenameAccount from './requests/rename/x-rename-account.js';
 import XClose from '/elements/x-close/x-close.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
@@ -19,14 +18,13 @@ export default class XKeyguard extends MixinRedux(XElement) {
         return `
         <x-loader></x-loader>
         <x-router>
-          <x-identicons x-route="create"></x-identicons>
-          <x-persist-account x-route="persist"></x-persist-account>
-          <x-set-label x-route="set-label"></x-set-label>
-          <x-save-recovered x-route="save-recovered"></x-save-recovered>
-          <x-import-words x-route="import-from-words"></x-import-words>
+          <x-create></x-create> 
+          <x-export-words></x-export-words>
+          <x-export-file></x-export-file>
+          
+          
           <x-import-file x-route="import-from-file"></x-import-file>
           <x-sign x-route="sign"></x-sign>
-          <x-export></x-export>
           <x-rename-account x-route="rename"></x-rename-account>
           <x-close x-route="/"></x-close>
         </x-router>
@@ -34,7 +32,7 @@ export default class XKeyguard extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XLoader, XRouter, XClose, XIdenticons, XPersistAccount, XSetLabel, XImportWords, XSaveRecovered,  XImportFile, XSign, XExport, XRenameAccount ];
+        return [ XLoader, XRouter, XClose, XCreate, XImportWords, XSaveRecovered,  XImportFile, XSign, XExportWords, XExportFile, XRenameAccount ];
     }
 
     static mapStateToProps(state) {
@@ -46,13 +44,6 @@ export default class XKeyguard extends MixinRedux(XElement) {
     _onPropertiesChanged(changes) {
         if (changes.executing !== undefined) {
             this.$loader.loading = changes.executing;
-        }
-
-        if (changes.isWrongPassphrase) {
-            const activePasswordSetter = XElement.elementMap(this.$('.in x-password-setter'));
-            if (activePasswordSetter) {
-                activePasswordSetter.wrongPassphrase();
-            }
         }
     }
 }

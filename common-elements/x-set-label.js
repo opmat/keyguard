@@ -1,7 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-export default class XSetLabel extends XElement {
+export default class XSetLabel extends MixinRedux(XElement) {
 
     html() { return `
         <x-identicon></x-identicon>
@@ -32,7 +33,7 @@ export default class XSetLabel extends XElement {
 
     listeners() {
         return {
-            'click button': e => console.log(`XSetLabel: label=${ this.$input.value }`)
+            'click button': e => this.fire('x-set-label', this.$input.value)
         }
     }
 }
