@@ -129,6 +129,9 @@ export default class KeyguardApi {
     }*/
 
     async sign(transaction) {
+        transaction.value = transaction.value * KeyguardApi.satoshis;
+        transaction.fee = transaction.fee * KeyguardApi.satoshis;
+
         return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
             transaction,
             address: transaction.sender // for basic transactions, todo generalize

@@ -23,6 +23,8 @@ export const TypeKeys = {
     SET_ERROR: 'request/error',
 };
 
+export const SATOSHIS = 1e5;
+
 export function reducer(state, action) {
     const initialState = {
         requestType: undefined, // type of current request, set when it starts and won't change
@@ -288,13 +290,22 @@ export function signTransaction(passphrase) {
 
         try {
             const key = await keystore.get(address, passphrase);
-            const signature = await key.createTransaction(recipient, value, fee, validityStartHeight, 'basic');
+            const tx = await key.createTransaction(recipient, value, fee, validityStartHeight, 'basic');
 
             dispatch(
-                setResult(RequestTypes.SIGN_TRANSACTION, signature)
+                setResult(RequestTypes.SIGN_TRANSACTION, {
+                    sender: tx.sender.toUserFriendlyAddress(),
+                    senderPubKey: tx.senderPubKey.serialize(),
+                    recipient: tx.recipient.toUserFriendlyAddress(),
+                    value: tx.value / SATOSHIS,
+                    fee: tx.fee / SATOSHIS,
+                    validityStartHeight: tx.validityStartHeight,
+                    signature: tx.signature.serialize()
+                })
             )
         } catch (e) {
             // assume the password was wrong
+            console.error(e);
             dispatch(
                 setData(RequestTypes.SIGN_TRANSACTION, { isWrongPassphrase: true })
             );

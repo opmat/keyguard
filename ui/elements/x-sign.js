@@ -44,14 +44,14 @@ export default class XSign extends MixinRedux(XElement) {
         const { transaction, isWrongPassphrase } = changes;
 
         if (transaction) {
-            const { sender, recipient, value, fee, validity } = transaction;
+            const { sender, recipient, value, fee, validityStartHeight } = transaction;
 
             this.$identicon[0].address = sender;
             this.$identicon[1].address = recipient;
 
             this.$('.value').textContent = (value/1e5).toString();
             this.$('.fee').textContent = fee;
-            this.$('.validity').textContent = validity;
+            this.$('.validity').textContent = validityStartHeight;
         }
 
         if (isWrongPassphrase) {
