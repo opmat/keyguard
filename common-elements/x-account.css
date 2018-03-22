@@ -1,0 +1,12 @@
+x-account, x-my-account {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+.x-account-label {
+    text-align: center;
+    margin: 10px;
+}

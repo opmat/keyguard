@@ -1,11 +1,10 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XIdenticon from '/elements/x-identicon/x-identicon.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 
-export default class XSetLabel extends MixinRedux(XElement) {
+export default class XSetLabel extends XElement {
 
     html() { return `
-        <x-identicon></x-identicon>
+        <x-my-account></x-my-account>
         <h1>Name your Account</h1>
         <section>
             <label>Name</label>
@@ -16,19 +15,11 @@ export default class XSetLabel extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XIdenticon ];
+        return [ XMyAccount ];
     }
 
     onCreate() {
         this.$input = this.$('input');
-    }
-
-    _onPropertiesChanged(changes) {
-        const { address } = changes;
-
-        if (address) {
-            this.$identicon.address = address;
-        }
     }
 
     listeners() {

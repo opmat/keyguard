@@ -1,15 +1,13 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XIdenticon from '/elements/x-identicon/x-identicon.js';
+import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XAddress from '/elements/x-address/x-address.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPassphraseTipps from '/elements/x-passphrase-tipps/x-passphrase-tipps.js';
 
-export default class XSetPassphrase extends MixinRedux(XElement) {
+export default class XSetPassphrase extends XElement {
 
     html() { return `
-        <x-identicon></x-identicon>
-        <x-address></x-address>
+        <x-my-account></x-my-account>
         <h1>Enter your Passphrase</h1>
         <x-passphrase-tipps></x-passphrase-tipps>
         <x-password-setter button-label="Confirm" show-indicator="true"></x-password-setter>
@@ -17,7 +15,7 @@ export default class XSetPassphrase extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XIdenticon, XAddress, XPassphraseTipps, XPasswordSetter ];
+        return [ XAddress, XPassphraseTipps, XPasswordSetter, XMyAccount ];
     }
 
     static mapStateToProps(state) {
@@ -25,12 +23,6 @@ export default class XSetPassphrase extends MixinRedux(XElement) {
             requestType: state.request.requestType,
             address: state.request.data.address
         };
-    }
-
-    _onPropertiesChanged(changes) {
-        const { address } = changes;
-
-        this.$identicon.setProperty('address', address);
     }
 
     listeners() {

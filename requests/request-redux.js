@@ -159,16 +159,16 @@ export function setExecuting(requestType) {
     }
 }
 
-// The following actions are async
-
-
-// load public key info to data, so we can show it in UI.
+// load key info to data, so we can show it in UI.
 export function loadAccountData(requestType) {
     return async (dispatch, getState) => {
+        const { address } = getState().request.data;
+
         try {
-            const key = await keystore.get(getState().request.data.address);
+            const key = await keystore.getPlain(address);
+
             dispatch(
-                setData(requestType, { ...key.getPublicInfo() })
+                setData(requestType, { ...key })
             );
         } catch (e) {
             dispatch(

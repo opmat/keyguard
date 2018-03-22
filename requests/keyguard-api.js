@@ -97,6 +97,11 @@ export default class KeyguardApi {
             // Set request state to started. Save reject so we can cancel the request when the window is closed
             this.actions.start(requestType, reject, data);
 
+            // load account data, if we already know the account this request is about
+            if (data.address) {
+                this.actions.loadAccountData(requestType);
+            }
+
             // wait until the ui dispatches the user's feedback
             store.subscribe(() => {
                 const request = store.getState().request;
@@ -161,38 +166,8 @@ export default class KeyguardApi {
     }
 
     rename(address) {
-        const request = this._startRequest(RequestTypes.RENAME, {
+        return this._startRequest(RequestTypes.RENAME, {
             address
         });
-        // TODO [max] we need the label every time we use an address.
-        this.actions.loadAccountData(RequestType.RENAME);
-        return request;
-    }
-
-    // old
-
-    async import(privateKey) {
-        if(typeof privateKey ===  'string') {
-            privateKey = Nimiq.PrivateKey.unserialize(Nimiq.BufferUtils.fromHex(privateKey));
-        }
-        const keyPair = Nimiq.KeyPair.fromPrivateKey(privateKey);
-        const key = new Key(keyPair);
-        await keyStore.put(account);
-
-        return key.userFriendlyAddress;
-    }
-
-    async importEncrypted(encryptedKey, password, persist = true) {
-        encryptedKey = Nimiq.BufferUtils.fromBase64(encryptedKey);
-        const account = Key.loadEncrypted(encryptedKey, password);
-        if (persist) {
-            keyStore.put(account);
-        }
-        return account.userFriendlyAddress;
-    }
-
-    async exportEncrypted(password) {
-        const exportedWallet = Key.exportEncrypted(password);
-        return
     }
 }

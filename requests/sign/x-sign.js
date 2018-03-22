@@ -1,5 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XIdenticon from '/elements/x-identicon/x-identicon.js';
+import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
+import XAccount from '/libraries/keyguard/common-elements/x-account.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
@@ -8,21 +9,21 @@ import { signTransaction } from './actions.js';
 export default class XSign extends MixinRedux(XElement) {
 
     html() { return `
-        <x-identicon></x-identicon>
+        <x-my-account></x-my-account>
         &#8675;
-        <x-identicon></x-identicon>
+        <x-account></x-account>
         <h1>Transaction</h1>
         <h2><span class="value"></span> NIM</h2>
         <section>
             <p><span class="fee"></span> satoshis fee</p>
             <p>Valid from block #<span class="validity"></span></p>
         </section>
-        <x-password-setter buttonLabel="Confirm" showIndicator="false"></x-password-setter>
+        <x-password-setter button-label="Confirm" show-indicator="false"></x-password-setter>
         `;
     }
 
     children() {
-        return [ XIdenticon, XPasswordSetter ];
+        return [ XAccount, XMyAccount, XPasswordSetter ];
     }
 
     static mapStateToProps(state) {
@@ -45,10 +46,9 @@ export default class XSign extends MixinRedux(XElement) {
         const { transaction, isWrongPassphrase } = changes;
 
         if (transaction) {
-            const { sender, recipient, value, fee, validityStartHeight } = transaction;
+            const { recipient, value, fee, validityStartHeight } = transaction;
 
-            this.$identicon[0].address = sender;
-            this.$identicon[1].address = recipient;
+            this.$account.address = recipient;
 
             this.$('.value').textContent = (value/1e5).toString();
             this.$('.fee').textContent = fee;

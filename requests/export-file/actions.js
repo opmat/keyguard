@@ -5,9 +5,7 @@ export function exportFile(passphrase) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.EXPORT_FILE) );
 
-        const { address } = getState().request.data;
-
-        const { encryptedKeyPair } = await keystore.getPlain(address);
+        const { address, encryptedKeyPair } = getState().request.data;
 
         // try to decrypt to authenticate the user
         try {

@@ -8,6 +8,7 @@
 @import '/elements/nimiq-logo/nimiq-logo.css';
 @import '/elements/x-loader/x-loader.css';
 @import 'requests/create/x-identicons/x-identicons.css';
+@import './common-elements/x-account.css';
 
 body x-router, body x-router [x-route] {
     flex-direction: column;
