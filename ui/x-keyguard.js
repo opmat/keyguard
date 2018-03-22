@@ -1,8 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XLoader from '/elements/x-loader/x-loader.js';
-import XPersistAccount from './elements/x-persist-account.js';
 import XIdenticons from './elements/x-identicons/x-identicons.js';
+import XPersistAccount from './elements/x-persist-account.js';
+import XSetLabel from './elements/x-set-label.js';
 import XImportWords from './elements/x-import-words.js';
 import XSaveRecovered from './elements/x-save-recovered.js';
 import XImportFile from './elements/x-import-file.js';
@@ -18,8 +19,9 @@ export default class XKeyguard extends MixinRedux(XElement) {
         return `
         <x-loader></x-loader>
         <x-router>
-          <x-persist-account x-route="persist"></x-persist-account>
           <x-identicons x-route="create"></x-identicons>
+          <x-persist-account x-route="persist"></x-persist-account>
+          <x-set-label x-route="set-label"></x-set-label>
           <x-save-recovered x-route="save-recovered"></x-save-recovered>
           <x-import-words x-route="import-from-words"></x-import-words>
           <x-import-file x-route="import-from-file"></x-import-file>
@@ -32,7 +34,7 @@ export default class XKeyguard extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XLoader, XRouter, XClose, XPersistAccount, XIdenticons, XImportWords, XSaveRecovered,  XImportFile, XSign, XExport, XRenameAccount ];
+        return [ XLoader, XRouter, XClose, XIdenticons, XPersistAccount, XSetLabel, XImportWords, XSaveRecovered,  XImportFile, XSign, XExport, XRenameAccount ];
     }
 
     static mapStateToProps(state) {
