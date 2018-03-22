@@ -2,14 +2,16 @@ import { RequestTypes, setExecuting, setResult, setData } from '../request-redux
 import { Key, Keytype, keystore } from '../../keys/index.js';
 
 // called when importing from file after entering the passphrase
-export function importFromFile(passphrase, label) {
+export function importFromFile() {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
+        // get encrypted key from request data set with _startRequest in keyguard-api
+        // passphrase and label were entered by user
+        const { encryptedKey, passphrase, label } = getState().request.data;
+
         try {
-            // get encrypted key from request data set with _startRequest in keyguard-api
-            const encryptedKey64 = getState().request.data.encryptedKey;
-            const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKey64);
+            const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKey);
 
             // test if we can decrypt
             const key = await Key.loadEncrypted(encryptedKeyPair, passphrase);

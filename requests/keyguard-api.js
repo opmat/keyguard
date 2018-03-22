@@ -148,8 +148,14 @@ export default class KeyguardApi {
         return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);
     }
 
-    export(address) {
-        return this._startRequest(RequestTypes.EXPORT, {
+    exportFile(address) {
+        return this._startRequest(RequestTypes.EXPORT_FILE, {
+            address
+        });
+    }
+
+    exportWords(address) {
+        return this._startRequest(RequestTypes.EXPORT_WORDS, {
             address
         });
     }
@@ -158,7 +164,7 @@ export default class KeyguardApi {
         const request = this._startRequest(RequestTypes.RENAME, {
             address
         });
-        // TODO [max] theoretically, we need the label every time we use an address.
+        // TODO [max] we need the label every time we use an address.
         this.actions.loadAccountData(RequestType.RENAME);
         return request;
     }

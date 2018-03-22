@@ -86,7 +86,7 @@ class KeyStore {
             label: key.label
         };
 
-        await this.putPlain(keyInfo);
+        return await this.putPlain(keyInfo);
     }
 
     async putPlain(keyInfo) {

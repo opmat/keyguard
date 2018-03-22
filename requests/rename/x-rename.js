@@ -44,7 +44,7 @@ export default class XRename extends MixinRedux(XElement) {
 
         if (requestType !== RequestTypes.RENAME) return;
 
-        const { address, label } = changes;
+        const { address, label, isWrongPassphrase } = changes;
 
         if (address) {
             this.$identicon.address = address;
@@ -52,6 +52,10 @@ export default class XRename extends MixinRedux(XElement) {
 
         if (label) {
             this.$input.value = label;
+        }
+
+        if (isWrongPassphrase) {
+            this.$passwordSetter.wrongPassphrase();
         }
     }
 

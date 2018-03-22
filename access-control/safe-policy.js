@@ -6,10 +6,12 @@ export default class SafePolicy extends BasePolicy {
         switch (method) {
             case 'importFromFile':
             case 'importFromWords':
-            case 'export':
+            case 'exportFile':
+            case 'exportWords':
             case 'list':
             case 'createVolatile':
             case 'create':
+            case 'rename':
                 return true;
             case 'sign':
                 // for now, assume there are only keys we are able to use in safe app
@@ -27,11 +29,13 @@ export default class SafePolicy extends BasePolicy {
             case 'list':
             case 'createVolatile':
                 return false;
-            case 'export':
             case 'create':
             case 'importFromFile':
             case 'importFromWords':
+            case 'exportFile':
+            case 'exportWords':
             case 'sign':
+            case 'rename':
                 return true;
             default:
                 throw new Error(`Unhandled method: ${method}`);

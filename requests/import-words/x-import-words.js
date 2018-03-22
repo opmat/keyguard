@@ -1,7 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XSetLabel from './common-elements/x-set-label.js';
-import XPersistAccount from './requests/create/x-persist-account.js';
-import XIdenticons from './requests/create/x-identicons/x-identicons.js';
+import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
+import XEnterPhrase from './x-enter-phrase.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { importFromWords } from './actions.js';
@@ -18,7 +17,7 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XPersistAccount, XSetLabel, XIdenticons ];
+        return [ XSetLabel, XEnterPhrase ];
     }
 
     static get actions() {

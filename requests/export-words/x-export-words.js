@@ -56,8 +56,8 @@ export default class XExportWords extends MixinRedux(XElement) {
 
         const { address, privateKey, isWrongPassphrase } = changes;
 
-        if (isWrongPassphrase !== undefined) {
-            this.$passwordSetter.setProperty('isWrongPassphrase', isWrongPassphrase);
+        if (isWrongPassphrase) {
+            this.$passwordSetter.wrongPassphrase();
         }
 
         if (address) {

@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XRouter from '/elements/x-router/x-router.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { RequestTypes, setData } from '../request-redux.js';
 
 export default class XUnlock extends MixinRedux(XElement) {
 
@@ -43,7 +43,6 @@ export default class XUnlock extends MixinRedux(XElement) {
 
         if (changes.isWrongPassphrase) {
             this.$passwordSetter.wrongPassphrase();
-            this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: false });
         }
     }
 
