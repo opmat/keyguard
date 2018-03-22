@@ -62,5 +62,3 @@ export default class XExportFile extends MixinRedux(XElement) {
         this.actions.exportFile(passphrase);
     }
 }
-
-// todo test
