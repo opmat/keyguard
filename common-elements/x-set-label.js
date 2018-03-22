@@ -1,7 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/elements/x-identicon/x-identicon.js';
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
-import XPassphraseTipps from '/elements/x-passphrase-tipps/x-passphrase-tipps.js';
 
 export default class XSetLabel extends XElement {
 
@@ -27,7 +25,9 @@ export default class XSetLabel extends XElement {
     _onPropertiesChanged(changes) {
         const { address } = changes;
 
-        this.$identicon.setProperty('address', address);
+        if (address) {
+            this.$identicon.address = address;
+        }
     }
 
     listeners() {
