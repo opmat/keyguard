@@ -41,12 +41,6 @@ export default class XEnterPhrase extends MixinRedux(XElement) {
         return [ XMnemonicInput ];
     }
 
-    static mapStateToProps(state) {
-        return {
-            requestType: state.request.requestType,
-        };
-    }
-
     static get actions() {
         return { deny, setData };
     }

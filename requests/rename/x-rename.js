@@ -27,28 +27,8 @@ export default class XRename extends MixinRedux(XElement) {
         super.onCreate();
     }
 
-    static mapStateToProps(state) {
-        return {
-            requestType: state.request.requestType,
-            address: state.request.data.address,
-            label: state.request.data.label
-        };
-    }
-
     static get actions() {
         return { rename, setData };
-    }
-
-    _onPropertiesChanged(changes) {
-        const { requestType } = this.properties;
-
-        if (requestType !== RequestTypes.RENAME) return;
-
-        const { isWrongPassphrase } = changes;
-
-        if (isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
-        }
     }
 
     listeners() {

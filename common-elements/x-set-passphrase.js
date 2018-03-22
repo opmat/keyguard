@@ -3,8 +3,9 @@ import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XAddress from '/elements/x-address/x-address.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPassphraseTipps from '/elements/x-passphrase-tipps/x-passphrase-tipps.js';
+import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-export default class XSetPassphrase extends XElement {
+export default class XSetPassphrase extends MixinRedux(XElement) {
 
     html() { return `
         <x-my-account></x-my-account>
@@ -20,9 +21,14 @@ export default class XSetPassphrase extends XElement {
 
     static mapStateToProps(state) {
         return {
-            requestType: state.request.requestType,
-            address: state.request.data.address
+            isWrongPassphrase: state.request.data.isWrongPassphrase
         };
+    }
+
+    _onPropertiesChanged(changes) {
+        if (changes.isWrongPassphrase) {
+            this.$passwordSetter.wrongPassphrase();
+        }
     }
 
     listeners() {

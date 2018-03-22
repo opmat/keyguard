@@ -25,25 +25,8 @@ export default class XUnlock extends MixinRedux(XElement) {
         };
     }
 
-    static mapStateToProps(state) {
-        return {
-            requestType: state.request.requestType,
-            isWrongPassphrase: state.request.data.isWrongPassphrase
-        };
-    }
-
     static get actions() {
         return { setData };
-    }
-
-    _onPropertiesChanged(changes) {
-        const { requestType } = this.properties;
-
-        if (requestType !== RequestTypes.IMPORT_FROM_FILE) return;
-
-        if (changes.isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
-        }
     }
 
     _onSubmit(passphrase) {

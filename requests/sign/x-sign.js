@@ -19,6 +19,7 @@ export default class XSign extends MixinRedux(XElement) {
             <p>Valid from block #<span class="validity"></span></p>
         </section>
         <x-password-setter button-label="Confirm" show-indicator="false"></x-password-setter>
+        <a secondary x-href="close">Cancel</a>
         `;
     }
 
@@ -29,8 +30,7 @@ export default class XSign extends MixinRedux(XElement) {
     static mapStateToProps(state) {
         return {
             requestType: state.request.requestType,
-            transaction: state.request.data.transaction,
-            isWrongPassphrase: state.request.data.isWrongPassphrase
+            transaction: state.request.data.transaction
         };
     }
 
@@ -43,7 +43,7 @@ export default class XSign extends MixinRedux(XElement) {
 
         if (requestType !== RequestTypes.SIGN_TRANSACTION) return;
 
-        const { transaction, isWrongPassphrase } = changes;
+        const { transaction } = changes;
 
         if (transaction) {
             const { recipient, value, fee, validityStartHeight } = transaction;
@@ -53,10 +53,6 @@ export default class XSign extends MixinRedux(XElement) {
             this.$('.value').textContent = (value/1e5).toString();
             this.$('.fee').textContent = fee;
             this.$('.validity').textContent = validityStartHeight;
-        }
-
-        if (isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
         }
     }
 

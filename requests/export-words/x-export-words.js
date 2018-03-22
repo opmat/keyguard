@@ -2,6 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
+import XShowWords from '/libraries/keyguard/common-elements/x-show-words.js';
 import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
@@ -11,12 +12,7 @@ import { exportWords } from './actions.js';
 export default class XExportWords extends MixinRedux(XElement) {
 
     html() { return `
-        <section x-route="export-words/words">
-            <h1>Backup your Account</h1>
-            <h2 secondary>Write down and physically store safely the following list of 24 Account Recovery Words to recover this account in the future.</h2>
-            <x-mnemonic-phrase></x-mnemonic-phrase>
-            <button class="last">Continue</button>
-        </section>
+        <x-show-words x-route="export-words/words"></x-show-words>
         <section x-route="export-words/authenticate">
             <h1>Backup your Account</h1>
             <x-my-account></x-my-account>
@@ -33,43 +29,18 @@ export default class XExportWords extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XPasswordSetter, XPrivacyAgent, XMnemonicPhrase, XMyAccount ];
-    }
-
-    static mapStateToProps(state) {
-        return {
-            requestType: state.request.requestType,
-            address: state.request.data.address,
-            privateKey: state.request.data.privateKey,
-            isWrongPassphrase: state.request.data.isWrongPassphrase
-        };
+        return [ XPasswordSetter, XPrivacyAgent, XMnemonicPhrase, XMyAccount, XShowWords ];
     }
 
     static get actions() {
         return { setData, setResult, exportWords };
     }
 
-    _onPropertiesChanged(changes) {
-        const { requestType } = this.properties;
-
-        if (requestType !== RequestTypes.EXPORT_WORDS) return;
-
-        const { privateKey, isWrongPassphrase } = changes;
-
-        if (isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
-        }
-
-        if (privateKey) {
-            this.$mnemonicPhrase.setProperty('privateKey', privateKey);
-        }
-    }
-
     listeners() {
         return {
             'x-password-setter-submitted': passphrase => this.actions.exportWords(passphrase),
             'x-surrounding-checked': () => XRouter.root.goTo('export-words/authenticate'),
-            'click button.last': () => this.actions.setResult(RequestTypes.EXPORT_WORDS, true)
+            'x-show-words': () => this.actions.setResult(RequestTypes.EXPORT_WORDS, true)
         };
     }
 }

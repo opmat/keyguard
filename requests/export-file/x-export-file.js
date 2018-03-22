@@ -23,29 +23,8 @@ export default class XExportFile extends MixinRedux(XElement) {
         return [ XPasswordSetter, XMyAccount ];
     }
 
-    static mapStateToProps(state) {
-        return {
-            requestType: state.request.requestType,
-            address: state.request.data.address,
-            privateKey: state.request.data.privateKey,
-            isWrongPassphrase: state.request.data.isWrongPassphrase
-        };
-    }
-
     static get actions() {
         return { exportFile };
-    }
-
-    _onPropertiesChanged(changes) {
-        const { requestType } = this.properties;
-
-        if (requestType !== RequestTypes.EXPORT_FILE) return;
-
-        const { isWrongPassphrase } = changes;
-
-        if (isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
-        }
     }
 
     listeners() {
