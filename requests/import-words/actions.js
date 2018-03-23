@@ -21,7 +21,7 @@ export function createKey() {
                 setData(RequestTypes.IMPORT_FROM_WORDS, { ...key.getPublicInfo(), key })
             );
 
-            XRouter.root.goTo('import-words/set-passphrase');
+            XRouter.root.goTo('import-from-words/set-passphrase');
 
         } catch (e) {
             console.error(e);
@@ -32,12 +32,12 @@ export function createKey() {
     }
 }
 
-export function importFromWords(passphrase, label) {
+export function importFromWords() {
     return async (dispatch, getState) => {
         dispatch(setExecuting(RequestTypes.IMPORT_FROM_WORDS));
 
         try {
-            const key = getState().request.key;
+            const { key, passphrase, label } = getState().request.data;
 
             key.type = Keytype.HIGH;
             key.label = label;

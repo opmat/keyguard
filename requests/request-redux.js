@@ -30,7 +30,7 @@ export function reducer(state, action) {
     const initialState = {
         requestType: undefined, // type of current request, set when it starts and won't change
 
-        executing: false, // true if we are doing async actions which can take longer, like storing in keystore
+        executing: undefined, // true if we are doing async actions which can take longer, like storing in keystore
 
         error: undefined, // setting an error here will throw it at the calling app
 

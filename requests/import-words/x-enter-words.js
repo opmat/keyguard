@@ -20,10 +20,9 @@ window.test = async () => {
     $mnemonicInput.$fields.forEach((field, index) => {
         putWord(field, testPassphrase[index], index);
     });
-    document.querySelectorAll('button').forEach(button => button.setAttribute('disabled', 'disabled'));
 };
 
-export default class XWordsPhrase extends MixinRedux(XElement) {
+export default class XEnterWords extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Account Recovery</h1>

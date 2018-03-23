@@ -1,12 +1,13 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
+import XSetPassphrase from '/libraries/keyguard/common-elements/x-set-passphrase.js';
 import XEnterWords from './x-enter-words.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createKey, importFromWords } from './actions.js';
 import XRouter from '/elements/x-router/x-router.js';
 
-export default class XCreate extends MixinRedux(XElement) {
+export default class XImportWords extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
     html() { return `
@@ -17,7 +18,7 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XSetLabel, XEnterWords ];
+        return [ XSetLabel, XEnterWords, XSetPassphrase ];
     }
 
     static get actions() {
@@ -34,16 +35,15 @@ export default class XCreate extends MixinRedux(XElement) {
 
     _onEnterWords() {
         this.actions.createKey();
-        XRouter.root.goTo('import-from-words/set-passphrase');
     }
 
     _onSetPassphrase(passphrase) {
-        this.actions.setData(RequestTypes.CREATE, { passphrase });
+        this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { passphrase });
         XRouter.root.goTo('import-from-words/set-label');
     }
 
     _onSetLabel(label) {
-        this.actions.setData(RequestTypes.CREATE, { label });
+        this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { label });
         this.actions.importFromWords();
     }
 }
