@@ -20,6 +20,11 @@ x-authenticate div[buttons] > * {
 x-authenticate [wrong] {
     background: var(--error-color);
     color: white;
+    display: none;
+}
+
+.x-password-setter.wrong [wrong] {
+    display: flex;
 }
 
 x-authenticate button {

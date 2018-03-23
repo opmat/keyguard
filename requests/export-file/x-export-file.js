@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
-import XCreateFile from './x-create-file.js';
+import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setResult } from '../request-redux.js';
 import { exportFile } from './actions.js';
@@ -9,7 +9,7 @@ import { exportFile } from './actions.js';
 export default class XExportFile extends MixinRedux(XElement) {
 
     html() { return `
-        <x-create-file x-route="export-file/download"></x-create-file>
+        <x-download-file x-route="export-file/download"></x-download-file>
         <section x-route="export-file">
             <h1>Backup your Account</h1>
             <x-my-account></x-my-account>
@@ -22,7 +22,7 @@ export default class XExportFile extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XAuthenticate, XMyAccount, XCreateFile ];
+        return [ XAuthenticate, XMyAccount, XDownloadFile ];
     }
 
     static get actions() {

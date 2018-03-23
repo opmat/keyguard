@@ -1,5 +1,4 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XRouter from '/elements/x-router/x-router.js';
 import XMnemonicInput from '/elements/x-mnemonic-input/x-mnemonic-input.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, deny, setData } from '/libraries/keyguard/requests/request-redux.js';
@@ -24,7 +23,7 @@ window.test = async () => {
     document.querySelectorAll('button').forEach(button => button.setAttribute('disabled', 'disabled'));
 };
 
-export default class XEnterPhrase extends MixinRedux(XElement) {
+export default class XWordsPhrase extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Account Recovery</h1>
@@ -54,6 +53,6 @@ export default class XEnterPhrase extends MixinRedux(XElement) {
 
     _onSuccess(hexKey) {
         this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { hexKey });
-        XRouter.root.goTo('import-from-words/set-passphrase');
+        this.fire('x-enter-words');
     }
 }

@@ -43,7 +43,8 @@ export function reducer(state, action) {
             isWrongPassphrase: undefined, // boolean set to true after user tried wrong passphrase
             privateKey: undefined, // unencrypted; we need it to show mnemonic phrase
             label: undefined, // label BEFORE rename
-            type: undefined // key type (high/low)
+            type: undefined, // key type (high/low),
+            encryptedKeyPair: undefined // the encrypted key pair
         }
     };
 

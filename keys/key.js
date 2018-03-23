@@ -13,13 +13,13 @@ export default class Key {
 
     /**
      * @param {Uint8Array|string} buf
-     * @param {Uint8Array|string} password
+     * @param {Uint8Array|string} passphrase
      * @return {Promise.<Key>}
      */
-    static async loadEncrypted(buf, password) {
+    static async loadEncrypted(buf, passphrase) {
         if (typeof buf === 'string') buf = Nimiq.BufferUtils.fromHex(buf);
-        if (typeof password === 'string') password = Nimiq.BufferUtils.fromAscii(password);
-        return new Key(await Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), password));
+        if (typeof passphrase === 'string') passphrase = Nimiq.BufferUtils.fromAscii(passphrase);
+        return new Key(await Nimiq.KeyPair.fromEncrypted(new Nimiq.SerialBuffer(buf), passphrase));
     }
 
 
@@ -90,14 +90,14 @@ export default class Key {
     }
 
     /**
-     * @param {Uint8Array|string} key
-     * @param {Uint8Array|string} [unlockKey]
+     * @param {Uint8Array|string} passphrase
+     * @param {Uint8Array|string} [pin]
      * @return {Promise.<Uint8Array>}
      */
-    exportEncrypted(key, unlockKey) {
-        if (typeof key === 'string') key = Nimiq.BufferUtils.fromAscii(key);
-        if (typeof unlockKey === 'string') unlockKey = Nimiq.BufferUtils.fromAscii(unlockKey);
-        return this._keyPair.exportEncrypted(key, unlockKey);
+    exportEncrypted(passphrase, pin) {
+        if (typeof passphrase === 'string') passphrase = Nimiq.BufferUtils.fromAscii(passphrase);
+        if (typeof pin === 'string') pin = Nimiq.BufferUtils.fromAscii(pin);
+        return this._keyPair.exportEncrypted(passphrase, pin);
     }
 
     /**

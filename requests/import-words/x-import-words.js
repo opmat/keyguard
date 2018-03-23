@@ -1,9 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
-import XEnterPhrase from './x-enter-phrase.js';
+import XEnterWords from './x-enter-words.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
-import { importFromWords } from './actions.js';
+import { createKey, importFromWords } from './actions.js';
 import XRouter from '/elements/x-router/x-router.js';
 
 export default class XCreate extends MixinRedux(XElement) {
@@ -12,23 +12,29 @@ export default class XCreate extends MixinRedux(XElement) {
     html() { return `
           <x-set-label x-route="import-from-words/set-label"></x-set-label>
           <x-set-passphrase x-route="import-from-words/set-passphrase"></x-set-passphrase>
-          <x-enter-phrase x-route="import-from-words"></x-enter-phrase>
+          <x-enter-words x-route="import-from-words"></x-enter-words>
         `;
     }
 
     children() {
-        return [ XSetLabel, XEnterPhrase ];
+        return [ XSetLabel, XEnterWords ];
     }
 
     static get actions() {
-        return { setData, importFromWords };
+        return { setData, createKey, importFromWords };
     }
 
     listeners() {
         return {
+            'x-enter-words': this._onEnterWords.bind(this),
             'x-set-passphrase': this._onSetPassphrase.bind(this),
             'x-set-label': this._onSetLabel.bind(this)
         }
+    }
+
+    _onEnterWords() {
+        this.actions.createKey();
+        XRouter.root.goTo('import-from-words/set-passphrase');
     }
 
     _onSetPassphrase(passphrase) {

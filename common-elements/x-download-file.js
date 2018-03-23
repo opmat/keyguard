@@ -4,10 +4,13 @@ import XDownloadableImage from "/elements/x-downloadable-image/x-downloadable-im
 import QrScanner from '/libraries/qr-scanner/qr-scanner.min.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-export default class XCreateFile extends MixinRedux(XElement) {
+export default class XDownloadFile extends MixinRedux(XElement) {
 
     html() {
-        return `<x-downloadable-image></x-downloadable-image>`
+        return `
+            <h2 secondary>Do NOT share this Account Access File and keep it safe.</h2>
+            <x-downloadable-image></x-downloadable-image>
+        `
     }
 
     children() {
