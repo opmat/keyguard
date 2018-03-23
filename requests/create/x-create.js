@@ -28,6 +28,16 @@ export default class XCreate extends MixinRedux(XElement) {
         return [ XSetPassphrase, XSetLabel, XIdenticons, XPrivacyAgent, XShowWords ];
     }
 
+    static mapStateToProps(state) {
+        if (state.request.requestType !== RequestTypes.CREATE) return;
+
+        const { address } = state.request.data;
+
+        return {
+            privateKey: address && state.keys.volatileKeys.get(address).keyPair.privateKey.toHex()
+        }
+    }
+
     static get actions() {
         return { setData, createPersistent };
     }
@@ -58,6 +68,7 @@ export default class XCreate extends MixinRedux(XElement) {
 
     _onSetLabel(label) {
         this.actions.setData(RequestTypes.CREATE, { label });
+        this.actions.setData(RequestTypes.CREATE, { privateKey: this.properties.privateKey })
         XRouter.root.goTo('create/words');
     }
 

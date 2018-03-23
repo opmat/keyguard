@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
+import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XShowWords from '/libraries/keyguard/common-elements/x-show-words.js';
 import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
@@ -18,7 +18,7 @@ export default class XExportWords extends MixinRedux(XElement) {
             <x-my-account></x-my-account>
             <section>
                 <p>Please enter your passphrase to backup your account.</p>
-                <x-password-setter button-label="Backup" show-indicator="false"></x-password-setter>
+                <x-authenticate button-label="Backup"></x-authenticate>
             </section>
         </section>
         <section x-route="export-words">
@@ -29,7 +29,7 @@ export default class XExportWords extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XPasswordSetter, XPrivacyAgent, XMnemonicPhrase, XMyAccount, XShowWords ];
+        return [ XAuthenticate, XPrivacyAgent, XMnemonicPhrase, XMyAccount, XShowWords ];
     }
 
     static get actions() {

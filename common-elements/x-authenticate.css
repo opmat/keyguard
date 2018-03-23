@@ -1,0 +1,7 @@
+x-authenticate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: var(--max-width);
+}

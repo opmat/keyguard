@@ -32,7 +32,7 @@ export default class XShowWords extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'click button.last': () => this.fire('x-show-words')
+            'click button': () => this.fire('x-show-words')
         };
     }
 }

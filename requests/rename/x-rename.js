@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
+import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
 import { rename } from './actions.js';
@@ -14,12 +14,12 @@ export default class XRename extends MixinRedux(XElement) {
             <label>Name</label>
             <input type="text" placeholder="Account name">
         </section>
-        <x-password-setter button-label="Save" show-indicator="false"></x-password-setter>
+        <x-authenticate button-label="Save"></x-authenticate>
         `;
     }
 
     children() {
-        return [ XMyAccount, XPasswordSetter ];
+        return [ XMyAccount, XAuthenticate ];
     }
 
     onCreate() {

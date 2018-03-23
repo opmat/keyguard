@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XAccount from '/libraries/keyguard/common-elements/x-account.js';
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
+import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
 import { signTransaction } from './actions.js';
@@ -18,13 +18,13 @@ export default class XSign extends MixinRedux(XElement) {
             <p><span class="fee"></span> satoshis fee</p>
             <p>Valid from block #<span class="validity"></span></p>
         </section>
-        <x-password-setter button-label="Confirm" show-indicator="false"></x-password-setter>
+        <x-authenticate button-label="Confirm"></x-authenticate>
         <a secondary x-href="close">Cancel</a>
         `;
     }
 
     children() {
-        return [ XAccount, XMyAccount, XPasswordSetter ];
+        return [ XAccount, XMyAccount, XAuthenticate ];
     }
 
     static mapStateToProps(state) {
