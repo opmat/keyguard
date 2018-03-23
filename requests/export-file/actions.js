@@ -12,9 +12,11 @@ export function exportFile(passphrase) {
         try {
             await keystore.get(address, passphrase);
 
+            // encryptedkeypair is already in store because of loadAccountData
+            // but we need to get rid of executing
             dispatch(
-                setData(RequestTypes.EXPORT_FILE, { encryptedKeyPair })
-            );
+                setData(RequestTypes.EXPORT_FILE, {})
+            )
 
             XRouter.root.goTo('export-file/download')
         } catch (e) {

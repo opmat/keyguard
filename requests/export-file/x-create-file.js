@@ -26,10 +26,14 @@ export default class XCreateFile extends MixinRedux(XElement) {
         }
     }
 
-    async _onPropertiesChanged() {
-        const { encryptedKeyPair, address } = this.properties;
+    async _onPropertiesChanged(changes) {
+        const { address } = this.properties;
+
+        let { encryptedKeyPair } = changes;
 
         if (!encryptedKeyPair || !address) return;
+
+        encryptedKeyPair = Nimiq.BufferUtils.toBase64(encryptedKeyPair);
 
         const qrPosition = WalletBackup.calculateQrPosition();
 
@@ -51,6 +55,6 @@ export default class XCreateFile extends MixinRedux(XElement) {
 
     _onImageDownload(e) {
         e.stopPropagation();
-        this.fire('x-wallet-download-complete');
+        this.fire('x-file-download-complete');
     }
 }
