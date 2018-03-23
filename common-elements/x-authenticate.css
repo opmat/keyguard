@@ -1,7 +1,31 @@
+@import '/elements/x-password-setter/x-password-setter.css';
+
 x-authenticate {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
     max-width: var(--max-width);
+}
+
+x-authenticate div[buttons] {
+    position: relative;
+}
+
+x-authenticate div[buttons] > * {
+    position: absolute;
+    top: 0;
+}
+
+x-authenticate [wrong] {
+    background: var(--error-color);
+    color: white;
+}
+
+x-authenticate button {
+    transition: opacity 300ms;
+}
+
+x-authenticate.wrong button {
+    opacity: 0;
 }

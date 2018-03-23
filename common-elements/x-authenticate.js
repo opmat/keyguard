@@ -3,13 +3,8 @@ import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
 export default class XAuthenticate extends MixinRedux(XPasswordSetter) {
 
-    html() { return `
-        <x-password-setter button-label="${ this.attributes.buttonLabel }" show-indicator="false"></x-password-setter>
-        `;
-    }
-
-    children() {
-        return [ XPasswordSetter ];
+    styles() {
+        return [ 'x-password-setter' ];
     }
 
     static mapStateToProps(state) {
@@ -20,7 +15,7 @@ export default class XAuthenticate extends MixinRedux(XPasswordSetter) {
 
     _onPropertiesChanged(changes) {
         if (changes.isWrongPassphrase) {
-            this.$passwordSetter.wrongPassphrase();
+            this.wrongPassphrase();
         }
     }
 }

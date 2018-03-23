@@ -1,5 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
+import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import XRouter from '/elements/x-router/x-router.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
@@ -11,17 +11,17 @@ export default class XUnlock extends MixinRedux(XElement) {
         <section>
             <p>Please enter your passphrase to unlock your Account Access File.</p>
         </section>
-        <x-password-setter button-label="Import" show-indicator="false"></x-password-setter>
+        <x-authenticate button-label="Import"></x-authenticate>
         `;
     }
 
     children() {
-        return [ XPasswordSetter ];
+        return [ XAuthenticate ];
     }
 
     listeners() {
         return {
-            'x-password-setter-submitted': this._onSubmit.bind(this)
+            'x-authenticate-submitted': this._onSubmit.bind(this)
         };
     }
 

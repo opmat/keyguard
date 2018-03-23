@@ -1,13 +1,15 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
+import XCreateFile from './x-create-file.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { exportFile } from './actions.js';
 
 export default class XExportFile extends MixinRedux(XElement) {
 
     html() { return `
-        <section x-route="export">
+        <x-create-file x-route="export-file/download"></x-create-file>
+        <section x-route="export-file">
             <h1>Backup your Account</h1>
             <x-my-account></x-my-account>
             <section>
@@ -19,7 +21,7 @@ export default class XExportFile extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XAuthenticate, XMyAccount ];
+        return [ XAuthenticate, XMyAccount, XCreateFile ];
     }
 
     static get actions() {
@@ -28,7 +30,7 @@ export default class XExportFile extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-password-setter-submitted': this._onSubmit.bind(this),
+            'x-authenticate-submitted': this._onSubmit.bind(this),
         };
     }
 

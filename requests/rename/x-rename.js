@@ -33,7 +33,7 @@ export default class XRename extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-password-setter-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
+            'x-authenticate-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
         }
     }
 }

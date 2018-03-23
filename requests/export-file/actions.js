@@ -1,5 +1,6 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
 import { Key, Keytype, keystore } from '../../keys/index.js';
+import XRouter from '/elements/x-router/x-router.js';
 
 export function exportFile(passphrase) {
     return async (dispatch, getState) => {
@@ -12,8 +13,10 @@ export function exportFile(passphrase) {
             await keystore.get(address, passphrase);
 
             dispatch(
-                setResult(RequestTypes.EXPORT_FILE, Nimiq.BufferUtils.toBase64(encryptedKeyPair))
+                setData(RequestTypes.EXPORT_FILE, { encryptedKeyPair })
             );
+
+            XRouter.root.goTo('export-file/download')
         } catch (e) {
             console.error(e);
             // assume the password was wrong

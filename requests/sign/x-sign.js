@@ -58,7 +58,7 @@ export default class XSign extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-password-setter-submitted': passphrase => this.actions.signTransaction(passphrase)
+            'x-authenticate-submitted': passphrase => this.actions.signTransaction(passphrase)
         }
     }
 }

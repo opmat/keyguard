@@ -38,7 +38,7 @@ export default class XExportWords extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-password-setter-submitted': passphrase => this.actions.exportWords(passphrase),
+            'x-authenticate-submitted': passphrase => this.actions.exportWords(passphrase),
             'x-surrounding-checked': () => XRouter.root.goTo('export-words/authenticate'),
             'x-show-words': () => this.actions.setResult(RequestTypes.EXPORT_WORDS, true)
         };

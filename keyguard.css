@@ -10,6 +10,7 @@
 @import 'requests/create/x-identicons/x-identicons.css';
 @import './common-elements/x-account.css';
 @import './common-elements/x-authenticate.css';
+@import './requests/export-file/x-create-file.css';
 
 body x-router, body x-router [x-route] {
     flex-direction: column;
