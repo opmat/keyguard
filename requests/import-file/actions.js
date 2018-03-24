@@ -8,10 +8,10 @@ export function decrypt() {
         dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
         // get encrypted key from request data set with _startRequest in keyguard-api
-        const { encryptedKey, passphrase } = getState().request.data;
+        const { encryptedKeyPair64, passphrase } = getState().request.data;
 
         try {
-            const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKey);
+            const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKeyPair64);
 
             // test if we can decrypt
             const key = await Key.loadEncrypted(encryptedKeyPair, passphrase);
@@ -37,10 +37,10 @@ export function importFromFile() {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
-        const { encryptedKey, passphrase, label } = getState().request.data;
+        const { encryptedKeyPair64, passphrase, label } = getState().request.data;
 
         try {
-            const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKey);
+            const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKeyPair64);
 
             const key = await Key.loadEncrypted(encryptedKeyPair, passphrase);
 

@@ -143,10 +143,8 @@ export default class KeyguardApi {
         });
     }
 
-    importFromFile(encryptedKey) {
-        return this._startRequest(RequestTypes.IMPORT_FROM_FILE, {
-            encryptedKey
-        });
+    importFromFile() {
+        return this._startRequest(RequestTypes.IMPORT_FROM_FILE);
     }
 
     importFromWords() {

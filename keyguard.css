@@ -7,7 +7,8 @@
 @import '/elements/x-privacy-agent/x-privacy-agent.css';
 @import '/elements/nimiq-logo/nimiq-logo.css';
 @import '/elements/x-loader/x-loader.css';
-@import 'requests/create/x-identicons/x-identicons.css';
+@import '/elements/x-wallet-backup-import/x-wallet-backup-import.css';
+@import './requests/create/x-identicons/x-identicons.css';
 @import './common-elements/x-account.css';
 @import './common-elements/x-authenticate.css';
 @import './common-elements/x-download-file.css';

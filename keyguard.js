@@ -46,8 +46,9 @@ class Keyguard {
 
 
         // start postMessage RPC server
-        this._api = RPC.Server(AccessControl.addAccessControl(KeyguardApi, () => store.getState(), defaultPolicies), true);
-        this._keyStore = keyStore;
+        this._api = RPC.Server(AccessControl.addAccessControl(
+            KeyguardApi, () => store.getState(), defaultPolicies
+        ), true);
     }
 }
 
@@ -56,7 +57,6 @@ class Keyguard {
     await Nimiq.load();
     Nimiq.GenesisConfig.bounty();
 
-    //setTimeout(() => window.keyguard = new Keyguard(), 200);
     window.keyguard = new Keyguard();
 })();
 
