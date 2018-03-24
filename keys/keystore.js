@@ -66,7 +66,11 @@ class KeyStore {
      */
     async get(userFriendlyAddress, passphrase) {
         const key = await this.getPlain(userFriendlyAddress);
-        return Key.loadEncrypted(key.encryptedKeyPair, passphrase);
+        const result = await Key.loadEncrypted(key.encryptedKeyPair, passphrase);
+        result.type = key.type;
+        result.label = key.label;
+
+        return result;
     }
 
     /**

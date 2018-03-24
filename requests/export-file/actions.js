@@ -16,7 +16,7 @@ export function exportFile(passphrase) {
             // but we need to get rid of executing
             dispatch(
                 setData(RequestTypes.EXPORT_FILE, {})
-            )
+            );
 
             XRouter.root.goTo('export-file/download')
         } catch (e) {

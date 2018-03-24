@@ -2,7 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { setData } from '/libraries/keyguard/requests/request-redux.js';
 import { rename } from './actions.js';
 
 export default class XRename extends MixinRedux(XElement) {
@@ -12,7 +12,7 @@ export default class XRename extends MixinRedux(XElement) {
         <x-my-account></x-my-account>
         <section>
             <label>Name</label>
-            <input type="text" placeholder="Account name">
+            <input id="label" type="text" placeholder="Account name">
         </section>
         <x-authenticate button-label="Save"></x-authenticate>
         `;
@@ -23,7 +23,7 @@ export default class XRename extends MixinRedux(XElement) {
     }
 
     onCreate() {
-        this.$input = this.$('input');
+        this.$input = this.$('input#label');
         super.onCreate();
     }
 
