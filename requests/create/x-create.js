@@ -80,11 +80,15 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     async _onWordsSeen() {
-        const { volatileKey, passphrase} = this.properties;
+       const { volatileKey, passphrase} = this.properties;
 
-        this.actions.setData(RequestTypes.CREATE, {
-            encryptedKeyPair: await volatileKey.keyPair.exportEncrypted(passphrase)
-        });
+       const encryptedKeyPair = await volatileKey.exportEncrypted(passphrase);
+
+       this.actions.setData(RequestTypes.CREATE, {
+           encryptedKeyPair
+       });
+
+
         XRouter.root.goTo('create/download');
     }
 

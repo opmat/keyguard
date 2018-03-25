@@ -6,7 +6,7 @@ export function exportFile(passphrase) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.EXPORT_FILE) );
 
-        const { address, encryptedKeyPair } = getState().request.data;
+        const { address } = getState().request.data;
 
         // try to decrypt to authenticate the user
         try {
