@@ -6,8 +6,8 @@ import WalletPolicy from './access-control/wallet-policy.js';
 import config from './config.js';
 import store from './store.js';
 import XKeyguard from './x-keyguard.js';
+import XNoRequest from './x-no-request.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
-import keyStore from './keys/keystore.js';
 
 class Keyguard {
     constructor() {
@@ -16,12 +16,19 @@ class Keyguard {
         if (self === top) {
             const $appContainer = document.querySelector('#app');
             MixinRedux.store = store;
+
+            // if there is no request, tell the user to go to dashboard?
+            const noRequestTimer = setTimeout(() => {
+                new XNoRequest($appContainer);
+            }, 10000);
+
             // wait until request is started
             const unsubscribe = store.subscribe(() => {
                 const state = store.getState();
                 if (state.request.requestType) {
                     window.app = new XKeyguard($appContainer);
-                    unsubscribe()
+                    unsubscribe();
+                    clearTimeout(noRequestTimer);
                 }
             });
         }
