@@ -10,6 +10,11 @@ import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createPersistent } from './actions.js';
 
+
+async function fail() {
+    throw new Error('heute nicht');
+}
+
 export default class XCreate extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
@@ -35,11 +40,14 @@ export default class XCreate extends MixinRedux(XElement) {
 
         const { address } = state.request.data;
 
+        const foo = fail();
+
         return {
             volatileKey: address && state.keys.volatileKeys.get(address),
             passphrase: state.request.data.passphrase
         }
     }
+
 
     static get actions() {
         return { setData, createPersistent };

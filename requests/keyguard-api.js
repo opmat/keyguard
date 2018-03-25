@@ -108,6 +108,7 @@ export default class KeyguardApi {
 
                 if (request.error) {
                     reject(request.error);
+                    self.close();
                 }
 
                 if (request.result) {
