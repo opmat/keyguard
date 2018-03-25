@@ -5,8 +5,8 @@ import XCreate from './requests/create/x-create.js';
 import XImportWords from './requests/import-words/x-import-words.js';
 import XImportFile from './requests/import-file/x-import-file.js';
 import XSign from './requests/sign/x-sign.js';
-import XExportFile from './requests/export-file/x-export-file.js';
-import XExportWords from './requests/export-words/x-export-words.js';
+import XBackupFile from './requests/backup-file/x-backup-file.js';
+import XBackupWords from './requests/backup-words/x-backup-words.js';
 import XRename from './requests/rename/x-rename.js';
 import XClose from '/elements/x-close/x-close.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
@@ -18,8 +18,8 @@ export default class XKeyguard extends MixinRedux(XElement) {
         <x-loader></x-loader>
         <x-router>
           <x-create></x-create> 
-          <x-export-words></x-export-words>
-          <x-export-file></x-export-file>
+          <x-backup-words></x-backup-words>
+          <x-backup-file></x-backup-file>
           <x-import-file></x-import-file>
           <x-import-words></x-import-words>
           <x-sign x-route="sign"></x-sign>
@@ -31,7 +31,7 @@ export default class XKeyguard extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XLoader, XRouter, XClose, XCreate, XImportWords, XRename,  XImportFile, XSign, XExportWords, XExportFile ];
+        return [ XLoader, XRouter, XClose, XCreate, XImportWords, XRename,  XImportFile, XSign, XBackupWords, XBackupFile ];
     }
 
     static mapStateToProps(state) {

@@ -4,13 +4,13 @@ import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setResult } from '../request-redux.js';
-import { exportFile } from './actions.js';
+import { backupFile } from './actions.js';
 
-export default class XExportFile extends MixinRedux(XElement) {
+export default class XBackupFile extends MixinRedux(XElement) {
 
     html() { return `
-        <x-download-file x-route="export-file/download"></x-download-file>
-        <section x-route="export-file">
+        <x-download-file x-route="backup-file/download"></x-download-file>
+        <section x-route="backup-file">
             <h1>Backup your Account</h1>
             <x-my-account></x-my-account>
             <section>
@@ -26,7 +26,7 @@ export default class XExportFile extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { exportFile, setResult };
+        return { backupFile, setResult };
     }
 
     listeners() {
@@ -37,10 +37,10 @@ export default class XExportFile extends MixinRedux(XElement) {
     }
 
     _onSubmit(passphrase) {
-        this.actions.exportFile(passphrase);
+        this.actions.backupFile(passphrase);
     }
 
     _onFileDownload() {
-        this.actions.setResult(RequestTypes.EXPORT_FILE, true);
+        this.actions.setResult(RequestTypes.BACKUP_FILE, true);
     }
 }

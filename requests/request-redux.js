@@ -10,8 +10,8 @@ export const RequestTypes = {
     CREATE: 'create',
     IMPORT_FROM_FILE: 'import-from-file',
     IMPORT_FROM_WORDS: 'import-from-words',
-    EXPORT_FILE: 'export-file',
-    EXPORT_WORDS: 'export-words',
+    BACKUP_FILE: 'backup-file',
+    BACKUP_WORDS: 'backup-words',
     RENAME: 'rename'
 };
 

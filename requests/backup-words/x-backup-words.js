@@ -7,13 +7,13 @@ import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
 import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData, setResult } from '../request-redux.js';
-import { exportWords } from './actions.js';
+import { backupWords } from './actions.js';
 
-export default class XExportWords extends MixinRedux(XElement) {
+export default class XBackupWords extends MixinRedux(XElement) {
 
     html() { return `
-        <x-show-words x-route="export-words/words"></x-show-words>
-        <section x-route="export-words/authenticate">
+        <x-show-words x-route="backup-words/words"></x-show-words>
+        <section x-route="backup-words/authenticate">
             <h1>Backup your Account</h1>
             <x-my-account></x-my-account>
             <section>
@@ -21,7 +21,7 @@ export default class XExportWords extends MixinRedux(XElement) {
                 <x-authenticate button-label="Backup"></x-authenticate>
             </section>
         </section>
-        <section x-route="export-words">
+        <section x-route="backup-words">
             <h1>Backup your Account</h1>
             <x-privacy-agent></x-privacy-agent>
         </section>
@@ -33,14 +33,14 @@ export default class XExportWords extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { setData, setResult, exportWords };
+        return { setData, setResult, backupWords };
     }
 
     listeners() {
         return {
-            'x-authenticate-submitted': passphrase => this.actions.exportWords(passphrase),
-            'x-surrounding-checked': () => XRouter.root.goTo('export-words/authenticate'),
-            'x-show-words': () => this.actions.setResult(RequestTypes.EXPORT_WORDS, true)
+            'x-authenticate-submitted': passphrase => this.actions.backupWords(passphrase),
+            'x-surrounding-checked': () => XRouter.root.goTo('backup-words/authenticate'),
+            'x-show-words': () => this.actions.setResult(RequestTypes.BACKUP_WORDS, true)
         };
     }
 }

@@ -152,14 +152,14 @@ export default class KeyguardApi {
         return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);
     }
 
-    exportFile(address) {
-        return this._startRequest(RequestTypes.EXPORT_FILE, {
+    backupFile(address) {
+        return this._startRequest(RequestTypes.BACKUP_FILE, {
             address
         });
     }
 
-    exportWords(address) {
-        return this._startRequest(RequestTypes.EXPORT_WORDS, {
+    backupWords(address) {
+        return this._startRequest(RequestTypes.BACKUP_WORDS, {
             address
         });
     }

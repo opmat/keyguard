@@ -6,8 +6,8 @@ export default class SafePolicy extends BasePolicy {
         switch (method) {
             case 'importFromFile':
             case 'importFromWords':
-            case 'exportFile':
-            case 'exportWords':
+            case 'backupFile':
+            case 'backupWords':
             case 'list':
             case 'createVolatile':
             case 'create':
@@ -32,8 +32,8 @@ export default class SafePolicy extends BasePolicy {
             case 'create':
             case 'importFromFile':
             case 'importFromWords':
-            case 'exportFile':
-            case 'exportWords':
+            case 'backupFile':
+            case 'backupWords':
             case 'sign':
             case 'rename':
                 return true;
