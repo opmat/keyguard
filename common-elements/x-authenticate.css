@@ -17,14 +17,13 @@ x-authenticate div[buttons] > * {
     top: 0;
 }
 
-x-authenticate [wrong] {
+x-authenticate [wrong][disabled] {
     background: var(--error-color);
     color: white;
-    display: none;
 }
 
-.x-password-setter.wrong [wrong] {
-    display: flex;
+x-authenticate:not(.wrong) [wrong] {
+    display: none;
 }
 
 x-authenticate button {
