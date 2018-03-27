@@ -22,7 +22,8 @@
     /* align-items: center; */
     width: 100vw;
     max-width: var(--max-width);
-    height: 100vh;
+    min-height: 100vh;
+    padding-bottom: 18px;
 }
 
 #app > * > * {
@@ -31,8 +32,7 @@
 }
 
 [x-route] {
-    min-height: 100vh;
-    padding-bottom: 56px;
+    min-height: calc(100vh - 58px);
 }
 
 [x-route] > * {
@@ -66,18 +66,10 @@ h1 {
     h1 {
         margin-top: 28px;
     }
-
-    [x-route] {
-        padding-bottom: 28px;
-    }
 }
 
 @media (max-height: 500px) {
     h1 {
         margin-top: 14px;
-    }
-
-    [x-route] {
-        padding-bottom: 14px;
     }
 }
