@@ -9,14 +9,16 @@ import { backupFile } from './actions.js';
 export default class XBackupFile extends MixinRedux(XElement) {
 
     html() { return `
-        <x-download-file x-route="backup-file/download"></x-download-file>
+        <section x-route="backup-file/download">
+            <h1>Save your Access File</h1>
+            <x-download-file></x-download-file>
+        </section>
         <section x-route="backup-file">
             <h1>Backup your Account</h1>
+            <h2>Please enter your passphrase to backup your account.</h2>
+            <x-grow x-grow="0.5"></x-grow>
             <x-my-account></x-my-account>
-            <section>
-                <p>Please enter your passphrase to backup your account.</p>
-                <x-authenticate button-label="Backup"></x-authenticate>
-            </section>
+            <x-authenticate button-label="Backup"></x-authenticate>
         </section>
         `;
     }
