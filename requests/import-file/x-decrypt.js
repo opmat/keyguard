@@ -7,9 +7,8 @@ export default class XDecrypt extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Enter your Passphrase</h1>
-        <section>
-            <p>Please enter your passphrase to unlock your Account Access File.</p>
-        </section>
+        <h2>Please enter your passphrase to unlock your Account Access File.</h2>
+        <x-grow></x-grow>
         <x-authenticate button-label="Import"></x-authenticate>
         `;
     }

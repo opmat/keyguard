@@ -13,7 +13,12 @@ export default class XImportFile extends MixinRedux(XElement) {
         return `
             <x-set-label x-route="import-from-file/set-label"></x-set-label>
             <x-decrypt x-route="import-from-file/decrypt"></x-decrypt>
-            <x-wallet-backup-import x-route="import-from-file"></x-wallet-backup-import>
+            <section x-route="import-from-file">
+                <h1>Import Access File</h1>
+                <x-grow></x-grow>
+                <x-wallet-backup-import></x-wallet-backup-import>
+                <x-grow></x-grow>
+            </section>
         `
     }
 
