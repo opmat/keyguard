@@ -27,10 +27,12 @@ export default class XEnterWords extends MixinRedux(XElement) {
     html() { return `
         <h1>Account Recovery</h1>
         <h2>Please enter your 24 Account Recovery Words.</h2>
-        <section>
-            Press <code>Space</code> or <code>Tab</code> at the end of a word to jump to the next field.
-        </section>
+        <x-grow></x-grow>
         <x-mnemonic-input class="x-recovery-phrase"></x-mnemonic-input>
+        <p class="pad-bottom">
+            Press <code>Space</code> or <code>Tab</code> at the end of a word to jump to the next field.
+        </p>
+        <x-grow x-grow="2"></x-grow>
         <button>Cancel</button>
         `;
     }
