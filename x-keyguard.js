@@ -17,15 +17,19 @@ export default class XKeyguard extends MixinRedux(XElement) {
         return `
         <x-loader></x-loader>
         <x-router>
-          <x-create></x-create> 
-          <x-backup-words></x-backup-words>
-          <x-backup-file></x-backup-file>
-          <x-import-file></x-import-file>
-          <x-import-words></x-import-words>
-          <x-sign x-route="sign"></x-sign>
-          <x-rename x-route="rename"></x-rename>
-          <x-close x-route="close"></x-close>
-          <x-close x-route="/"></x-close>
+            <x-create></x-create> 
+            <x-backup-words></x-backup-words>
+            <x-backup-file></x-backup-file>
+            <x-import-file></x-import-file>
+            <x-import-words></x-import-words>
+            <x-sign x-route="sign"></x-sign>
+            <x-rename x-route="rename"></x-rename>
+            <x-close x-route="close"></x-close>
+            <x-close x-route="/"></x-close>
+            <a secondary x-href="close">
+                <i class="material-icons">&#xE5C9;</i>
+                Cancel
+            </a>
         </x-router>
         `;
     }

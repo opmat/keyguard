@@ -19,7 +19,6 @@ export default class XSign extends MixinRedux(XElement) {
             <p>Valid from block #<span class="validity"></span></p>
         </section>
         <x-authenticate button-label="Confirm"></x-authenticate>
-        <a secondary x-href="close">Cancel</a>
         `;
     }
 
