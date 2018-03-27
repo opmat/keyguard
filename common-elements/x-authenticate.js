@@ -1,10 +1,10 @@
-import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
+import XPasswordGetter from '/elements/x-password-getter/x-password-getter.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 
-export default class XAuthenticate extends MixinRedux(XPasswordSetter) {
+export default class XAuthenticate extends MixinRedux(XPasswordGetter) {
 
     styles() {
-        return [ 'x-password-setter' ];
+        return [ 'x-password-input' ];
     }
 
     static mapStateToProps(state) {
