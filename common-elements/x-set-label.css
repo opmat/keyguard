@@ -1,4 +1,5 @@
-x-set-label input {
+x-set-label input,
+x-rename #label {
     font-size: 2em !important;
     width: 80% !important;
     font-weight: 300;

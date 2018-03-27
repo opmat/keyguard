@@ -9,11 +9,11 @@ export default class XRename extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Rename your Account</h1>
+        <x-grow></x-grow>
         <x-my-account></x-my-account>
-        <section>
-            <label>Name</label>
-            <input id="label" type="text" placeholder="Account name">
-        </section>
+        <x-grow></x-grow>
+        <input id="label" type="text" placeholder="Account name">
+        <x-grow></x-grow>
         <x-authenticate button-label="Save"></x-authenticate>
         `;
     }

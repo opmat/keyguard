@@ -21,10 +21,10 @@ export default class XKeyguard extends MixinRedux(XElement) {
         <x-backup-file></x-backup-file>
         <x-import-file></x-import-file>
         <x-import-words></x-import-words>
-        <x-sign x-route="sign"></x-sign>
-        <x-rename x-route="rename"></x-rename>
+        <div><x-sign x-route="sign"></x-sign></div>
+        <div><x-rename x-route="rename"></x-rename></div>
         <x-close x-route="close"></x-close>
-        <x-close x-route="/"></x-close>
+        <div><x-close x-route="/"></x-close></div>
         <a secondary x-href="close">
             <i class="material-icons">&#xE5C9;</i>
             Cancel
