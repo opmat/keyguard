@@ -33,7 +33,6 @@ export default class XEnterWords extends MixinRedux(XElement) {
             Press <code>Space</code> or <code>Tab</code> at the end of a word to jump to the next field.
         </p>
         <x-grow x-grow="2"></x-grow>
-        <button>Cancel</button>
         `;
     }
 
@@ -47,8 +46,7 @@ export default class XEnterWords extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-mnemonic-input': this._onSuccess.bind(this),
-            'click button': () => this.actions.deny(RequestTypes.IMPORT_FROM_WORDS)
+            'x-mnemonic-input': this._onSuccess.bind(this)
         }
     }
 
