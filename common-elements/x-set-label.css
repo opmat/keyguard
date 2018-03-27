@@ -1,0 +1,6 @@
+x-set-label input {
+    font-size: 2em !important;
+    width: 80% !important;
+    font-weight: 300;
+    margin-bottom: 28px;
+}

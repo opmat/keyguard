@@ -76,6 +76,8 @@ class Keyguard {
         this._api = RPC.Server(AccessControl.addAccessControl(
             KeyguardApi, () => store.getState(), defaultPolicies
         ), true);
+
+        // this._api.create({callingOrigin: 'http://safe.localhost:5000'});
     }
 }
 

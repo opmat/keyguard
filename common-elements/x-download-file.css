@@ -1,7 +1,6 @@
 @import '/elements/x-downloadable-image/x-downloadable-image.css';
 
 x-download-file{
-	width: 64%;
 	position:  relative;
 	display: block;
 	text-align: center;

@@ -11,13 +11,17 @@ export default class XIdenticons extends MixinRedux(XElement) {
         return `
             <h1>Choose Your Account Avatar</h1>
             <h2>The Avatar will be 'unique' to this Account. You can not change it later.</h2>
+            <x-grow></x-grow>
             <x-container>
                 <div class="center" id="loading">
                     <x-loading-animation></x-loading-animation>
                     <h2>Mixing colors</h2>
                 </div>
             </x-container>
+            <x-grow></x-grow>
             <a secondary class="generate-more">Generate New</a>
+            <x-grow></x-grow>
+
             <x-backdrop class="center">
                 <x-address></x-address>
                 <a button>Confirm</a>

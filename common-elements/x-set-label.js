@@ -4,12 +4,13 @@ import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 export default class XSetLabel extends XElement {
 
     html() { return `
-        <x-my-account></x-my-account>
         <h1>Name your Account</h1>
-        <section>
-            <label>Name</label>
-            <input type="text" placeholder="Account name">
-        </section>
+        <h2>This name exists only in this app and is never shared.</h2>
+        <x-grow></x-grow>
+        <x-my-account></x-my-account>
+        <x-grow></x-grow>
+        <input type="text" placeholder="Account name">
+        <x-grow x-grow="2"></x-grow>
         <button>Confirm</button>
         `;
     }
