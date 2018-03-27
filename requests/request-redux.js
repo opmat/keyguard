@@ -63,53 +63,47 @@ export function reducer(state, action) {
     switch (action.type) {
         case TypeKeys.START:
             if (state.requestType) {
-                return {
-                    ...initialState,
+                return Object.assign({}, initialState, {
                     error: new Error('Multiple Requests')
-                };
+                });
             }
 
-            return {
-                ...state,
+            return Object.assign({}, state, {
                 requestType: action.requestType,
                 reject: action.reject,
                 data: {
                     ...state.data,
                     ...action.data
                 }
-            };
+            });
 
         case TypeKeys.SET_DATA:
-            return {
-                ...state,
+            return Object.assign({}, state, {
                 executing: false,
-                data: {
-                    ...state.data,
-                    ...action.data
-                }
-            };
+                data: Object.assign({},
+                    state.data,
+                    action.data
+                )
+            });
 
         case TypeKeys.SET_EXECUTING:
-            return {
-                ...state,
+            return Object.assign({}, state, {
                 executing: true,
-                data: {
-                    ...state.data,
-                    isWrongPassphrase: false
-                }
-            };
+                data: Object.assign({},
+                    state.data,
+                    { isWrongPassphrase: false }
+                )
+            });
 
         case TypeKeys.SET_RESULT:
-            return {
-                ...state,
+            return Object.assign({}, state, {
                 result: action.result
-            };
+            });
 
         case TypeKeys.SET_ERROR:
-            return {
-                ...state,
+            return Object.assign({}, state, {
                 error: action.error
-            };
+            });
 
         default:
             return state
@@ -169,7 +163,7 @@ export function loadAccountData(requestType) {
             const key = await keystore.getPlain(address);
 
             dispatch(
-                setData(requestType, { ...key })
+                setData(requestType, key)
             );
         } catch (e) {
             dispatch(

@@ -21,16 +21,15 @@ export function reducer(state, action) {
                 map.set(key.userFriendlyAddress, key);
             }
 
-            return {
-                ...state,
+            return Object.assign({}, state, {
                 volatileKeys: map
-            };
+            });
 
         case TypeKeys.CLEAR:
-            return {
+            return Object.assign({}, state, {
                 ...state,
                 volatileKeys: new Map()
-            };
+            });
 
         default:
             return state
