@@ -28,4 +28,8 @@ export default class XSetLabel extends XElement {
             'click button': e => this.fire('x-set-label', this.$input.value)
         }
     }
+
+    onEntry() {
+        this.$('input').focus();
+    }
 }

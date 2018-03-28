@@ -24,4 +24,8 @@ export default class XSetPassphrase extends XElement {
             'x-password-setter-submitted': (passphrase) => this.fire('x-set-passphrase', passphrase)
         }
     }
+
+    onEntry() {
+        this.$passwordSetter.focus();
+    }
 }
