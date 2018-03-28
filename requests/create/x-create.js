@@ -50,6 +50,11 @@ export default class XCreate extends MixinRedux(XElement) {
         return { setData, createPersistent };
     }
 
+    async onCreate() {
+        super.onCreate();
+        this.router = await XRouter.instance;
+    }
+
     listeners() {
         return {
             'x-choose-identicon': this._onChooseIdenticon.bind(this),
@@ -63,16 +68,16 @@ export default class XCreate extends MixinRedux(XElement) {
 
     _onChooseIdenticon(address) {
         this.actions.setData(RequestTypes.CREATE, { address } );
-        XRouter.root.goTo('create/warning');
+        this.router.goTo('create/warning');
     }
 
     _onSurroundingChecked() {
-        XRouter.root.goTo('create/set-passphrase');
+        this.router.goTo('create/set-passphrase');
     }
 
     _onSetPassphrase(passphrase) {
         this.actions.setData(RequestTypes.CREATE, { passphrase });
-        XRouter.root.goTo('create/set-label');
+        this.router.goTo('create/set-label');
     }
 
     _onSetLabel(label) {
@@ -80,7 +85,7 @@ export default class XCreate extends MixinRedux(XElement) {
         this.actions.setData(RequestTypes.CREATE, {
             privateKey: this.properties.volatileKey.keyPair.privateKey.toHex()
         });
-        XRouter.root.goTo('create/words');
+        this.router.goTo('create/words');
     }
 
     async _onWordsSeen() {
@@ -93,7 +98,7 @@ export default class XCreate extends MixinRedux(XElement) {
        });
 
 
-        XRouter.root.goTo('create/download');
+        this.router.goTo('create/download');
     }
 
     _onFileDownload() {

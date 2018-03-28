@@ -77,6 +77,8 @@ class Keyguard {
             KeyguardApi, () => store.getState(), defaultPolicies
         ), true);
 
+        // enable on-demand for local testing/debugging w/t needing to call the API first
+        // this._api.create({ callingOrigin: 'http://localhost' });
         // this._api.create({callingOrigin: 'http://safe.localhost:5000'});
     }
 }
@@ -88,4 +90,3 @@ class Keyguard {
 
     window.keyguard = new Keyguard();
 })();
-

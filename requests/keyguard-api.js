@@ -117,7 +117,7 @@ export default class KeyguardApi {
             });
 
             // open corresponding UI
-            XRouter.root.goTo(requestType);
+            XRouter.instance.then(router => router.goTo(requestType));
         });
     }
 
