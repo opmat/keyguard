@@ -21,7 +21,7 @@ export default class XKeyguard extends MixinRedux(XElement) {
         <x-backup-file></x-backup-file>
         <x-import-file></x-import-file>
         <x-import-words></x-import-words>
-        <div><x-sign x-route="sign"></x-sign></div>
+        <div><x-sign x-route="sign-transaction"></x-sign></div>
         <div><x-rename x-route="rename"></x-rename></div>
         <x-close x-route="close"></x-close>
         <div><x-close x-route="/"></x-close></div>
