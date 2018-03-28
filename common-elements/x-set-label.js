@@ -5,7 +5,7 @@ export default class XSetLabel extends XElement {
 
     html() { return `
         <h1>Name your Account</h1>
-        <h2>This name exists only in this app and is never shared.</h2>
+        <h2>This name is only visible to you</h2>
         <x-grow></x-grow>
         <x-my-account></x-my-account>
         <x-grow></x-grow>

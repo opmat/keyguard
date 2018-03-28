@@ -31,6 +31,18 @@ export default class XRename extends MixinRedux(XElement) {
         return { rename, setData };
     }
 
+    static mapStateToProps(state) {
+        return {
+            label: state.request.data.label
+        }
+    }
+
+    _onPropertiesChanged(changes) {
+        if (changes.label) {
+            this.$input.value = changes.label;
+        }
+    }
+
     listeners() {
         return {
             'x-authenticate-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
