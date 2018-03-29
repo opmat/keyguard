@@ -1,7 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/elements/x-router/x-router.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
-import XAddress from '/elements/x-address/x-address.js';
 import XPasswordSetter from '/elements/x-password-setter/x-password-setter.js';
 import XPassphraseTipps from '/elements/x-passphrase-tipps/x-passphrase-tipps.js';
 
@@ -18,7 +17,7 @@ export default class XSetPassphrase extends XElement {
     }
 
     children() {
-        return [ XAddress, XPassphraseTipps, XPasswordSetter, XMyAccount ];
+        return [ XPassphraseTipps, XPasswordSetter, XMyAccount ];
     }
 
     listeners() {
