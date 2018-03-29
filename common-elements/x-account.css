@@ -12,7 +12,9 @@ x-account, x-my-account {
 }
 
 @media (max-width: 480px) {
-    x-account x-identicon, x-my-account x-identicon {
+    x-account x-identicon,
+    x-my-account x-identicon {
         width: 120px;
+        height: 120px;
     }
 }

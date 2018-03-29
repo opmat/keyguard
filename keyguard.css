@@ -78,3 +78,9 @@ h1 {
         margin-top: 14px;
     }
 }
+
+x-identicon {
+    display: block;
+    height: 160px;
+    width: 160px;
+}
