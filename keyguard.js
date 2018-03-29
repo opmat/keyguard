@@ -49,7 +49,7 @@ class Keyguard {
         self.onunload = () => {
             const reject = store.getState().request.reject;
             if (reject){
-                reject(new Error('Window was closed.'));
+                reject(new Error('Keyguard window was closed.'));
             }
         };
 
