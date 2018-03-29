@@ -22,7 +22,7 @@ export default class XSetPassphrase extends XElement {
 
     listeners() {
         return {
-            /*'x-passphrase-setter-submitted': () => XRouter.root.goTo(this.$el, '/confirm'),
+            /*'x-passphrase-setter-submitted': async () => (await XRouter.instance).goTo(this.$el, '/confirm'),
             'x-passphrase-getter-submitted': (passphrase) => this.fire('x-set-passphrase', passphrase)*/
             'x-passphrase-setter-submitted': (passphrase) => this.fire('x-set-passphrase', passphrase)
         }
