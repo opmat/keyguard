@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { Key, Keytype, keystore } from '../../keys/index.js';
+import { keystore } from '../../keys/index.js';
 import XRouter from '/elements/x-router/x-router.js';
 
 export function backupWords(passphrase) {
@@ -13,7 +13,7 @@ export function backupWords(passphrase) {
                 setData(RequestTypes.BACKUP_WORDS, { privateKey: key.keyPair.privateKey.toHex() })
             );
 
-            XRouter.root.goTo('backup-words/words');
+            (await XRouter.instance).goTo('backup-words/words');
         } catch (e) {
             console.error(e);
             // assume the password was wrong

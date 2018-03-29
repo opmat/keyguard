@@ -3,7 +3,7 @@ x-account, x-my-account {
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    min-height: 250px;
+    margin: 16px;
 }
 
 .x-account-label {

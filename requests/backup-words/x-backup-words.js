@@ -32,9 +32,8 @@ export default class XBackupWords extends MixinRedux(XElement) {
     listeners() {
         return {
             'x-authenticate-submitted': passphrase => this.actions.backupWords(passphrase),
-            'x-surrounding-checked': () => XRouter.root.goTo('backup-words/authenticate'),
+            'x-surrounding-checked': async () => (await XRouter.instance).root.goTo('backup-words/authenticate'),
             'x-show-words': () => this.actions.setResult(RequestTypes.BACKUP_WORDS, true)
         };
     }
 }
-

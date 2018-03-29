@@ -26,6 +26,11 @@ export default class XImportFile extends MixinRedux(XElement) {
         return [ XWalletBackupImport, XSetLabel, XDecrypt ];
     }
 
+    async onCreate() {
+        super.onCreate();
+        this.router = await XRouter.instance;
+    }
+
     static get actions() {
         return { setData, importFromFile, decrypt };
     }
@@ -40,7 +45,7 @@ export default class XImportFile extends MixinRedux(XElement) {
 
     _onReadFile(encryptedKeyPair64) {
         this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { encryptedKeyPair64 });
-        XRouter.root.goTo('import-from-file/decrypt');
+        this.router.goTo('import-from-file/decrypt');
     }
 
     _onDecrypt() {

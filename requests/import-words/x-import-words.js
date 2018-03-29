@@ -37,9 +37,9 @@ export default class XImportWords extends MixinRedux(XElement) {
         this.actions.createKey();
     }
 
-    _onSetPassphrase(passphrase) {
+    async _onSetPassphrase(passphrase) {
         this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { passphrase });
-        XRouter.root.goTo('import-from-words/set-label');
+        (await XRouter.instance).goTo('import-from-words/set-label');
     }
 
     _onSetLabel(label) {

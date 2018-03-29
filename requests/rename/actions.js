@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { Key, Keytype, keystore } from '../../keys/index.js';
+import { keystore } from '../../keys/index.js';
 
 export function rename(passphrase, label) {
     return async (dispatch, getState) => {

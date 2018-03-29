@@ -21,7 +21,7 @@ export function createKey() {
                 setData(RequestTypes.IMPORT_FROM_WORDS, { ...key.getPublicInfo(), key })
             );
 
-            XRouter.root.goTo('import-from-words/set-passphrase');
+            (await XRouter.instance).goTo('import-from-words/set-passphrase');
 
         } catch (e) {
             console.error(e);

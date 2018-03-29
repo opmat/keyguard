@@ -11,11 +11,10 @@ export default class XSign extends MixinRedux(XElement) {
     html() { return `
         <h1>Transaction</h1>
         <x-my-account></x-my-account>
+        <i class="material-icons">arrow_downward</i>
+        <x-account></x-account>
         <div class="x-value"><span class="value"></span> NIM</div>
         <div class="x-fee"><span class="fee"></span> Fee</div>
-        <x-account></x-account>
-        <section>
-        </section>
         <x-authenticate button-label="Confirm"></x-authenticate>
         `;
     }
@@ -52,7 +51,12 @@ export default class XSign extends MixinRedux(XElement) {
             this.$account.address = recipient;
 
             this.$('.value').textContent = (value/1e5).toString();
-            this.$('.fee').textContent = (fee/1e5).toString();
+
+            if (fee === 0) {
+                this.$el.removeChild(this.$('.x-fee'));
+            } else {
+                this.$('.fee').textContent = (fee/1e5).toString();
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { Key, Keytype, keystore } from '../../keys/index.js';
+import { keystore } from '/libraries/keyguard/keys/index.js';
 import XRouter from '/elements/x-router/x-router.js';
 
 export function backupFile(passphrase) {
@@ -18,7 +18,7 @@ export function backupFile(passphrase) {
                 setData(RequestTypes.BACKUP_FILE, {})
             );
 
-            XRouter.root.goTo('backup-file/download')
+            (await XRouter.instance).goTo('backup-file/download')
         } catch (e) {
             console.error(e);
             // assume the password was wrong

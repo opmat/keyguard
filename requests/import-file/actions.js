@@ -20,7 +20,7 @@ export function decrypt() {
                 setData(RequestTypes.IMPORT_FROM_FILE, { ...key.getPublicInfo() })
             );
 
-            XRouter.root.goTo('import-from-file/set-label');
+            (await XRouter.instance).goTo('import-from-file/set-label');
 
         } catch (e) {
             console.error(e);

@@ -1,5 +1,5 @@
 import { SATOSHIS, RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { Keytype, keystore } from '../../keys/index.js';
+import { keystore } from '../../keys/index.js';
 
 // called after confirming a transaction sign request (BASIC transaction)
 export function signTransaction(passphrase) {
