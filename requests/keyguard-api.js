@@ -134,8 +134,8 @@ export default class KeyguardApi {
     }*/
 
     async sign(transaction) {
-        transaction.value = transaction.value * KeyguardApi.satoshis;
-        transaction.fee = transaction.fee * KeyguardApi.satoshis;
+        transaction.value = Math.round(transaction.value * KeyguardApi.satoshis);
+        transaction.fee = Math.round(transaction.fee * KeyguardApi.satoshis);
 
         return this._startRequest(RequestTypes.SIGN_TRANSACTION, {
             transaction,
