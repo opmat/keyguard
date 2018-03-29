@@ -1,30 +1,20 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
-import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
-import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
+import XAuthenticateBackup from '../../common-elements/x-authenticate-backup.js';
 import { RequestTypes, setResult } from '../request-redux.js';
 import { backupFile } from './actions.js';
 
 export default class XBackupFile extends MixinRedux(XElement) {
 
     html() { return `
-        <section x-route="backup-file/download">
-            <h1>Save your Access File</h1>
-            <x-download-file></x-download-file>
-        </section>
-        <section x-route="backup-file">
-            <h1>Backup your Account</h1>
-            <h2>Please enter your passphrase to backup your account.</h2>
-            <x-grow x-grow="0.5"></x-grow>
-            <x-my-account></x-my-account>
-            <x-authenticate button-label="Backup"></x-authenticate>
-        </section>
+        <x-download-file x-route="backup-file/download"></x-download-file>
+        <x-authenticate-backup x-route="backup-file"></x-authenticate-backup>
         `;
     }
 
     children() {
-        return [ XAuthenticate, XMyAccount, XDownloadFile ];
+        return [ XAuthenticateBackup, XDownloadFile ];
     }
 
     static get actions() {

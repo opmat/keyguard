@@ -37,6 +37,10 @@ export default class XSign extends MixinRedux(XElement) {
         return { signTransaction, setData };
     }
 
+    onAfterEntry() {
+        setTimeout(() => this.$authenticate.focus(), 100);
+    }
+
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 

@@ -4,6 +4,7 @@ import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js
 import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
 import { setData } from '/libraries/keyguard/requests/request-redux.js';
 import { rename } from './actions.js';
+import KeyboardHandler from '/libraries/nimiq-utils/keyboard-handler/keyboard-handler.js';
 
 export default class XRename extends MixinRedux(XElement) {
 
@@ -47,5 +48,9 @@ export default class XRename extends MixinRedux(XElement) {
         return {
             'x-authenticate-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
         }
+    }
+
+    onAfterEntry() {
+        this.$input.focus();
     }
 }

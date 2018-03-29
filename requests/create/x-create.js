@@ -45,7 +45,6 @@ export default class XCreate extends MixinRedux(XElement) {
         }
     }
 
-
     static get actions() {
         return { setData, createPersistent };
     }
@@ -89,14 +88,13 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     async _onWordsSeen() {
-       const { volatileKey, passphrase} = this.properties;
+        const { volatileKey, passphrase} = this.properties;
 
-       const encryptedKeyPair = await volatileKey.exportEncrypted(passphrase);
+        const encryptedKeyPair = await volatileKey.exportEncrypted(passphrase);
 
-       this.actions.setData(RequestTypes.CREATE, {
-           encryptedKeyPair
-       });
-
+        this.actions.setData(RequestTypes.CREATE, {
+            encryptedKeyPair
+        });
 
         this.router.goTo('create/download');
     }

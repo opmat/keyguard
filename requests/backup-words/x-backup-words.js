@@ -13,14 +13,7 @@ export default class XBackupWords extends MixinRedux(XElement) {
 
     html() { return `
         <x-show-words x-route="backup-words/words"></x-show-words>
-        <section x-route="backup-words/authenticate">
-            <h1>Backup your Account</h1>
-            <x-my-account></x-my-account>
-            <section>
-                <p>Please enter your passphrase to backup your account.</p>
-                <x-authenticate button-label="Backup"></x-authenticate>
-            </section>
-        </section>
+        <x-authenticate-backup x-route="backup-words/authenticate"></x-authenticate-backup>
         <section x-route="backup-words">
             <h1>Backup your Account</h1>
             <x-privacy-agent></x-privacy-agent>

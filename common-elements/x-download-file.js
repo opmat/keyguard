@@ -8,6 +8,7 @@ export default class XDownloadFile extends MixinRedux(XElement) {
 
     html() {
         return `
+            <h1>Save your Access File</h1>
             <h2 secondary>Do NOT share this Account Access File and keep it safe.</h2>
             <x-grow></x-grow>
             <x-downloadable-image></x-downloadable-image>

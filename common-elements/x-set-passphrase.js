@@ -27,7 +27,7 @@ export default class XSetPassphrase extends XElement {
         }
     }
 
-    onEntry() {
+    onAfterEntry() {
         this.$passwordSetter.focus();
     }
 }
