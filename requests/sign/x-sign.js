@@ -9,14 +9,12 @@ import { signTransaction } from './actions.js';
 export default class XSign extends MixinRedux(XElement) {
 
     html() { return `
-        <x-my-account></x-my-account>
-        &#8675;
-        <x-account></x-account>
         <h1>Transaction</h1>
-        <h2><span class="value"></span> NIM</h2>
+        <x-my-account></x-my-account>
+        <div class="x-value"><span class="value"></span> NIM</div>
+        <div class="x-fee"><span class="fee"></span> Fee</div>
+        <x-account></x-account>
         <section>
-            <p><span class="fee"></span> satoshis fee</p>
-            <p>Valid from block #<span class="validity"></span></p>
         </section>
         <x-authenticate button-label="Confirm"></x-authenticate>
         `;
@@ -54,8 +52,7 @@ export default class XSign extends MixinRedux(XElement) {
             this.$account.address = recipient;
 
             this.$('.value').textContent = (value/1e5).toString();
-            this.$('.fee').textContent = fee;
-            this.$('.validity').textContent = validityStartHeight;
+            this.$('.fee').textContent = (fee/1e5).toString();
         }
     }
 

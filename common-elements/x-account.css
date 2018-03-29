@@ -10,3 +10,9 @@ x-account, x-my-account {
     text-align: center;
     margin: 10px;
 }
+
+@media (max-width: 480px) {
+    x-account x-identicon, x-my-account x-identicon {
+        width: 120px;
+    }
+}

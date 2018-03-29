@@ -14,6 +14,7 @@
 @import './common-elements/x-download-file.css';
 @import './common-elements/x-set-label.css';
 @import './common-elements/x-show-words.css';
+@import './requests/sign/x-sign.css';
 
 #app {
     display: flex;
