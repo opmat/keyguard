@@ -1,12 +1,12 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
 import XSetPassphrase from '/libraries/keyguard/common-elements/x-set-passphrase.js';
-import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
+import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
 import XShowWords from '/libraries/keyguard/common-elements/x-show-words.js';
 import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
 import XIdenticons from './x-identicons/x-identicons.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createPersistent } from './actions.js';
 

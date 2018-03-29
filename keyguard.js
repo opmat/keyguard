@@ -7,7 +7,7 @@ import config from './config.js';
 import store from './store.js';
 import XKeyguard from './x-keyguard.js';
 import XNoRequest from './x-no-request.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 
 class Keyguard {
     constructor() {

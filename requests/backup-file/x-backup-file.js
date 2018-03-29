@@ -1,5 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
 import XAuthenticateBackup from '../../common-elements/x-authenticate-backup.js';
 import { RequestTypes, setResult } from '../request-redux.js';

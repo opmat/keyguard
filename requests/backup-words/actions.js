@@ -1,6 +1,6 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
 import { keystore } from '../../keys/index.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 
 export function backupWords(passphrase) {
     return async (dispatch, getState) => {

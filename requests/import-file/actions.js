@@ -1,6 +1,6 @@
 import { RequestTypes, setExecuting, setResult, setData, loadAccountData, setError } from '../request-redux.js';
 import { Key, Keytype, keystore } from '../../keys/index.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 
 // called after entering the passphrase
 export function decrypt() {

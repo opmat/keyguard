@@ -1,8 +1,8 @@
 import XElement from "/libraries/x-element/x-element.js";
-import WalletBackup from "/libraries/wallet-backup/wallet-backup.js";
-import XDownloadableImage from "/elements/x-downloadable-image/x-downloadable-image.js";
+import WalletBackup from "/libraries/backup-file/backup-file.js";
+import XDownloadableImage from "/secure-elements/x-downloadable-image/x-downloadable-image.js";
 import QrScanner from '/libraries/qr-scanner/qr-scanner.min.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 
 export default class XDownloadFile extends MixinRedux(XElement) {
 

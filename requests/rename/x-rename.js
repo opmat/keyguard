@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { setData } from '/libraries/keyguard/requests/request-redux.js';
 import { rename } from './actions.js';
 

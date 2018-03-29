@@ -1,4 +1,4 @@
-@import '/elements/x-password-setter/x-password-setter.css';
+@import '/secure-elements/x-passphrase-setter/x-passphrase-setter.css';
 
 x-authenticate {
     display: flex;

@@ -1,6 +1,6 @@
 import { RequestTypes, setExecuting, setResult, setError, setData } from '../request-redux.js';
 import { Key, Keytype, keystore } from '../../keys/index.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 
 export function createKey() {
     return async (dispatch, getState) => {

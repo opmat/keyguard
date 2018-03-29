@@ -4,7 +4,7 @@ import keyStore from '../keys/keystore.js';
 import store from '../store.js';
 import { createVolatile, clearVolatile } from '../keys/keys-redux.js';
 import { start, loadAccountData } from './request-redux.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 import { RequestTypes } from './request-redux.js';
 
 export default class KeyguardApi {

@@ -2,10 +2,10 @@ import XElement from '/libraries/x-element/x-element.js';
 import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
 import XSetPassphrase from '/libraries/keyguard/common-elements/x-set-passphrase.js';
 import XEnterWords from './x-enter-words.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createKey, importFromWords } from './actions.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 
 export default class XImportWords extends MixinRedux(XElement) {
 

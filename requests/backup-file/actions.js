@@ -1,6 +1,6 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
 import { keystore } from '/libraries/keyguard/keys/index.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 
 export function backupFile(passphrase) {
     return async (dispatch, getState) => {

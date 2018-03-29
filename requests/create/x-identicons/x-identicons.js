@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XIdenticon from '/elements/x-identicon/x-identicon.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import XIdenticon from '/secure-elements/x-identicon/x-identicon.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { createVolatile, clearVolatile } from '/libraries/keyguard/keys/keys-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
 

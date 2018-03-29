@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import XMnemonicPhrase from '/secure-elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 
 export default class XShowWords extends MixinRedux(XElement) {
 

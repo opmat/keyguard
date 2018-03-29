@@ -1,11 +1,11 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
 import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
 import XShowWords from '/libraries/keyguard/common-elements/x-show-words.js';
-import XPrivacyAgent from '/elements/x-privacy-agent/x-privacy-agent.js';
-import XMnemonicPhrase from '/elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
+import XMnemonicPhrase from '/secure-elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData, setResult } from '../request-redux.js';
 import { backupWords } from './actions.js';
 

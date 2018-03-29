@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 
 export default class XDecrypt extends MixinRedux(XElement) {

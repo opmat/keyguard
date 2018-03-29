@@ -1,5 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XRouter from '/elements/x-router/x-router.js';
+import XRouter from '/secure-elements/x-router/x-router.js';
 import XLoader from '/elements/x-loader/x-loader.js';
 import XCreate from './requests/create/x-create.js';
 import XImportWords from './requests/import-words/x-import-words.js';
@@ -8,8 +8,8 @@ import XSign from './requests/sign/x-sign.js';
 import XBackupFile from './requests/backup-file/x-backup-file.js';
 import XBackupWords from './requests/backup-words/x-backup-words.js';
 import XRename from './requests/rename/x-rename.js';
-import XClose from '/elements/x-close/x-close.js';
-import MixinRedux from '/elements/mixin-redux/mixin-redux.js';
+import XClose from '/secure-elements/x-close/x-close.js';
+import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 
 export default class XKeyguard extends MixinRedux(XElement) {
 
