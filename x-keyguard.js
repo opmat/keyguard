@@ -29,7 +29,6 @@ export default class XKeyguard extends MixinRedux(XElement) {
             <i class="material-icons">&#xE5C9;</i>
             Cancel
         </a>
-        <x-router></x-router>
         `;
     }
 

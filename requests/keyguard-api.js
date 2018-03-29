@@ -1,5 +1,4 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-import Key from '../keys/key.js';
 import * as Keytype from '../keys/keytype.js';
 import keyStore from '../keys/keystore.js';
 import store from '../store.js';
@@ -94,6 +93,9 @@ export default class KeyguardApi {
                 throw new Error('Request already started');
             }
 
+            // open corresponding UI
+            XRouter.create(requestType);
+
             // Set request state to started. Save reject so we can cancel the request when the window is closed
             this.actions.start(requestType, reject, data);
 
@@ -115,9 +117,6 @@ export default class KeyguardApi {
                     resolve(request.result);
                 }
             });
-
-            // open corresponding UI
-            XRouter.instance.then(router => router.goTo(requestType));
         });
     }
 
