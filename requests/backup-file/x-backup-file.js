@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import XDownloadFile from '/libraries/keyguard/common-elements/x-download-file.js';
-import XAuthenticateBackup from '../../common-elements/x-authenticate-backup.js';
+import XAuthenticateBackup from '/libraries/keyguard/common-elements/x-authenticate-backup.js';
 import { RequestTypes, setResult } from '../request-redux.js';
 import { backupFile } from './actions.js';
 

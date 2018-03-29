@@ -1,7 +1,4 @@
-import keystore from '../keys/keystore.js';
-import * as Keytype from '../keys/keytype.js';
-import Key from '../keys/key.js';
-import XRouter from '/secure-elements/x-router/x-router.js';
+import { keystore } from '../keys/index.js';
 
 // Requests which need UI
 export const RequestTypes = {

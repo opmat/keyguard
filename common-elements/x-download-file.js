@@ -1,8 +1,8 @@
 import XElement from "/libraries/x-element/x-element.js";
-import WalletBackup from "/libraries/backup-file/backup-file.js";
-import XDownloadableImage from "/secure-elements/x-downloadable-image/x-downloadable-image.js";
+import BackupFile from "/libraries/backup-file/backup-file.js";
 import QrScanner from '/libraries/qr-scanner/qr-scanner.min.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
+import XDownloadableImage from "/secure-elements/x-downloadable-image/x-downloadable-image.js";
 
 export default class XDownloadFile extends MixinRedux(XElement) {
 
@@ -40,14 +40,14 @@ export default class XDownloadFile extends MixinRedux(XElement) {
 
         encryptedKeyPair = Nimiq.BufferUtils.toBase64(encryptedKeyPair);
 
-        const qrPosition = WalletBackup.calculateQrPosition();
+        const qrPosition = BackupFile.calculateQrPosition();
 
         let backup = null;
         let scanResult = null;
 
         // QR Scanner is not super reliable. Test if we can read the image we just created, if not, create a new one.
         do {
-            backup = new WalletBackup(address, encryptedKeyPair);
+            backup = new BackupFile(address, encryptedKeyPair);
             try {
                 scanResult = await QrScanner.scanImage(backup.$canvas, qrPosition, null, null, false, true);
             } catch(e) { }

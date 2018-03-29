@@ -1,7 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XAmount from '/elements/x-amount/x-amount.js';
 import XIdenticon from '/secure-elements/x-identicon/x-identicon.js';
-import XAddress from '/elements/x-address/x-address.js';
+import XAddressNoCopy from '/secure-elements/x-address-no-copy/x-address-no-copy.js';
 
 export default class XAccount extends XElement {
     html() {
@@ -9,12 +8,12 @@ export default class XAccount extends XElement {
             <x-identicon></x-identicon>
             <div class="x-account-info">
                 <div class="x-account-label"></div>
-                <x-address></x-address>
+                <x-address-no-copy></x-address-no-copy>
             </div>
         `
     }
 
-    children() { return [XIdenticon, XAddress, XAmount] }
+    children() { return [XIdenticon, XAddressNoCopy ] }
 
     onCreate() {
         this.$label = this.$('.x-account-label');
@@ -42,12 +41,8 @@ export default class XAccount extends XElement {
 
     set address(address) {
         this.$identicon.address = address;
-        this.$address.address = address;
+        this.$addressNoCopy.address = address;
         this._address = address;
-    }
-
-    set balance(balance) {
-        this.$amount.value = balance;
     }
 
     set account(account) {
