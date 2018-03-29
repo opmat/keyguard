@@ -1,6 +1,5 @@
-import Reflection from '/libraries/nimiq-utils/reflection/reflection.js';
+import Reflection from '/libraries/secure-utils/reflection/reflection.js';
 import Policy from './policy.js';
-import config from '../config.js';
 import UI from '../ui.js';
 import { NoUIError } from '../errors/index.js';
 
