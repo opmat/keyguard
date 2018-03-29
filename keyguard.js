@@ -86,7 +86,7 @@ class Keyguard {
 (async function() {
     // to be removed
     await Nimiq.load();
-    Nimiq.GenesisConfig.dev();
+    Nimiq.GenesisConfig.bounty();
 
     window.keyguard = new Keyguard();
 })();
