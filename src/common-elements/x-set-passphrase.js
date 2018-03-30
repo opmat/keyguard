@@ -21,14 +21,29 @@ export default class XSetPassphrase extends XElement {
         return [ XPassphraseTipps, XPassphraseSetter, XPassphraseGetter, XMyAccount ];
     }
 
+    onAfterEntry() {
+        this.$passphraseSetter.focus();
+    }
+
     listeners() {
         return {
-            'x-passphrase-setter-submitted': async () => (await XRouter.instance).goTo(this, 'confirm'),
-            'x-passphrase-getter-submitted': (passphrase) => this.fire('x-set-passphrase', passphrase),
+            'x-passphrase-setter-submitted': this._onSetterSubmit.bind(this),
+            'x-passphrase-getter-submitted': this._onConfirmationSubmit.bind(this)
         }
     }
 
-    onAfterEntry() {
-        this.$passphraseSetter.focus();
+    async _onSetterSubmit(passphrase) {
+        this._passphrase = passphrase;
+        (await XRouter.instance).goTo(this, 'confirm');
+    }
+
+    _onConfirmationSubmit(passphrase2) {
+        if (this._passphrase === passphrase2) {
+            this.fire('x-set-passphrase', passphrase2);
+        } else {
+            this.$passphraseSetter.clear();
+            this.$passphraseGetter.wrongPassphrase();
+            setTimeout(async () => (await XRouter.instance).goTo(this, ''), 700);
+        }
     }
 }
