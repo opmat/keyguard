@@ -16,7 +16,7 @@ export default class XImportFile extends MixinRedux(XElement) {
             <section x-route="import-from-file">
                 <h1>Import Access File</h1>
                 <x-grow></x-grow>
-                <x-wallet-backup-import></x-wallet-backup-import>
+                <x-account-backup-import></x-account-backup-import>
                 <x-grow></x-grow>
             </section>
         `
