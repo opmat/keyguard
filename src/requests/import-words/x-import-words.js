@@ -11,9 +11,9 @@ export default class XImportWords extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
     html() { return `
-          <x-set-label x-route="import-from-words/set-label"></x-set-label>
-          <x-set-passphrase x-route="import-from-words/set-passphrase"></x-set-passphrase>
-          <x-enter-words x-route="import-from-words"></x-enter-words>
+          <x-set-label x-route="set-label"></x-set-label>
+          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
+          <x-enter-words x-route=""></x-enter-words>
         `;
     }
 
@@ -39,7 +39,7 @@ export default class XImportWords extends MixinRedux(XElement) {
 
     async _onSetPassphrase(passphrase) {
         this.actions.setData(RequestTypes.IMPORT_FROM_WORDS, { passphrase });
-        (await XRouter.instance).goTo('import-from-words/set-label');
+        (await XRouter.instance).goTo(this, 'set-label');
     }
 
     _onSetLabel(label) {

@@ -16,11 +16,11 @@ export default class XKeyguard extends MixinRedux(XElement) {
     html() {
         return `
         <x-loader></x-loader>
-        <x-create></x-create>
+        <x-create x-route="create"></x-create>
         <x-backup-words x-route="backup-words"></x-backup-words>
-        <x-backup-file></x-backup-file>
-        <x-import-file></x-import-file>
-        <x-import-words></x-import-words>
+        <x-backup-file x-route="backup-file"></x-backup-file>
+        <x-import-file x-route="import-from-file"></x-import-file>
+        <x-import-words x-route="import-from-words"></x-import-words>
         <div><x-sign x-route="sign-transaction"></x-sign></div>
         <div><x-rename x-route="rename"></x-rename></div>
         <x-close x-route="close"></x-close>

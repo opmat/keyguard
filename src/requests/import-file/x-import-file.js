@@ -11,9 +11,9 @@ export default class XImportFile extends MixinRedux(XElement) {
 
     html() {
         return `
-            <x-set-label x-route="import-from-file/set-label"></x-set-label>
-            <x-decrypt x-route="import-from-file/decrypt"></x-decrypt>
-            <section x-route="import-from-file">
+            <x-set-label x-route="set-label"></x-set-label>
+            <x-decrypt x-route="decrypt"></x-decrypt>
+            <section x-route="">
                 <h1>Import Access File</h1>
                 <x-grow></x-grow>
                 <x-account-backup-import></x-account-backup-import>

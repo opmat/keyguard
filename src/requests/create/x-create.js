@@ -14,19 +14,19 @@ export default class XCreate extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
     html() { return `
-          <section x-route="create/download">
+          <section x-route="download">
             <h1>Save your Access File</h1>
             <x-download-file></x-download-file>
           </section>
-          <x-show-words x-route="create/words"></x-show-words>
-          <section x-route="create/warning">
+          <x-show-words x-route="words"></x-show-words>
+          <section x-route="warning">
             <h1>Backup your Account</h1>
             <x-grow></x-grow>
             <x-privacy-agent></x-privacy-agent>
           </section>
-          <x-set-label x-route="create/set-label"></x-set-label>
-          <x-set-passphrase x-route="create/set-passphrase"></x-set-passphrase>
-          <x-identicons x-route="create"></x-identicons>
+          <x-set-label x-route="set-label"></x-set-label>
+          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
+          <x-identicons x-route=""></x-identicons>
         `;
     }
 
@@ -67,16 +67,16 @@ export default class XCreate extends MixinRedux(XElement) {
 
     _onChooseIdenticon(address) {
         this.actions.setData(RequestTypes.CREATE, { address } );
-        this.router.goTo('create/warning');
+        this.router.goTo(this, 'warning');
     }
 
     _onSurroundingChecked() {
-        this.router.goTo('create/set-passphrase');
+        this.router.goTo(this, 'set-passphrase');
     }
 
     _onSetPassphrase(passphrase) {
         this.actions.setData(RequestTypes.CREATE, { passphrase });
-        this.router.goTo('create/set-label');
+        this.router.goTo(this, 'set-label');
     }
 
     _onSetLabel(label) {
@@ -84,7 +84,7 @@ export default class XCreate extends MixinRedux(XElement) {
         this.actions.setData(RequestTypes.CREATE, {
             privateKey: this.properties.volatileKey.keyPair.privateKey.toHex()
         });
-        this.router.goTo('create/words');
+        this.router.goTo(this, 'words');
     }
 
     async _onWordsSeen() {
@@ -96,7 +96,7 @@ export default class XCreate extends MixinRedux(XElement) {
             encryptedKeyPair
         });
 
-        this.router.goTo('create/download');
+        this.router.goTo(this, 'download');
     }
 
     _onFileDownload() {
