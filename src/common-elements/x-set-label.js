@@ -25,6 +25,7 @@ export default class XSetLabel extends XElement {
 
     listeners() {
         return {
+            'keydown input': (d, e) => { if (e.keyCode == 13) this.fire('x-set-label', this.$input.value) },
             'click button': e => this.fire('x-set-label', this.$input.value)
         }
     }
