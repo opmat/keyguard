@@ -1,5 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XAuthenticate from '/libraries/keyguard/src/common-elements/x-authenticate.js';
+import XAuthenticateBackup from '/libraries/keyguard/src/common-elements/x-authenticate-backup.js';
 import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
 import XShowWords from '/libraries/keyguard/src/common-elements/x-show-words.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
@@ -12,9 +12,9 @@ import { backupWords } from './actions.js';
 export default class XBackupWords extends MixinRedux(XElement) {
 
     html() { return `
-        <x-show-words x-route="backup-words/words"></x-show-words>
-        <x-authenticate-backup x-route="backup-words/authenticate"></x-authenticate-backup>
-        <section x-route="backup-words">
+        <x-show-words x-route="words"></x-show-words>
+        <x-authenticate-backup x-route="authenticate"></x-authenticate-backup>
+        <section x-route="">
             <h1>Backup your Account</h1>
             <x-privacy-agent></x-privacy-agent>
         </section>
@@ -22,7 +22,7 @@ export default class XBackupWords extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XAuthenticate, XPrivacyAgent, XMnemonicPhrase, XMyAccount, XShowWords ];
+        return [ XAuthenticateBackup, XPrivacyAgent, XMnemonicPhrase, XMyAccount, XShowWords ];
     }
 
     static get actions() {
@@ -32,7 +32,7 @@ export default class XBackupWords extends MixinRedux(XElement) {
     listeners() {
         return {
             'x-authenticate-submitted': passphrase => this.actions.backupWords(passphrase),
-            'x-surrounding-checked': async () => (await XRouter.instance).root.goTo('backup-words/authenticate'),
+            'x-surrounding-checked': async () => (await XRouter.instance).goTo(this, 'authenticate'),
             'x-show-words': () => this.actions.setResult(RequestTypes.BACKUP_WORDS, true)
         };
     }

@@ -17,7 +17,7 @@ export default class XKeyguard extends MixinRedux(XElement) {
         return `
         <x-loader></x-loader>
         <x-create></x-create>
-        <x-backup-words></x-backup-words>
+        <x-backup-words x-route="backup-words"></x-backup-words>
         <x-backup-file></x-backup-file>
         <x-import-file></x-import-file>
         <x-import-words></x-import-words>
