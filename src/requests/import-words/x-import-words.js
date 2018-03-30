@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
-import XSetPassphrase from '/libraries/keyguard/common-elements/x-set-passphrase.js';
+import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
+import XSetPassphrase from '/libraries/keyguard/src/common-elements/x-set-passphrase.js';
 import XEnterWords from './x-enter-words.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';

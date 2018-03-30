@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
-import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
+import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
 import XPassphraseSetter from '/secure-elements/x-passphrase-setter/x-passphrase-setter.js';
 import XPassphraseTipps from '/secure-elements/x-passphrase-tipps/x-passphrase-tipps.js';
 

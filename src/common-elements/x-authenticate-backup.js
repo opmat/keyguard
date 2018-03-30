@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
-import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
+import XAuthenticate from '/libraries/keyguard/src/common-elements/x-authenticate.js';
+import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
 
 export default class XAuthenticateBackup extends XElement {
 

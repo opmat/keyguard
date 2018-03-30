@@ -9,11 +9,11 @@
 @import '/elements/x-loader/x-loader.css';
 @import '/secure-elements/x-account-backup-import/x-account-backup-import.css';
 @import './requests/create/x-identicons/x-identicons.css';
-@import './common-elements/x-account.css';
-@import './common-elements/x-authenticate.css';
-@import './common-elements/x-download-file.css';
-@import './common-elements/x-set-label.css';
-@import './common-elements/x-show-words.css';
+@import 'common-elements/x-account.css';
+@import 'common-elements/x-authenticate.css';
+@import 'common-elements/x-download-file.css';
+@import 'common-elements/x-set-label.css';
+@import 'common-elements/x-show-words.css';
 @import './requests/sign/x-sign.css';
 
 #app {

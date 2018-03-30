@@ -1,9 +1,9 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XMyAccount from '/libraries/keyguard/common-elements/x-my-account.js';
-import XAccount from '/libraries/keyguard/common-elements/x-account.js';
-import XAuthenticate from '/libraries/keyguard/common-elements/x-authenticate.js';
+import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
+import XAccount from '/libraries/keyguard/src/common-elements/x-account.js';
+import XAuthenticate from '/libraries/keyguard/src/common-elements/x-authenticate.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 import { signTransaction } from './actions.js';
 
 export default class XSign extends MixinRedux(XElement) {

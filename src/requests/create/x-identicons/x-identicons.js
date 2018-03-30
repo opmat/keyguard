@@ -1,8 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XIdenticon from '/secure-elements/x-identicon/x-identicon.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import { createVolatile, clearVolatile } from '/libraries/keyguard/keys/keys-redux.js';
-import { RequestTypes, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { createVolatile, clearVolatile } from '/libraries/keyguard/src/keys/keys-redux.js';
+import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 
 export default class XIdenticons extends MixinRedux(XElement) {
 

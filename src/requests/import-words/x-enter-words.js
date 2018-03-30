@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMnemonicInput from '/secure-elements/x-mnemonic-input/x-mnemonic-input.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import { RequestTypes, deny, setData } from '/libraries/keyguard/requests/request-redux.js';
+import { RequestTypes, deny, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 
 // TODO remove for production
 import MnemonicPhrase from '/libraries/mnemonic-phrase/mnemonic-phrase.min.js';
