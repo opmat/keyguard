@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
-import XWalletBackupImport from '/secure-elements/x-account-backup-import/x-account-backup-import.js';
+import XAccountBackupImport from '/secure-elements/x-account-backup-import/x-account-backup-import.js';
 import XSetLabel from '/libraries/keyguard/common-elements/x-set-label.js';
 import XDecrypt from './x-decrypt.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
@@ -23,7 +23,7 @@ export default class XImportFile extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XWalletBackupImport, XSetLabel, XDecrypt ];
+        return [ XAccountBackupImport, XSetLabel, XDecrypt ];
     }
 
     async onCreate() {

@@ -27,7 +27,6 @@ export function reducer(state, action) {
 
         case TypeKeys.CLEAR:
             return Object.assign({}, state, {
-                ...state,
                 volatileKeys: new Map()
             });
 

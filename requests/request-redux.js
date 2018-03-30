@@ -1,4 +1,4 @@
-import { keystore } from '../keys/index.js';
+import { keyStore } from '../keys/index.js';
 
 // Requests which need UI
 export const RequestTypes = {
@@ -68,43 +68,43 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 requestType: action.requestType,
                 reject: action.reject,
-                data: {
-                    ...state.data,
-                    ...action.data
-                }
-            });
-
-        case TypeKeys.SET_DATA:
-            return Object.assign({}, state, {
-                executing: false,
                 data: Object.assign({},
                     state.data,
                     action.data
                 )
             });
 
-        case TypeKeys.SET_EXECUTING:
-            return Object.assign({}, state, {
-                executing: true,
-                data: Object.assign({},
-                    state.data,
-                    { isWrongPassphrase: false }
-                )
-            });
+            case TypeKeys.SET_DATA:
+                return Object.assign({}, state, {
+                    executing: false,
+                    data: Object.assign({},
+                        state.data,
+                        action.data
+                    )
+                });
 
-        case TypeKeys.SET_RESULT:
-            return Object.assign({}, state, {
-                result: action.result
-            });
+            case TypeKeys.SET_EXECUTING:
+                return Object.assign({}, state, {
+                    executing: true,
+                    data: Object.assign({},
+                        state.data,
+                        { isWrongPassphrase: false }
+                    )
+                });
 
-        case TypeKeys.SET_ERROR:
-            return Object.assign({}, state, {
-                error: action.error
-            });
+            case TypeKeys.SET_RESULT:
+                return Object.assign({}, state, {
+                    result: action.result
+                });
 
-        default:
-            return state
-    }
+            case TypeKeys.SET_ERROR:
+                return Object.assign({}, state, {
+                    error: action.error
+                });
+
+            default:
+                return state
+        }
 }
 
 export function start(requestType, reject, data) {
@@ -157,7 +157,7 @@ export function loadAccountData(requestType) {
         const { address } = getState().request.data;
 
         try {
-            const key = await keystore.getPlain(address);
+            const key = await keyStore.getPlain(address);
 
             dispatch(
                 setData(requestType, key)

@@ -3,8 +3,8 @@ import XAccount from './x-account.js';
 
 export default class XMyAccount extends MixinRedux(XAccount) {
     static mapStateToProps(state) {
-        return {
-            ...state.request.data
-        }
+        return Object.assign({},
+            state.request.data
+        )
     }
 }

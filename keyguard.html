@@ -19,7 +19,9 @@
           img-src http: https: blob: data:; worker-src 'self' blob:; style-src 'self';">
     <link rel="apple-touch-icon" href="pwa/icons/apple-touch-icon.png">
     <link rel="apple-touch-startup-image" href="pwa/icons/icon-512x512.png">
+    <!-- build:css -->
     <link rel="stylesheet" href="keyguard.css">
+    <!-- endbuild -->
 </head>
 <body>
 <div id="app">
@@ -28,6 +30,9 @@
         <h2>Processing request</h2>
     </div>
 </div>
+<!-- build:js -->
 <script src="keyguard.js" type="module"></script>
+<!-- endbuild -->
+
 </body>
 </html>

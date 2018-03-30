@@ -1,4 +1,4 @@
-import { keystore, Keytype } from '../../keys/index.js';
+import { keyStore, KeyType } from '../../keys/index.js';
 import { RequestTypes, setError, setResult, setExecuting } from '../request-redux.js';
 
 export function createPersistent() {
@@ -9,16 +9,15 @@ export function createPersistent() {
         const { address, label, passphrase } = state.request.data;
         const key = state.keys.volatileKeys.get(address);
 
-        key.type = Keytype.HIGH;
+        key.type = KeyType.HIGH;
         key.label = label;
 
-        if (await keystore.put(key, passphrase)) {
-            const encryptedKeyPair = (await keystore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
+        if (await keyStore.put(key, passphrase)) {
+            const encryptedKeyPair = (await keyStore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
-                setResult(RequestTypes.CREATE, {
-                    ...key.getPublicInfo(),
+                setResult(RequestTypes.CREATE, Object.assign({}, key.getPublicInfo(), {
                     encryptedKeyPair
-                })
+                }))
             );
         } else {
             dispatch(

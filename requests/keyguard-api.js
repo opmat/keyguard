@@ -1,6 +1,6 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
-import * as Keytype from '../keys/keytype.js';
-import keyStore from '../keys/keystore.js';
+import KeyType from '../keys/key-type.js';
+import keyStore from '../keys/key-store.js';
 import store from '../store.js';
 import { createVolatile, clearVolatile } from '../keys/keys-redux.js';
 import { start, loadAccountData } from './request-redux.js';
@@ -57,7 +57,7 @@ export default class KeyguardApi {
 
         if (!key) throw new Error('Key not found');
 
-        key._type = Keytype.low;
+        key._type = KeyType.low;
 
         if (!await keyStore.put(key, pin)) {
             throw new Error('Key could not be persisted');

@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { keystore } from '../../keys/index.js';
+import { keyStore } from '../../keys/index.js';
 
 export function rename(passphrase, label) {
     return async (dispatch, getState) => {
@@ -8,11 +8,11 @@ export function rename(passphrase, label) {
         const { address } = getState().request.data;
 
         try {
-            const key = await keystore.get(address, passphrase);
+            const key = await keyStore.get(address, passphrase);
 
             key.label = label;
 
-            await keystore.put(key, passphrase);
+            await keyStore.put(key, passphrase);
 
             dispatch(
                 setResult(RequestTypes.RENAME, label)

@@ -1,5 +1,5 @@
 import BasePolicy from './base-policy.js';
-import * as Keytype from '../keys/keytype.js';
+import KeyType from '../keys/key-type.js';
 
 export default class WalletPolicy extends BasePolicy {
     constructor(limit) {
@@ -21,7 +21,7 @@ export default class WalletPolicy extends BasePolicy {
             case 'sign':
                 const { accountNumber, recipient, value, fee } = args;
                 const key = state.keys.get(accountNumber);
-                if (key && key.type === Keytype.LOW) return true;
+                if (key && key.type === KeyType.LOW) return true;
                 return false;
             default:
                 throw new Error(`Unhandled method: ${method}`);

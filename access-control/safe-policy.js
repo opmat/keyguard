@@ -1,5 +1,5 @@
 import BasePolicy from './base-policy.js';
-import * as Keytype from '../keys/keytype.js';
+import KeyType from '../keys/key-type.js';
 
 export default class SafePolicy extends BasePolicy {
     allows(method, args, state) {

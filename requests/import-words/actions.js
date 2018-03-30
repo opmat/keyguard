@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setError, setData } from '../request-redux.js';
-import { Key, Keytype, keystore } from '../../keys/index.js';
+import { Key, KeyType, keyStore } from '../../keys/index.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 
 export function createKey() {
@@ -18,7 +18,7 @@ export function createKey() {
             const key = await Key.loadPlain(keyPair.serialize());
 
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_WORDS, { ...key.getPublicInfo(), key })
+                setData(RequestTypes.IMPORT_FROM_WORDS, Object.assign({}, key.getPublicInfo(), { key }))
             );
 
             (await XRouter.instance).goTo('import-from-words/set-passphrase');
@@ -39,11 +39,11 @@ export function importFromWords() {
         try {
             const { key, passphrase, label } = getState().request.data;
 
-            key.type = Keytype.HIGH;
+            key.type = KeyType.HIGH;
             key.label = label;
 
             // actual import
-            await keystore.put(key, passphrase);
+            await keyStore.put(key, passphrase);
 
             dispatch(
                 setResult(RequestTypes.IMPORT_FROM_WORDS, key.getPublicInfo())

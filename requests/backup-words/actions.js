@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { keystore } from '../../keys/index.js';
+import { keyStore } from '../../keys/index.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 
 export function backupWords(passphrase) {
@@ -7,7 +7,7 @@ export function backupWords(passphrase) {
         dispatch( setExecuting(RequestTypes.BACKUP_WORDS) );
 
         try {
-            const key = await keystore.get(getState().request.data.address, passphrase);
+            const key = await keyStore.get(getState().request.data.address, passphrase);
 
             dispatch(
                 setData(RequestTypes.BACKUP_WORDS, { privateKey: key.keyPair.privateKey.toHex() })

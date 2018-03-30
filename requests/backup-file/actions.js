@@ -1,5 +1,5 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { keystore } from '/libraries/keyguard/keys/index.js';
+import { keyStore } from '/libraries/keyguard/keys/index.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 
 export function backupFile(passphrase) {
@@ -10,7 +10,7 @@ export function backupFile(passphrase) {
 
         // try to decrypt to authenticate the user
         try {
-            await keystore.get(address, passphrase);
+            await keyStore.get(address, passphrase);
 
             // encryptedkeypair is already in store because of loadAccountData
             // but we need to get rid of executing

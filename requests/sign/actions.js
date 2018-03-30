@@ -1,5 +1,5 @@
 import { SATOSHIS, RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
-import { keystore } from '../../keys/index.js';
+import { keyStore } from '../../keys/index.js';
 
 // called after confirming a transaction sign request (BASIC transaction)
 export function signTransaction(passphrase) {
@@ -9,7 +9,7 @@ export function signTransaction(passphrase) {
         const { transaction: { recipient, value, fee, validityStartHeight }, address } = getState().request.data;
 
         try {
-            const key = await keystore.get(address, passphrase);
+            const key = await keyStore.get(address, passphrase);
             const tx = await key.createTransaction(recipient, value, fee, validityStartHeight, 'basic');
 
             dispatch(
