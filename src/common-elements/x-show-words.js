@@ -5,7 +5,7 @@ import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 export default class XShowWords extends MixinRedux(XElement) {
 
     html() { return `
-        <h1>Backup your Account</h1>
+        <h1>Backup your Recovery Words</h1>
         <h2 secondary>Write down and physically store safely the following list of 24 Account Recovery Words to recover this account in the future.</h2>
         <x-grow></x-grow>
         <x-mnemonic-phrase></x-mnemonic-phrase>

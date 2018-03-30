@@ -33,7 +33,12 @@
 }
 
 [x-route] {
+    width: 100%;
     min-height: calc(100vh - 58px);
+}
+
+[x-route] [x-route] {
+    min-height: unset;
 }
 
 [x-route] > * {

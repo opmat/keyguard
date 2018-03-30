@@ -9,6 +9,7 @@ x-download-file{
 x-download-file x-downloadable-image {
 	width: 100%;
 	max-width:  260px;
+	max-width: 90%;
 	transition: transform 300ms;
 	/*flex-grow:  1;*/
 }
@@ -25,8 +26,8 @@ x-download-file x-downloadable-image img {
 
 @media (max-height: 700px){
 	x-download-file x-downloadable-image img {
-		max-height: 44vh;
         width: unset;
+		max-height: 50vh;
 		height: unset;
 	}
 }

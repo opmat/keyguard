@@ -24,7 +24,6 @@ export default class XCreate extends MixinRedux(XElement) {
           <x-set-label x-route="set-label"></x-set-label>
           <x-show-words x-route="words"></x-show-words>
           <section x-route="download">
-            <h1>Save your Access File</h1>
             <x-download-file></x-download-file>
           </section>
         `;
