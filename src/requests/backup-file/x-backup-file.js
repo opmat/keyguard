@@ -8,8 +8,8 @@ import { backupFile } from './actions.js';
 export default class XBackupFile extends MixinRedux(XElement) {
 
     html() { return `
-        <x-download-file x-route="download"></x-download-file>
         <x-authenticate-backup x-route=""></x-authenticate-backup>
+        <x-download-file x-route="download"></x-download-file>
         `;
     }
 

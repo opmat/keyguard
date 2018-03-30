@@ -12,12 +12,12 @@ import { backupWords } from './actions.js';
 export default class XBackupWords extends MixinRedux(XElement) {
 
     html() { return `
-        <x-show-words x-route="words"></x-show-words>
-        <x-authenticate-backup x-route="authenticate"></x-authenticate-backup>
         <section x-route="">
             <h1>Backup your Account</h1>
             <x-privacy-agent></x-privacy-agent>
         </section>
+        <x-authenticate-backup x-route="authenticate"></x-authenticate-backup>
+        <x-show-words x-route="words"></x-show-words>
         `;
     }
 

@@ -14,19 +14,19 @@ export default class XCreate extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
     html() { return `
-          <section x-route="download">
-            <h1>Save your Access File</h1>
-            <x-download-file></x-download-file>
-          </section>
-          <x-show-words x-route="words"></x-show-words>
+          <x-identicons x-route=""></x-identicons>
           <section x-route="warning">
             <h1>Backup your Account</h1>
             <x-grow></x-grow>
             <x-privacy-agent></x-privacy-agent>
           </section>
-          <x-set-label x-route="set-label"></x-set-label>
           <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
-          <x-identicons x-route=""></x-identicons>
+          <x-set-label x-route="set-label"></x-set-label>
+          <x-show-words x-route="words"></x-show-words>
+          <section x-route="download">
+            <h1>Save your Access File</h1>
+            <x-download-file></x-download-file>
+          </section>
         `;
     }
 

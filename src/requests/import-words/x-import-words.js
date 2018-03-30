@@ -11,9 +11,9 @@ export default class XImportWords extends MixinRedux(XElement) {
 
     // todo fix router, so we can fix order. Last should be first
     html() { return `
-          <x-set-label x-route="set-label"></x-set-label>
-          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
           <x-enter-words x-route=""></x-enter-words>
+          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
+          <x-set-label x-route="set-label"></x-set-label>
         `;
     }
 
