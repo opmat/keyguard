@@ -4,6 +4,7 @@ import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
 import XSetPassphrase from '/libraries/keyguard/src/common-elements/x-set-passphrase.js';
 import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
 import XShowWords from '/libraries/keyguard/src/common-elements/x-show-words.js';
+import XValidateWordsConnected from './x-validate-words-connected.js';
 import XDownloadFile from '/libraries/keyguard/src/common-elements/x-download-file.js';
 import XIdenticons from './x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
@@ -23,6 +24,7 @@ export default class XCreate extends MixinRedux(XElement) {
           <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
           <x-set-label x-route="set-label"></x-set-label>
           <x-show-words x-route="words"></x-show-words>
+          <x-validate-words-connected x-route="validate-words"></x-validate-words-connected>
           <section x-route="download">
             <x-download-file></x-download-file>
           </section>
@@ -30,7 +32,15 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XSetPassphrase, XSetLabel, XIdenticons, XPrivacyAgent, XShowWords, XDownloadFile ];
+        return [
+            XSetPassphrase,
+            XSetLabel,
+            XIdenticons,
+            XPrivacyAgent,
+            XShowWords,
+            XValidateWordsConnected,
+            XDownloadFile
+        ];
     }
 
     static mapStateToProps(state) {
@@ -60,6 +70,7 @@ export default class XCreate extends MixinRedux(XElement) {
             'x-set-passphrase': this._onSetPassphrase.bind(this),
             'x-set-label': this._onSetLabel.bind(this),
             'x-show-words': this._onWordsSeen.bind(this),
+            'x-validate-words': this._onWordsValidated.bind(this),
             'x-file-download-complete': this._onFileDownload.bind(this)
         }
     }
@@ -86,7 +97,11 @@ export default class XCreate extends MixinRedux(XElement) {
         this.router.goTo(this, 'words');
     }
 
-    async _onWordsSeen() {
+    _onWordsSeen() {
+        this.router.goTo(this, 'validate-words');
+    }
+
+    async _onWordsValidated() {
         const { volatileKey, passphrase} = this.properties;
 
         const encryptedKeyPair = await volatileKey.exportEncrypted(passphrase);

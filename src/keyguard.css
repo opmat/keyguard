@@ -1,19 +1,20 @@
-@import "/libraries/nimiq-style/nimiq-style.css";
+@import '/libraries/nimiq-style/nimiq-style.css';
 @import '/secure-elements/x-router/x-router.css';
 @import '/secure-elements/x-loading-animation/x-loading-animation.css';
 @import '/secure-elements/x-passphrase-setter/x-passphrase-setter.css';
 @import '/secure-elements/x-mnemonic-input/x-mnemonic-input.css';
 @import '/secure-elements/x-mnemonic-phrase/x-mnemonic-phrase.css';
+@import '/secure-elements/x-validate-words/x-validate-words.css';
 @import '/secure-elements/x-privacy-agent/x-privacy-agent.css';
 @import '/secure-elements/nimiq-logo/nimiq-logo.css';
-@import '/elements/x-loader/x-loader.css';
 @import '/secure-elements/x-account-backup-import/x-account-backup-import.css';
+@import '/secure-elements/x-loader/x-loader.css';
+@import './common-elements/x-account.css';
+@import './common-elements/x-authenticate.css';
+@import './common-elements/x-download-file.css';
+@import './common-elements/x-set-label.css';
+@import './common-elements/x-show-words.css';
 @import './requests/create/x-identicons/x-identicons.css';
-@import 'common-elements/x-account.css';
-@import 'common-elements/x-authenticate.css';
-@import 'common-elements/x-download-file.css';
-@import 'common-elements/x-set-label.css';
-@import 'common-elements/x-show-words.css';
 @import './requests/sign/x-sign.css';
 
 #app {

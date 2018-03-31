@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
-import XLoader from '/elements/x-loader/x-loader.js';
+import XLoader from '/secure-elements/x-loader/x-loader.js';
 import XCreate from './requests/create/x-create.js';
 import XImportWords from './requests/import-words/x-import-words.js';
 import XImportFile from './requests/import-file/x-import-file.js';
