@@ -5,7 +5,7 @@ function getConfig(host) {
                 safeOrigin: 'https://safe.nimiq.com',
                 walletOrigin: 'https://wallet.nimiq.com',
                 minerOrigin: 'https://miner.nimiq.com',
-                mode: 'live'
+                mode: 'main'
             };
 
         case 'https://secure.nimiq-testnet.com':
