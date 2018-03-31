@@ -68,10 +68,5 @@ export default class XCreateWallet extends MixinRedux(XElement) {
     async _onSetPassphrase(passphrase) {
         this.actions.setData(RequestTypes.CREATE_WALLET, { passphrase });
         this.actions.createPersistent();
-        const encryptedKeyPair = await volatileKey.exportEncrypted(passphrase);
-
-        this.actions.setResult(RequestTypes.CREATE_WALLET, {
-            encryptedKeyPair
-        });
     }
 }

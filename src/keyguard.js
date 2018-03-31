@@ -52,8 +52,8 @@ class Keyguard {
 
         // cancel request when window is closed
         self.onunload = () => {
-            const reject = store.getState().request.reject;
-            if (reject){
+            const { reject, result }  = store.getState().request.reject;
+            if (reject && !result){
                 reject(new Error('Keyguard window was closed.'));
             }
         };
@@ -63,7 +63,7 @@ class Keyguard {
             const reject = store.getState().request.reject;
             if (reject) {
                 reject(error);
-                self.close();
+                //self.close();
             }
         };
 
@@ -72,7 +72,7 @@ class Keyguard {
             const reject = store.getState().request.reject;
             if (reject) {
                 reject(new Error(event.reason));
-                self.close();
+                //self.close();
             }
         };
 
