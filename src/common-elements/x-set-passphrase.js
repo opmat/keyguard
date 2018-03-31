@@ -13,7 +13,10 @@ export default class XSetPassphrase extends XElement {
         <x-my-account></x-my-account>
         <x-passphrase-tipps></x-passphrase-tipps>
         <x-passphrase-setter x-route="" button-label="Confirm" show-indicator="true"></x-passphrase-setter>
-        <x-passphrase-getter x-route="confirm"></x-passphrase-getter>
+        <section class="center" x-route="confirm">
+            <h2>Please repeat:</h2>
+            <x-passphrase-getter button-label="Confirm"></x-passphrase-getter>
+        </section>
         `;
     }
 
@@ -35,6 +38,7 @@ export default class XSetPassphrase extends XElement {
     async _onSetterSubmit(passphrase) {
         this._passphrase = passphrase;
         (await XRouter.instance).goTo(this, 'confirm');
+        this.$passphraseGetter.focus();
     }
 
     _onConfirmationSubmit(passphrase2) {
