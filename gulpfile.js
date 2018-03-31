@@ -5,7 +5,7 @@ const NimiqBuild = require('../../meta/build-process/nimiq-base-gulpfile.js');
 gulp.task('build', () => NimiqBuild.build(
     'src/keyguard.js',
     'src/keyguard.css',
-    'src/keyguard.html',
+    'src/index.html',
     [],
     `${__dirname}/../../`,
     'dist'
