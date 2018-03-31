@@ -1,6 +1,6 @@
 import BasePolicy from './base-policy.js';
 
-export default class SafePolicy extends BasePolicy {
+export default class MinerPolicy extends BasePolicy {
     allows(method, args, state) {
         switch (method) {
             case 'list':

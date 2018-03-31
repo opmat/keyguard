@@ -3,6 +3,7 @@ import KeyguardApi from './requests/keyguard-api.js';
 import AccessControl from './access-control/access-control.js';
 import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
+import MinerPolicy from './access-control/miner-policy.js';
 import config from './config.js';
 import store from './store.js';
 import XKeyguard from './x-keyguard.js';
@@ -42,6 +43,10 @@ class Keyguard {
             {
                 origin: config.walletOrigin,
                 policy: new WalletPolicy(1000)
+            },
+            {
+                origin: config.minerOrigin,
+                policy: new MinerPolicy()
             }
         ];
 
