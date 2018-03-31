@@ -17,12 +17,28 @@
 @import './requests/create/x-identicons/x-identicons.css';
 @import './requests/sign/x-sign.css';
 
+.header-top {
+    width: 100%;
+    padding: 1em 1.8em;
+    overflow: auto;
+}
+
+@media (max-width: 480px) {
+    .header-top {
+        width: auto;
+    }
+
+    .header-top nimiq-logo {
+        width: auto;
+    }
+}
+
 #app {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 100vw;
+    width: 98vw;
     max-width: var(--max-width);
     min-height: 100vh;
     padding-bottom: 18px;
