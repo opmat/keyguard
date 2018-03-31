@@ -14,7 +14,7 @@ export default class XSetPassphrase extends XElement {
         <x-passphrase-tipps></x-passphrase-tipps>
         <x-passphrase-setter x-route="" button-label="Confirm" show-indicator="true"></x-passphrase-setter>
         <section class="center" x-route="confirm">
-            <h2>Please repeat:</h2>
+            <h2>Please repeat your passphrase:</h2>
             <x-passphrase-getter button-label="Confirm"></x-passphrase-getter>
         </section>
         `;

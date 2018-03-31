@@ -137,6 +137,7 @@ x-identicons[selected] [button] {
     z-index: 2;
     transform: translate(0, 0);
     pointer-events: all;
+    width: 100vw;
 }
 
 x-identicons[selected] x-address {
