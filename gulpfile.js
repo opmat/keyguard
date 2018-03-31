@@ -10,3 +10,5 @@ gulp.task('build', () => NimiqBuild.build(
     `${__dirname}/../../`,
     'dist'
 ));
+
+gulp.task('default', ['build']);
