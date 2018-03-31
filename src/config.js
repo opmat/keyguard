@@ -4,6 +4,7 @@ function getConfig(host) {
             return {
                 safeOrigin: 'https://safe.nimiq.com',
                 walletOrigin: 'https://wallet.nimiq.com',
+                minerOrigin: 'https://miner.nimiq.com',
                 mode: 'live'
             };
 
@@ -11,6 +12,7 @@ function getConfig(host) {
             return {
                 safeOrigin: 'https://safe.nimiq-testnet.com',
                 walletOrigin: 'https://wallet.nimiq-testnet.com',
+                minerOrigin: 'https://miner.nimiq-testnet.com',
                 mode: 'test'
             };
 
@@ -18,7 +20,8 @@ function getConfig(host) {
             return {
                 safeOrigin: location.origin,
                 walletOrigin: location.origin,
-                mode: 'test'
+                minerOrigin: location.origin,
+                mode: 'dev'
             }
     }
 }
