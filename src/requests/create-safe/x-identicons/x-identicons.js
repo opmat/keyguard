@@ -59,7 +59,7 @@ export default class XIdenticons extends MixinRedux(XElement) {
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 
-        if (requestType !== RequestTypes.CREATE) return;
+        if (requestType !== RequestTypes.CREATE_SAFE) return;
 
         const { addresses } = changes;
 
@@ -86,8 +86,8 @@ export default class XIdenticons extends MixinRedux(XElement) {
     }
 
     async _generateIdenticons() {
-        this.actions.clearVolatile();
-        this.actions.createVolatile(7);
+        this.actions.clearVolatile(RequestTypes.CREATE_SAFE);
+        this.actions.createVolatile(RequestTypes.CREATE_SAFE, 7);
     }
 
     _onIdenticonSelected(address, $identicon) {

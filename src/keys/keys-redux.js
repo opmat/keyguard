@@ -35,14 +35,14 @@ export function reducer(state, action) {
     }
 }
 
-export function clearVolatile() {
+export function clearVolatile(requestType) {
     return {
         type: TypeKeys.CLEAR,
-        requestType: RequestTypes.CREATE
+        requestType
     }
 }
 
-export function createVolatile(number) {
+export function createVolatile(requestType, number) {
     const keys = [];
 
     for (let i = 0; i < number; i++) {
@@ -54,6 +54,6 @@ export function createVolatile(number) {
     return {
         type: TypeKeys.ADD,
         payload: keys,
-        requestType: RequestTypes.CREATE
+        requestType
     }
 }

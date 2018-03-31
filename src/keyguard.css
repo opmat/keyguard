@@ -14,7 +14,7 @@
 @import './common-elements/x-download-file.css';
 @import './common-elements/x-set-label.css';
 @import './common-elements/x-show-words.css';
-@import './requests/create/x-identicons/x-identicons.css';
+@import 'requests/create-safe/x-identicons/x-identicons.css';
 @import './requests/sign/x-sign.css';
 
 .header-top {

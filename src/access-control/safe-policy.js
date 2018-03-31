@@ -10,7 +10,7 @@ export default class SafePolicy extends BasePolicy {
             case 'backupWords':
             case 'list':
             case 'createVolatile':
-            case 'create':
+            case 'createSafe':
             case 'rename':
                 return true;
             case 'sign':
@@ -29,7 +29,7 @@ export default class SafePolicy extends BasePolicy {
             case 'list':
             case 'createVolatile':
                 return false;
-            case 'create':
+            case 'createSafe':
             case 'importFromFile':
             case 'importFromWords':
             case 'backupFile':

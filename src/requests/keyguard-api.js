@@ -122,8 +122,12 @@ export default class KeyguardApi {
 
     /** SAFE */
 
-    async create() {
-        return this._startRequest(RequestTypes.CREATE);
+    async createSafe() {
+        return this._startRequest(RequestTypes.CREATE_SAFE);
+    }
+
+    async createWallet() {
+        return this._startRequest(RequestTypes.CREATE_WALLET);
     }
 
     // todo later: test if transaction or generic message and react accordingly

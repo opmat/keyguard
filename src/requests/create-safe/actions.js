@@ -3,7 +3,7 @@ import { RequestTypes, setError, setResult, setExecuting } from '../request-redu
 
 export function createPersistent() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.CREATE) );
+        dispatch( setExecuting(RequestTypes.CREATE_SAFE) );
 
         const state = getState();
         const { address, label, passphrase } = state.request.data;
@@ -15,13 +15,13 @@ export function createPersistent() {
         if (await keyStore.put(key, passphrase)) {
             const encryptedKeyPair = (await keyStore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
-                setResult(RequestTypes.CREATE, Object.assign({}, key.getPublicInfo(), {
+                setResult(RequestTypes.CREATE_SAFE, Object.assign({}, key.getPublicInfo(), {
                     encryptedKeyPair
                 }))
             );
         } else {
             dispatch(
-                setError(RequestTypes.CREATE, 'Key could not be persisted')
+                setError(RequestTypes.CREATE_SAFE, 'Key could not be persisted')
             );
         }
     }

@@ -1,7 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 import XLoader from '/secure-elements/x-loader/x-loader.js';
-import XCreate from './requests/create/x-create.js';
+import XCreateSafe from './requests/create-safe/x-create-safe.js';
+import XCreateWallet from './requests/create-wallet/x-create-wallet.js';
 import XImportWords from './requests/import-words/x-import-words.js';
 import XImportFile from './requests/import-file/x-import-file.js';
 import XSign from './requests/sign/x-sign.js';
@@ -16,7 +17,8 @@ export default class XKeyguard extends MixinRedux(XElement) {
     html() {
         return `
         <x-loader></x-loader>
-        <x-create x-route="create"></x-create>
+        <x-create-safe x-route="create-safe"></x-create-safe>
+        <x-create-wallet x-route="create-wallet"></x-create-wallet>
         <x-backup-words x-route="backup-words"></x-backup-words>
         <x-backup-file x-route="backup-file"></x-backup-file>
         <x-import-file x-route="import-from-file"></x-import-file>
@@ -33,7 +35,19 @@ export default class XKeyguard extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XLoader, XRouter, XClose, XCreate, XImportWords, XRename,  XImportFile, XSign, XBackupWords, XBackupFile ];
+        return [
+            XLoader,
+            XRouter,
+            XClose,
+            XCreateSafe,
+            XCreateWallet,
+            XImportWords,
+            XRename,
+            XImportFile,
+            XSign,
+            XBackupWords,
+            XBackupFile
+        ];
     }
 
     static mapStateToProps(state) {

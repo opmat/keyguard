@@ -4,6 +4,7 @@ export default class MinerPolicy extends BasePolicy {
     allows(method, args, state) {
         switch (method) {
             case 'list':
+            case 'createWallet':
                 return true;
             default:
                 throw new Error(`Unhandled method: ${method}`);
@@ -14,6 +15,8 @@ export default class MinerPolicy extends BasePolicy {
         switch (method) {
             case 'list':
                 return false;
+            case 'createWallet':
+                return true;
             default:
                 throw new Error(`Unhandled method: ${method}`);
         }

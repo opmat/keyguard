@@ -5,15 +5,13 @@ import XSetPassphrase from '/libraries/keyguard/src/common-elements/x-set-passph
 import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
 import XShowWords from '/libraries/keyguard/src/common-elements/x-show-words.js';
 import XValidateWordsConnected from './x-validate-words-connected.js';
-import XDownloadFile from '/libraries/keyguard/src/common-elements/x-download-file.js';
 import XIdenticons from './x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createPersistent } from './actions.js';
 
-export default class XCreate extends MixinRedux(XElement) {
+export default class XCreateSafe extends MixinRedux(XElement) {
 
-    // todo fix router, so we can fix order. Last should be first
     html() { return `
           <x-identicons x-route=""></x-identicons>
           <section x-route="warning">
@@ -25,9 +23,6 @@ export default class XCreate extends MixinRedux(XElement) {
           <x-set-label x-route="set-label"></x-set-label>
           <x-show-words x-route="words"></x-show-words>
           <x-validate-words-connected x-route="validate-words"></x-validate-words-connected>
-          <section x-route="download">
-            <x-download-file></x-download-file>
-          </section>
         `;
     }
 
@@ -39,12 +34,11 @@ export default class XCreate extends MixinRedux(XElement) {
             XPrivacyAgent,
             XShowWords,
             XValidateWordsConnected,
-            XDownloadFile
         ];
     }
 
     static mapStateToProps(state) {
-        if (state.request.requestType !== RequestTypes.CREATE) return;
+        if (state.request.requestType !== RequestTypes.CREATE_SAFE) return;
 
         const { address } = state.request.data;
 
@@ -70,13 +64,12 @@ export default class XCreate extends MixinRedux(XElement) {
             'x-set-passphrase': this._onSetPassphrase.bind(this),
             'x-set-label': this._onSetLabel.bind(this),
             'x-show-words': this._onWordsSeen.bind(this),
-            'x-validate-words': this._onWordsValidated.bind(this),
-            'x-file-download-complete': this._onFileDownload.bind(this)
+            'x-validate-words': this._onWordsValidated.bind(this)
         }
     }
 
     _onChooseIdenticon(address) {
-        this.actions.setData(RequestTypes.CREATE, { address } );
+        this.actions.setData(RequestTypes.CREATE_SAFE, { address } );
         this.router.goTo(this, 'warning');
     }
 
@@ -85,13 +78,13 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     _onSetPassphrase(passphrase) {
-        this.actions.setData(RequestTypes.CREATE, { passphrase });
+        this.actions.setData(RequestTypes.CREATE_SAFE, { passphrase });
         this.router.goTo(this, 'set-label');
     }
 
     _onSetLabel(label) {
-        this.actions.setData(RequestTypes.CREATE, { label });
-        this.actions.setData(RequestTypes.CREATE, {
+        this.actions.setData(RequestTypes.CREATE_SAFE, { label });
+        this.actions.setData(RequestTypes.CREATE_SAFE, {
             privateKey: this.properties.volatileKey.keyPair.privateKey.toHex()
         });
         this.router.goTo(this, 'words');
@@ -102,18 +95,6 @@ export default class XCreate extends MixinRedux(XElement) {
     }
 
     async _onWordsValidated() {
-        const { volatileKey, passphrase} = this.properties;
-
-        const encryptedKeyPair = await volatileKey.exportEncrypted(passphrase);
-
-        this.actions.setData(RequestTypes.CREATE, {
-            encryptedKeyPair
-        });
-
-        this.router.goTo(this, 'download');
-    }
-
-    _onFileDownload() {
         this.actions.createPersistent();
     }
 }
