@@ -1,6 +1,6 @@
 import XElement from '/libraries/x-element/x-element.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import XDownloadFile from '/libraries/keyguard/src/common-elements/x-download-file.js';
+// import XDownloadFile from '/libraries/keyguard/src/common-elements/x-download-file.js';
 import XAuthenticateBackup from '/libraries/keyguard/src/common-elements/x-authenticate-backup.js';
 import { RequestTypes, setResult } from '../request-redux.js';
 import { backupFile } from './actions.js';
@@ -14,7 +14,7 @@ export default class XBackupFile extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XAuthenticateBackup, XDownloadFile ];
+        return [ XAuthenticateBackup, /* XDownloadFile */ ];
     }
 
     static get actions() {
@@ -24,7 +24,7 @@ export default class XBackupFile extends MixinRedux(XElement) {
     listeners() {
         return {
             'x-authenticate-submitted': this._onSubmit.bind(this),
-            'x-file-download-complete': this._onFileDownload.bind(this)
+            // 'x-file-download-complete': this._onFileDownload.bind(this)
         };
     }
 
