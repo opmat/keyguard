@@ -23,6 +23,14 @@ export default class XSignWallet extends MixinRedux(XElement) {
         return [ XAccount, XMyAccount, XAuthenticatePin ];
     }
 
+    onEntry() {
+        this.$authenticatePin.$pinpad.open();
+    }
+
+    onExit() {
+        this.$authenticatePin.$pinpad.close();
+    }
+
     static mapStateToProps(state) {
         return {
             requestType: state.request.requestType,
