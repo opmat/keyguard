@@ -29,6 +29,16 @@ export default class KeyguardApi {
         return keys;
     }
 
+    async getDefaultAccount() {
+        const keys = await this.list();
+
+        const firstSafeKey = keys.find(key => key.type === KeyType.HIGH);
+        if (firstSafeKey) return firstSafeKey;
+
+        // Return first Wallet key or NULL
+        return keys.find(key => key.type === KeyType.LOW) || null;
+    }
+
     /** SAFE */
 
     /**

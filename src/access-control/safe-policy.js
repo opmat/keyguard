@@ -13,6 +13,8 @@ export default class SafePolicy extends BasePolicy {
             case 'createSafe':
                 // todo remove
             case 'createWallet':
+                // todo remove
+            case 'getDefaultAccount':
             case 'rename':
                 return true;
             case 'signSafe':
@@ -31,6 +33,8 @@ export default class SafePolicy extends BasePolicy {
         switch (method) {
             case 'list':
             case 'createVolatile':
+            // todo remove
+            case 'getDefaultAccount':
                 return false;
             case 'createSafe':
             // todo remove
