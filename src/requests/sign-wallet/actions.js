@@ -2,14 +2,14 @@ import { SATOSHIS, RequestTypes, setExecuting, setResult, setData } from '../req
 import { keyStore } from '../../keys/index.js';
 
 // called after confirming a transaction sign request (BASIC transaction)
-export function signWalletTransaction(passphrase) {
+export function signWalletTransaction(pin ) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.SIGN_WALLET_TRANSACTION) );
 
         const { transaction: { recipient, value, fee, validityStartHeight }, address } = getState().request.data;
 
         try {
-            const key = await keyStore.get(address, passphrase);
+            const key = await keyStore.get(address, pin);
             const tx = await key.createTransaction(recipient, value, fee, validityStartHeight, 'basic');
 
             dispatch(

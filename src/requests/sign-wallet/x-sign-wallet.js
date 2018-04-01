@@ -15,7 +15,7 @@ export default class XSignWallet extends MixinRedux(XElement) {
         <x-account></x-account>
         <div class="x-value"><span class="value"></span> NIM</div>
         <div class="x-fee"><span class="fee"></span> Fee</div>
-        <x-authenticate-pin button-label="Confirm"></x-authenticate-pin>
+        <x-authenticate-pin></x-authenticate-pin>
         `;
     }
 
@@ -32,10 +32,6 @@ export default class XSignWallet extends MixinRedux(XElement) {
 
     static get actions() {
         return { signWalletTransaction, setData };
-    }
-
-    onAfterEntry() {
-        setTimeout(() => this.$authenticate.focus(), 100);
     }
 
     _onPropertiesChanged(changes) {

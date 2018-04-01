@@ -12,10 +12,9 @@ export default class XAuthenticatePin extends MixinRedux(XElement) {
 
     children() { return [ XPinpad ] }
 
-    listeners() {
-        return {
-            'x-pinpad': (pin) => this.fire('x-authenticate-pin-submitted', pin)
-        }
+    onCreate() {
+        this.$pinpad.open();
+        super.onCreate();
     }
 
     static mapStateToProps(state) {
@@ -26,7 +25,13 @@ export default class XAuthenticatePin extends MixinRedux(XElement) {
 
     _onPropertiesChanged(changes) {
         if (changes.isWrongPin) {
-            this.isWrongPin();
+            this.$pinpad.onPinIncorrect();
+        }
+    }
+
+    listeners() {
+        return {
+            'x-pin': (pin) => this.fire('x-authenticate-pin-submitted', pin)
         }
     }
 }
