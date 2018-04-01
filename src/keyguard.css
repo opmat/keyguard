@@ -15,7 +15,7 @@
 @import './common-elements/x-download-file.css';
 @import './common-elements/x-set-label.css';
 @import './common-elements/x-show-words.css';
-@import 'requests/create-safe/x-identicons/x-identicons.css';
+@import './requests/create-safe/x-identicons/x-identicons.css';
 @import './requests/sign-safe/x-sign-safe.css';
 @import './requests/sign-wallet/x-sign-wallet.css';
 
