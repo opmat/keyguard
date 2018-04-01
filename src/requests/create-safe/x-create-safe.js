@@ -43,8 +43,7 @@ export default class XCreateSafe extends MixinRedux(XElement) {
         const { address } = state.request.data;
 
         return {
-            volatileKey: address && state.keys.volatileKeys.get(address),
-            passphrase: state.request.data.passphrase
+            volatileKey: address && state.keys.volatileKeys.get(address)
         }
     }
 

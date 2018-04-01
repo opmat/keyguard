@@ -11,6 +11,8 @@ export default class SafePolicy extends BasePolicy {
             case 'list':
             case 'createVolatile':
             case 'createSafe':
+                // todo remove
+            case 'createWallet':
             case 'rename':
                 return true;
             case 'signSafe':
@@ -31,6 +33,8 @@ export default class SafePolicy extends BasePolicy {
             case 'createVolatile':
                 return false;
             case 'createSafe':
+            // todo remove
+            case 'createWallet':
             case 'importFromFile':
             case 'importFromWords':
             case 'backupFile':

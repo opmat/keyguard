@@ -1,18 +1,18 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
-import XSetPassphrase from '/libraries/keyguard/src/common-elements/x-set-passphrase.js';
+import XSetPin from './x-set-pin.js';
 import XIdenticons from './x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
-import { createPersistent } from './actions.js';
+import { createWalletPersistent } from './actions.js';
 
 export default class XCreateWallet extends MixinRedux(XElement) {
 
     html() { return `
           <x-identicons x-route=""></x-identicons>
           <x-set-label x-route="set-label"></x-set-label>
-          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
+          <x-set-pin x-route="set-pin"></x-set-pin>
           <section x-route="download">
             <x-download-file></x-download-file>
           </section>
@@ -21,7 +21,7 @@ export default class XCreateWallet extends MixinRedux(XElement) {
 
     children() {
         return [
-            XSetPassphrase,
+            XSetPin,
             XSetLabel,
             XIdenticons,
         ];
@@ -33,13 +33,12 @@ export default class XCreateWallet extends MixinRedux(XElement) {
         const { address } = state.request.data;
 
         return {
-            volatileKey: address && state.keys.volatileKeys.get(address),
-            passphrase: state.request.data.passphrase
+            volatileKey: address && state.keys.volatileKeys.get(address)
         }
     }
 
     static get actions() {
-        return { setData, createPersistent };
+        return { setData, createWalletPersistent };
     }
 
     async onCreate() {
@@ -51,7 +50,7 @@ export default class XCreateWallet extends MixinRedux(XElement) {
         return {
             'x-choose-identicon': this._onChooseIdenticon.bind(this),
             'x-set-label': this._onSetLabel.bind(this),
-            'x-set-passphrase': this._onSetPassphrase.bind(this)
+            'x-set-pin': this._onSetPin.bind(this)
         }
     }
 
@@ -62,11 +61,11 @@ export default class XCreateWallet extends MixinRedux(XElement) {
 
     _onSetLabel(label) {
         this.actions.setData(RequestTypes.CREATE_WALLET, { label });
-        this.router.goTo(this, 'set-passphrase');
+        this.router.goTo(this, 'set-pin');
     }
 
-    async _onSetPassphrase(passphrase) {
-        this.actions.setData(RequestTypes.CREATE_WALLET, { passphrase });
-        this.actions.createPersistent();
+    async _onSetPin(pin) {
+        this.actions.setData(RequestTypes.CREATE_WALLET, { pin });
+        this.actions.createWalletPersistent();
     }
 }

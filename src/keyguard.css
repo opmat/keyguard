@@ -9,6 +9,7 @@
 @import '/secure-elements/nimiq-logo/nimiq-logo.css';
 @import '/secure-elements/x-account-backup-import/x-account-backup-import.css';
 @import '/secure-elements/x-loader/x-loader.css';
+@import '/secure-elements/x-pinpad/x-pinpad.css';
 @import './common-elements/x-account.css';
 @import './common-elements/x-authenticate.css';
 @import './common-elements/x-download-file.css';
