@@ -1,12 +1,12 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
 import XAccount from '/libraries/keyguard/src/common-elements/x-account.js';
-import XAuthenticate from '/libraries/keyguard/src/common-elements/x-authenticate.js';
+import XAuthenticatePin from '/libraries/keyguard/src/common-elements/x-authenticate-pin.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
-import { signTransaction } from './actions.js';
+import { signWalletTransaction } from './actions.js';
 
-export default class XSign extends MixinRedux(XElement) {
+export default class XSignWallet extends MixinRedux(XElement) {
 
     html() { return `
         <h1>Transaction</h1>
@@ -15,12 +15,12 @@ export default class XSign extends MixinRedux(XElement) {
         <x-account></x-account>
         <div class="x-value"><span class="value"></span> NIM</div>
         <div class="x-fee"><span class="fee"></span> Fee</div>
-        <x-authenticate button-label="Confirm"></x-authenticate>
+        <x-authenticate-pin button-label="Confirm"></x-authenticate-pin>
         `;
     }
 
     children() {
-        return [ XAccount, XMyAccount, XAuthenticate ];
+        return [ XAccount, XMyAccount, XAuthenticatePin ];
     }
 
     static mapStateToProps(state) {
@@ -31,7 +31,7 @@ export default class XSign extends MixinRedux(XElement) {
     }
 
     static get actions() {
-        return { signTransaction, setData };
+        return { signWalletTransaction, setData };
     }
 
     onAfterEntry() {
@@ -41,7 +41,7 @@ export default class XSign extends MixinRedux(XElement) {
     _onPropertiesChanged(changes) {
         const { requestType } = this.properties;
 
-        if (requestType !== RequestTypes.SIGN_TRANSACTION) return;
+        if (requestType !== RequestTypes.SIGN_WALLET_TRANSACTION) return;
 
         const { transaction } = changes;
 
@@ -62,7 +62,7 @@ export default class XSign extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-authenticate-submitted': passphrase => this.actions.signTransaction(passphrase)
+            'x-authenticate-pin-submitted': pin => this.actions.signWalletTransaction(pin)
         }
     }
 }

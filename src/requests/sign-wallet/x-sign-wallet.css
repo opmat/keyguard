@@ -1,7 +1,7 @@
-x-sign .x-value {
+x-sign-wallet .x-value {
     font-size: 34px;
 }
 
-x-sign x-fee {
+x-sign-wallet x-fee {
     font-size: 16px;
 }

@@ -5,7 +5,8 @@ import XCreateSafe from './requests/create-safe/x-create-safe.js';
 import XCreateWallet from './requests/create-wallet/x-create-wallet.js';
 import XImportWords from './requests/import-words/x-import-words.js';
 import XImportFile from './requests/import-file/x-import-file.js';
-import XSign from './requests/sign/x-sign.js';
+import XSignSafe from './requests/sign-safe/x-sign-safe.js';
+import XSignWallet from './requests/sign-wallet/x-sign-wallet.js';
 import XBackupFile from './requests/backup-file/x-backup-file.js';
 import XBackupWords from './requests/backup-words/x-backup-words.js';
 import XRename from './requests/rename/x-rename.js';
@@ -23,7 +24,8 @@ export default class XKeyguard extends MixinRedux(XElement) {
         <x-backup-file x-route="backup-file"></x-backup-file>
         <x-import-file x-route="import-from-file"></x-import-file>
         <x-import-words x-route="import-from-words"></x-import-words>
-        <div><x-sign x-route="sign-transaction"></x-sign></div>
+        <div><x-sign-safe x-route="sign-safe-transaction"></x-sign-safe></div>
+        <div><x-sign-wallet x-route="sign-wallet-transaction"></x-sign-wallet></div>
         <div><x-rename x-route="rename"></x-rename></div>
         <x-close x-route="close"></x-close>
         <div><x-close x-route="/"></x-close></div>
@@ -44,7 +46,8 @@ export default class XKeyguard extends MixinRedux(XElement) {
             XImportWords,
             XRename,
             XImportFile,
-            XSign,
+            XSignSafe,
+            XSignWallet,
             XBackupWords,
             XBackupFile
         ];

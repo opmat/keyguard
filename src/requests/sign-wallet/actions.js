@@ -2,9 +2,9 @@ import { SATOSHIS, RequestTypes, setExecuting, setResult, setData } from '../req
 import { keyStore } from '../../keys/index.js';
 
 // called after confirming a transaction sign request (BASIC transaction)
-export function signTransaction(passphrase) {
+export function signWalletTransaction(passphrase) {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.SIGN_TRANSACTION) );
+        dispatch( setExecuting(RequestTypes.SIGN_WALLET_TRANSACTION) );
 
         const { transaction: { recipient, value, fee, validityStartHeight }, address } = getState().request.data;
 
@@ -13,7 +13,7 @@ export function signTransaction(passphrase) {
             const tx = await key.createTransaction(recipient, value, fee, validityStartHeight, 'basic');
 
             dispatch(
-                setResult(RequestTypes.SIGN_TRANSACTION, {
+                setResult(RequestTypes.SIGN_WALLET_TRANSACTION, {
                     sender: tx.sender.toUserFriendlyAddress(),
                     senderPubKey: tx.senderPubKey.serialize(),
                     recipient: tx.recipient.toUserFriendlyAddress(),
@@ -27,7 +27,7 @@ export function signTransaction(passphrase) {
             // assume the password was wrong
             console.error(e);
             dispatch(
-                setData(RequestTypes.SIGN_TRANSACTION, { isWrongPassphrase: true })
+                setData(RequestTypes.SIGN_WALLET_TRANSACTION, { isWrongPin: true })
             );
         }
     }
