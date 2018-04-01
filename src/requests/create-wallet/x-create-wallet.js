@@ -1,6 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
-import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
 import XSetPin from './x-set-pin.js';
 import XIdenticons from './x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
@@ -11,7 +10,6 @@ export default class XCreateWallet extends MixinRedux(XElement) {
 
     html() { return `
           <x-identicons x-route=""></x-identicons>
-          <x-set-label x-route="set-label"></x-set-label>
           <x-set-pin x-route="set-pin"></x-set-pin>
           <section x-route="download">
             <x-download-file></x-download-file>
@@ -22,7 +20,6 @@ export default class XCreateWallet extends MixinRedux(XElement) {
     children() {
         return [
             XSetPin,
-            XSetLabel,
             XIdenticons,
         ];
     }
@@ -49,18 +46,13 @@ export default class XCreateWallet extends MixinRedux(XElement) {
     listeners() {
         return {
             'x-choose-identicon': this._onChooseIdenticon.bind(this),
-            'x-set-label': this._onSetLabel.bind(this),
             'x-set-pin': this._onSetPin.bind(this)
         }
     }
 
     _onChooseIdenticon(address) {
         this.actions.setData(RequestTypes.CREATE_WALLET, { address } );
-        this.router.goTo(this, 'set-label');
-    }
-
-    _onSetLabel(label) {
-        this.actions.setData(RequestTypes.CREATE_WALLET, { label });
+        this.actions.setData(RequestTypes.CREATE_WALLET, { label: 'Miner Account' });
         this.router.goTo(this, 'set-pin');
     }
 
