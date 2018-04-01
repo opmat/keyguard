@@ -85,7 +85,7 @@ export default class KeyguardApi {
      * @return {Promise<any>} - answer for calling app
      * @private
      */
-    _startRequest(requestType, data = {}, restrictType = KeyType.HIGH) {
+    _startRequest(requestType, data = {}) {
         return new Promise((resolve, reject) => {
 
             // only one request at a time
@@ -96,17 +96,13 @@ export default class KeyguardApi {
             // open corresponding UI
             XRouter.create(requestType);
 
+            // Set request state to started. Save reject so we can cancel the request when the window is closed
+            this.actions.start(requestType, reject, data);
+
             // load account data, if we already know the account this request is about
             if (data.address) {
                 this.actions.loadAccountData(requestType);
             }
-
-            if (store.getState().request.data.key.type !== restrictType) {
-                throw new Error('Unauthorized: account type does not match request type');
-            }
-
-            // Set request state to started. Save reject so we can cancel the request when the window is closed
-            this.actions.start(requestType, reject, data);
 
             // wait until the ui dispatches the user's feedback
             store.subscribe(() => {
@@ -142,23 +138,29 @@ export default class KeyguardApi {
     }*/
 
     async signSafe(transaction) {
+        const key = await keyStore.getPlain(transaction.sender);
+        if (key.type !== KeyType.HIGH) throw new Error('Unauthorized: sender is not a Safe account');
+
         transaction.value = Math.round(transaction.value * KeyguardApi.satoshis);
         transaction.fee = Math.round(transaction.fee * KeyguardApi.satoshis);
 
         return this._startRequest(RequestTypes.SIGN_SAFE_TRANSACTION, {
             transaction,
             address: transaction.sender // for basic transactions, todo generalize
-        }, KeyType.HIGH);
+        });
     }
 
     async signWallet(transaction) {
+        const key = await keyStore.getPlain(transaction.sender);
+        if (key.type !== KeyType.LOW) throw new Error('Unauthorized: sender is not a Wallet account');
+
         transaction.value = Math.round(transaction.value * KeyguardApi.satoshis);
         transaction.fee = Math.round(transaction.fee * KeyguardApi.satoshis);
 
         return this._startRequest(RequestTypes.SIGN_WALLET_TRANSACTION, {
             transaction,
             address: transaction.sender // for basic transactions, todo generalize
-        }, KeyType.LOW);
+        });
     }
 
     importFromFile() {
