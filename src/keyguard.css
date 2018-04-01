@@ -28,6 +28,7 @@
 @media (max-width: 480px) {
     .header-top {
         width: auto;
+        padding: 1em 0.5em;
     }
 
     .header-top nimiq-logo {
