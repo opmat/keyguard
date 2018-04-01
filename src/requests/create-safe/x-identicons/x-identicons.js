@@ -86,8 +86,8 @@ export default class XIdenticons extends MixinRedux(XElement) {
     }
 
     async _generateIdenticons() {
-        if (this.propertiesrequestType !== RequestTypes.CREATE_SAFE
-         && this.propertiesrequestType !== RequestTypes.CREATE_WALLET) return;
+        if (this.properties.requestType !== RequestTypes.CREATE_SAFE
+         && this.properties.requestType !== RequestTypes.CREATE_WALLET) return;
 
         this.actions.clearVolatile(this.properties.requestType);
         this.actions.createVolatile(this.properties.requestType, 7);
