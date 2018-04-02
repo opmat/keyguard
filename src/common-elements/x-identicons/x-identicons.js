@@ -78,7 +78,7 @@ export default class XIdenticons extends MixinRedux(XElement) {
     }
 
     onEntry() {
-        this._generateIdenticons();
+        setTimeout(() => this._generateIdenticons(), 100);
     }
 
     onExit(){
@@ -86,9 +86,6 @@ export default class XIdenticons extends MixinRedux(XElement) {
     }
 
     async _generateIdenticons() {
-        if (this.properties.requestType !== RequestTypes.CREATE_SAFE
-         && this.properties.requestType !== RequestTypes.CREATE_WALLET) return;
-
         this.actions.clearVolatile(this.properties.requestType);
         this.actions.createVolatile(this.properties.requestType, 7);
     }

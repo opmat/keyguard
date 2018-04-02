@@ -18,17 +18,19 @@ export default class XKeyguard extends MixinRedux(XElement) {
     html() {
         return `
         <x-loader></x-loader>
-        <x-create-safe x-route="create-safe"></x-create-safe>
-        <x-create-wallet x-route="create-wallet"></x-create-wallet>
-        <x-backup-words x-route="backup-words"></x-backup-words>
-        <x-backup-file x-route="backup-file"></x-backup-file>
-        <x-import-file x-route="import-from-file"></x-import-file>
-        <x-import-words x-route="import-from-words"></x-import-words>
-        <div><x-sign-safe x-route="sign-safe-transaction"></x-sign-safe></div>
-        <div><x-sign-wallet x-route="sign-wallet-transaction"></x-sign-wallet></div>
-        <div><x-rename x-route="rename"></x-rename></div>
-        <x-close x-route="close"></x-close>
-        <div><x-close x-route="/"></x-close></div>
+        <div class="x-route-container">
+            <x-create-safe x-route="create-safe"></x-create-safe>
+            <x-create-wallet x-route="create-wallet"></x-create-wallet>
+            <x-backup-words x-route="backup-words"></x-backup-words>
+            <x-backup-file x-route="backup-file"></x-backup-file>
+            <x-import-file x-route="import-from-file"></x-import-file>
+            <x-import-words x-route="import-from-words"></x-import-words>
+            <div><x-sign-safe x-route="sign-safe-transaction"></x-sign-safe></div>
+            <div><x-sign-wallet x-route="sign-wallet-transaction"></x-sign-wallet></div>
+            <div><x-rename x-route="rename"></x-rename></div>
+            <x-close x-route="close"></x-close>
+            <div><x-close x-route="/"></x-close></div>
+        </div>
         <a secondary x-href="close">
             <i class="material-icons">&#xE5C9;</i>
             Cancel

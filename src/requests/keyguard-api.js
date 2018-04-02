@@ -91,11 +91,11 @@ export default class KeyguardApi {
                 throw new Error('Request already started');
             }
 
-            // open corresponding UI
-            XRouter.create(requestType);
-
             // Set request state to started. Save reject so we can cancel the request when the window is closed
             this.actions.start(requestType, reject, data);
+
+            // open corresponding UI
+            XRouter.create(requestType);
 
             // load account data, if we already know the account this request is about
             if (data.address) {
