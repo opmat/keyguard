@@ -1,4 +1,5 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
+import ValidationUtils from '/libraries/secure-utils/validation-utils/validation-utils.js';
 import KeyType from '../keys/key-type.js';
 import keyStore from '../keys/key-store.js';
 import store from '../store.js';
@@ -22,8 +23,6 @@ export default class KeyguardApi {
 
     /** WITHOUT UI */
 
-    /** SAFE AND WALLET */
-
     async list() {
         const keys = await keyStore.list();
         return keys;
@@ -39,18 +38,7 @@ export default class KeyguardApi {
         return keys.find(key => key.type === KeyType.LOW) || null;
     }
 
-    /** SAFE */
-
-    /**
-     * called by safe after back up file was downloaded
-     */
-    async activate(userFriendlyAddress) {
-        await keyStore.activate(userFriendlyAddress);
-    }
-
-    /** WALLET */
-
-    createVolatile(number) {
+    /*createVolatile(number) {
 
         this.actions.clearVolatile();
 
@@ -74,9 +62,9 @@ export default class KeyguardApi {
         }
 
         return true;
-    }
+    }*/
 
-    async lock(userFriendlyAddress, pin) {
+    /*async lock(userFriendlyAddress, pin) {
         const key = keyStore.get(userFriendlyAddress);
         return key.lock(pin);
     }
@@ -84,7 +72,7 @@ export default class KeyguardApi {
     async unlock(userFriendlyAddress, pin) {
         const key = keyStore.get(userFriendlyAddress);
         return key.unlock(pin);
-    }
+    }*/
 
     /** WITH UI */
 
@@ -129,8 +117,6 @@ export default class KeyguardApi {
             });
         });
     }
-
-    /** SAFE */
 
     async createSafe() {
         return this._startRequest(RequestTypes.CREATE_SAFE);
@@ -182,18 +168,24 @@ export default class KeyguardApi {
     }
 
     backupFile(address) {
+        if (!ValidationUtils.isValidAddress(address)) return;
+
         return this._startRequest(RequestTypes.BACKUP_FILE, {
             address
         });
     }
 
     backupWords(address) {
+        if (!ValidationUtils.isValidAddress(address)) return;
+
         return this._startRequest(RequestTypes.BACKUP_WORDS, {
             address
         });
     }
 
     rename(address) {
+        if (!ValidationUtils.isValidAddress(address)) return;
+
         return this._startRequest(RequestTypes.RENAME, {
             address
         });
