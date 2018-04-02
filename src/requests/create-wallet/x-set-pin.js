@@ -6,7 +6,12 @@ export default class XSetPin extends XElement {
 
     html() { return `
         <h1>Choose your pin</h1>
-        <h2>Please enter a pin to protect your account</h2>
+        <h2>Please enter an account control PIN</h2>
+        <div class="spacing-bottom center">
+            <span>
+                Careful, this PIN is <strong>not recoverable!</strong> If you lose it, you lose access to your funds.     
+            </span>
+        </div>
         <x-grow></x-grow>
         <x-pinpad></x-pinpad>
         <x-grow></x-grow>
