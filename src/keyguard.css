@@ -18,6 +18,7 @@
 @import 'common-elements/x-identicons/x-identicons.css';
 @import './requests/sign-safe/x-sign-safe.css';
 @import './requests/sign-wallet/x-sign-wallet.css';
+@import '/secure-elements/x-dot-loader/x-dot-loader.css';
 
 .header-top {
     width: 100%;
