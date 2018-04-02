@@ -9,7 +9,8 @@ import { signWalletTransaction } from './actions.js';
 export default class XSignWallet extends MixinRedux(XElement) {
 
     html() { return `
-        <h1>Transaction</h1>
+        <h1>Authorize Transaction</h1>
+        <h2>Enter your pin below to authorize this transaction:</h2>
         <x-my-account></x-my-account>
         <i class="material-icons">arrow_downward</i>
         <x-account></x-account>
