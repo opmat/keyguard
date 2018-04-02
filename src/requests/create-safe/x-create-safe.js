@@ -5,7 +5,7 @@ import XSetPassphrase from '/libraries/keyguard/src/common-elements/x-set-passph
 import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
 import XShowWords from '/libraries/keyguard/src/common-elements/x-show-words.js';
 import XValidateWordsConnected from './x-validate-words-connected.js';
-import XIdenticons from './x-identicons/x-identicons.js';
+import XIdenticons from '../../common-elements/x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createPersistent } from './actions.js';
@@ -40,10 +40,9 @@ export default class XCreateSafe extends MixinRedux(XElement) {
     static mapStateToProps(state) {
         if (state.request.requestType !== RequestTypes.CREATE_SAFE) return;
 
-        const { address } = state.request.data;
-
         return {
-            volatileKey: address && state.keys.volatileKeys.get(address)
+            volatileKeys: state.keys.volatileKeys,
+            volatileKey: state.request.data.volatileKey
         }
     }
 
@@ -68,7 +67,8 @@ export default class XCreateSafe extends MixinRedux(XElement) {
     }
 
     _onChooseIdenticon(address) {
-        this.actions.setData(RequestTypes.CREATE_SAFE, { address } );
+        const volatileKey = this.properties.volatileKeys.get(address);
+        this.actions.setData(RequestTypes.CREATE_SAFE, { address, volatileKey } );
         this.router.goTo(this, 'warning');
     }
 

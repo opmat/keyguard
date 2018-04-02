@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 import XSetPin from './x-set-pin.js';
-import XIdenticons from '../create-safe/x-identicons/x-identicons.js';
+import XIdenticons from '../../common-elements/x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
 import { createWalletPersistent } from './actions.js';
