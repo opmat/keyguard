@@ -123,11 +123,29 @@ x-identicons x-address:before {
 x-identicons x-address {
     opacity: 0;
     position: absolute;
-    bottom: 350px;
+    bottom: 35vh;
     width: unset;
     transition: opacity 300ms, transform 500ms;
     transform: scale(0.3);
     cursor: auto;
+}
+
+@media (max-height: 600px) {
+    x-identicons x-address {
+        bottom: 40vh;
+    }
+}
+
+@media (max-height: 500px) {
+    x-identicons x-address {
+        bottom: 45vh;
+    }
+}
+
+@media (max-height: 450px) {
+    x-identicons x-address {
+        bottom: 50vh;
+    }
 }
 
 x-identicons x-address:hover {
