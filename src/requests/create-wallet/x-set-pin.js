@@ -7,7 +7,9 @@ export default class XSetPin extends XElement {
     html() { return `
         <h1>Choose your pin</h1>
         <h2>Please enter a pin to protect your account</h2>
+        <x-grow></x-grow>
         <x-pinpad></x-pinpad>
+        <x-grow></x-grow>
         `;
     }
 
