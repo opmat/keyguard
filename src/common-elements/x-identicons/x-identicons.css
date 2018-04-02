@@ -4,10 +4,12 @@
 x-identicons {
     -webkit-user-select: none;
     user-select: none;
-    padding-bottom: 16px;
+    /* padding-bottom: 16px; */
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    min-height: 100vh;
+    /* max-height: 600px; */
 }
 
 x-identicons x-header {
@@ -18,8 +20,7 @@ x-identicons x-identicon {
     width: 128px;
     height: 128px;
     position: absolute;
-    margin-top: 0;
-    transition: transform 500ms, margin-top 500ms;
+    transition: transform 500ms;
     will-change: transform;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     transform: scale(0.6);
@@ -39,8 +40,9 @@ x-identicons x-container {
     flex-grow: 1;
     justify-content: center;
     align-items: center;
-    height: 400px;
-    width: 100vw;
+    width: 100%;
+    height: 360px;
+    position: relative;
 }
 
 x-identicons x-identicon:nth-child(1) {
@@ -72,24 +74,18 @@ x-identicons x-identicon:nth-child(7) {
 }
 
 
-x-identicons [button], x-identicons x-backdrop [button]+[secondary] {
+x-identicons [button] {
     opacity: 0;
-    transform: translate(0, 480px);
+    /* transform: translate(0, 480px); */
     transition: transform 500ms;
     will-change: transform;
-    transition-delay: 150ms;
+    transition-delay: 300ms;
     position: absolute;
-    pointer-events: none;
-}
-
-x-identicons [button] {
     bottom: 75px;
+    pointer-events: none;
     width: calc(100% - 64px);
 }
 
-x-identicons [button]+[secondary] {
-    bottom: 25px;
-}
 
 x-identicons x-backdrop {
     content: '';
@@ -106,10 +102,13 @@ x-identicons x-backdrop {
 
 x-identicons x-backdrop [button]+[secondary] {
     margin-bottom: 16px;
+    position: absolute;
+    bottom: 25px;
 }
 
 
 x-identicons [secondary] {
+    margin-top: 30px;
     margin-bottom: 20px;
 }
 
@@ -124,9 +123,10 @@ x-identicons x-address:before {
 x-identicons x-address {
     opacity: 0;
     position: absolute;
+    bottom: 350px;
+    width: unset;
     transition: opacity 300ms, transform 500ms;
     transform: scale(0.3);
-    bottom: 49vh;
     cursor: auto;
 }
 
@@ -134,27 +134,26 @@ x-identicons x-address:hover {
     background: none;
 }
 
-x-identicons[selected] [button], x-identicons[selected] [button]+[secondary] {
+x-identicons[selected] [button] {
     opacity: 1;
     z-index: 2;
     transform: translate(0, 0);
     pointer-events: all;
+    width: 100vw;
 }
 
 x-identicons[selected] x-address {
     opacity: 1;
     z-index: 2;
-    transform: scale(1);
-    bottom: 158px;
+    transform: translate(0, 56px);
+    margin-top: 32px;
 }
 
 x-identicons[selected] x-backdrop {
     pointer-events: all;
     opacity: 1;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    border: 100vmax solid transparent;
+    margin-bottom: -100vmax;
 }
 
 x-identicons x-identicon[selected],
@@ -164,8 +163,7 @@ x-identicons x-identicon.returning {
 }
 
 x-identicons x-identicon[selected] {
-    transform: scale(1.5) translate(0, -350px);
-    margin-top: 52vh;
+    transform: scale(1.5) translateY(-40px);
 }
 
 @media (max-width: 380px) {
