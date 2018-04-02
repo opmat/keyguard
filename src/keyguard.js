@@ -63,7 +63,7 @@ class Keyguard {
             const reject = store.getState().request.reject;
             if (reject) {
                 reject(error);
-                //self.close();
+                self.close();
             }
         };
 
@@ -72,19 +72,14 @@ class Keyguard {
             const reject = store.getState().request.reject;
             if (reject) {
                 reject(new Error(event.reason));
-                //self.close();
+                self.close();
             }
         };
-
 
         // start postMessage RPC server
         this._api = RPC.Server(AccessControl.addAccessControl(
             KeyguardApi, () => store.getState(), defaultPolicies
         ), true);
-
-        // enable on-demand for local testing/debugging w/t needing to call the API first
-        // this._api.create({ callingOrigin: 'http://localhost' });
-        // this._api.create({callingOrigin: 'http://safe.localhost:5000'});
     }
 }
 
