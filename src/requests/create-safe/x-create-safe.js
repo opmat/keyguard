@@ -73,16 +73,6 @@ export default class XCreateSafe extends MixinRedux(XElement) {
     }
 
     _onSurroundingChecked() {
-        this.router.goTo(this, 'set-passphrase');
-    }
-
-    _onSetPassphrase(passphrase) {
-        this.actions.setData(RequestTypes.CREATE_SAFE, { passphrase });
-        this.router.goTo(this, 'set-label');
-    }
-
-    _onSetLabel(label) {
-        this.actions.setData(RequestTypes.CREATE_SAFE, { label });
         this.actions.setData(RequestTypes.CREATE_SAFE, {
             privateKey: this.properties.volatileKey.keyPair.privateKey.toHex()
         });
@@ -94,6 +84,16 @@ export default class XCreateSafe extends MixinRedux(XElement) {
     }
 
     async _onWordsValidated() {
+        this.router.goTo(this, 'set-passphrase');
+    }
+
+    _onSetPassphrase(passphrase) {
+        this.actions.setData(RequestTypes.CREATE_SAFE, { passphrase });
+        this.router.goTo(this, 'set-label');
+    }
+
+    _onSetLabel(label) {
+        this.actions.setData(RequestTypes.CREATE_SAFE, { label });
         this.actions.createPersistent();
     }
 }
