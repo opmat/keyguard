@@ -1,6 +1,6 @@
 function getConfig(host) {
     switch (host) {
-        case 'https://secure.nimiq.com':
+        case 'https://keyguard.nimiq.com':
             return {
                 safeOrigin: 'https://safe.nimiq.com',
                 walletOrigin: 'https://wallet.nimiq.com',
@@ -8,7 +8,7 @@ function getConfig(host) {
                 mode: 'main'
             };
 
-        case 'https://secure.nimiq-testnet.com':
+        case 'https://keyguard.nimiq-testnet.com':
             return {
                 safeOrigin: 'https://safe.nimiq-testnet.com',
                 walletOrigin: 'https://wallet.nimiq-testnet.com',
