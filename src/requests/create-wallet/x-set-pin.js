@@ -36,7 +36,7 @@ export default class XSetPin extends XElement {
         } else if (this._pin !== pin) {
             this.$pinpad.onPinIncorrect();
             this._pin = null;
-            XToast.show('PIN not matching. Please choose a new one.', 'error');
+            XToast.show('PIN not matching. Please try again.', 'error');
         } else {
             this.fire('x-set-pin', pin);
         }
