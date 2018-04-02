@@ -47,7 +47,7 @@ export default class XSignSafe extends MixinRedux(XElement) {
         const { transaction } = changes;
 
         if (transaction) {
-            const { recipient, value, fee, validityStartHeight } = transaction;
+            const { recipient, value, fee } = transaction;
 
             this.$account.address = recipient;
 
