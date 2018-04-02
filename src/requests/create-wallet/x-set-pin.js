@@ -21,11 +21,11 @@ export default class XSetPin extends XElement {
 
     onEntry() {
         this._pin = null;
-        this.$pinpad.show();
+        this.$pinpad.open();
     }
 
     onExit() {
-        this.$pinpad.hide();
+        this.$pinpad.close();
     }
 
     async _onEnterPin(pin) {
