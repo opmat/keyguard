@@ -47,12 +47,11 @@ class KeyStore {
      * @returns {Promise}
      */
     async put(key, passphrase, unlockKey) {
-        console.log(key, passphrase, unlockKey);
         /** @type {Uint8Array} */
         const encryptedKeyPair = await key.exportEncrypted(passphrase, unlockKey);
 
         const keyInfo = {
-            encryptedKeyPair: [...encryptedKeyPair],
+            encryptedKeyPair: encryptedKeyPair,
             userFriendlyAddress: key.userFriendlyAddress,
             type: key.type,
             label: key.label
@@ -62,9 +61,8 @@ class KeyStore {
     }
 
     putPlain(keyInfo) {
-        console.log(keyInfo.encryptedKeyPair, "to", [...keyInfo.encryptedKeyPair]);
-
         keyInfo.encryptedKeyPair = [...keyInfo.encryptedKeyPair];
+
         try {
             localStorage.setItem(`${this._prefix}${keyInfo.userFriendlyAddress}`, JSON.stringify(keyInfo));
             return true;
