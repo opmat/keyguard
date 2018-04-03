@@ -32,7 +32,7 @@ class KeyStore {
      * @returns {Promise.<Key>}
      */
     async get(userFriendlyAddress, passphrase) {
-        const key = this.getPlain(userFriendlyAddress);
+        const key = await this.getPlain(userFriendlyAddress);
         const result = await Key.loadEncrypted(key.encryptedKeyPair, passphrase);
         result.type = key.type;
         result.label = key.label;
@@ -90,7 +90,7 @@ class KeyStore {
     async list() {
         const storageKeys = Object.keys(localStorage).filter(key => key.startsWith(`${this._prefix}`));
 
-        const keys = storageKeys.map(storageKey => this.getPlain(storageKey.replace(`${this._prefix}`, '')));
+        const keys = await Promise.all(storageKeys.map(storageKey => this.getPlain(storageKey.replace(`${this._prefix}`, ''))));
 
         return keys.map(key => {
             return {
