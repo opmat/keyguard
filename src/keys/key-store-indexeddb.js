@@ -120,7 +120,7 @@ class KeyStore {
     }
 
     /**
-     * @returns {Array.<object>}
+     * @returns {Promise.<Array.<object>>}
      */
     async list() {
         const db = await this.connect();
