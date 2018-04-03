@@ -6,6 +6,7 @@ import { createVolatile, clearVolatile } from '../keys/keys-redux.js';
 import { start, loadAccountData } from './request-redux.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 import { RequestTypes } from './request-redux.js';
+import BrowserDetection from '/libraries/secure-utils/browser-detection/browser-detection.js';
 
 export default class KeyguardApi {
 
@@ -23,6 +24,10 @@ export default class KeyguardApi {
     /** WITHOUT UI */
 
     async list() {
+        if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
+            return this.listFromCookie();
+        }
+
         const keys = await keyStore.list();
         return keys;
     }
@@ -35,6 +40,16 @@ export default class KeyguardApi {
 
         // Return first Wallet key or NULL
         return keys.find(key => key.type === KeyType.LOW) || null;
+    }
+
+    async listFromCookie() {
+        const match = document.cookie.match(new RegExp('accounts=([^;]+)'));
+
+        if (match) {
+            return JSON.parse(match[1]);
+        }
+
+        return [];
     }
 
     /*createVolatile(number) {
@@ -102,7 +117,7 @@ export default class KeyguardApi {
             }
 
             // wait until the ui dispatches the user's feedback
-            store.subscribe(() => {
+            store.subscribe(async () => {
                 const request = store.getState().request;
 
                 if (request.error) {
@@ -111,6 +126,11 @@ export default class KeyguardApi {
                 }
 
                 if (request.result) {
+                    if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
+                        const keys = await keyStore.list();
+                        document.cookie = `accounts=${ JSON.stringify(keys.slice(0, 10)) }`;
+                    }
+
                     resolve(request.result);
                 }
             });

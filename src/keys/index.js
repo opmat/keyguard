@@ -1,8 +1,6 @@
+/*
 import { default as keyStoreIndexeddb } from './key-store-indexeddb.js';
 import { default as keyStoreLocalstorage } from './key-store-localstorage.js';
-
-export { default as Key } from './key.js';
-export { default as KeyType } from './key-type.js';
 
 let keyStore;
 
@@ -12,6 +10,8 @@ if (isSafari || iOS) {
     keyStore = keyStoreLocalstorage;
 } else {
     keyStore = keyStoreIndexeddb;
-}
+}*/
 
-export { keyStore as keyStore };
+export { default as keyStore } from './key-store-indexeddb.js';
+export { default as Key } from './key.js';
+export { default as KeyType } from './key-type.js';
