@@ -19,7 +19,7 @@ class KeyStore {
      * @param {string} userFriendlyAddress
      * @returns {Promise.<object>}
      */
-    getPlain(userFriendlyAddress) {
+    async getPlain(userFriendlyAddress) {
         const key = JSON.parse(localStorage.getItem(`${this._prefix}${userFriendlyAddress}`));
         key.encryptedKeyPair = new Uint8Array(key.encryptedKeyPair);
 
@@ -60,7 +60,11 @@ class KeyStore {
         return this.putPlain(keyInfo);
     }
 
-    putPlain(keyInfo) {
+    /**
+     * @param {object} keyInfo
+     * @returns {Promise}
+     */
+    async putPlain(keyInfo) {
         keyInfo.encryptedKeyPair = [...keyInfo.encryptedKeyPair];
 
         try {
@@ -76,14 +80,14 @@ class KeyStore {
      * @param {string} userFriendlyAddress
      * @returns {Promise}
      */
-    remove(userFriendlyAddress) {
+    async remove(userFriendlyAddress) {
         return localStorage.removeItem(`${this._prefix}${userFriendlyAddress}`);
     }
 
     /**
-     * @returns {Array.<object>}
+     * @returns {Promise.<Array.<object>>}
      */
-    list() {
+    async list() {
         const storageKeys = Object.keys(localStorage).filter(key => key.startsWith(`${this._prefix}`));
 
         const keys = storageKeys.map(storageKey => this.getPlain(storageKey.replace(`${this._prefix}`, '')));
@@ -103,7 +107,7 @@ class KeyStore {
      * @param userFriendlyAddress
      * @return {Promise<void>}
      */
-    activate(userFriendlyAddress) {
+    async activate(userFriendlyAddress) {
         // TODO: implement
     }
 
