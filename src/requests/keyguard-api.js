@@ -1,7 +1,6 @@
 import { bindActionCreators } from '/libraries/redux/src/index.js';
 import ValidationUtils from '/libraries/secure-utils/validation-utils/validation-utils.js';
-import KeyType from '../keys/key-type.js';
-import keyStore from '../keys/key-store.js';
+import { KeyType, keyStore } from '../keys/index.js';
 import store from '../store.js';
 import { createVolatile, clearVolatile } from '../keys/keys-redux.js';
 import { start, loadAccountData } from './request-redux.js';
