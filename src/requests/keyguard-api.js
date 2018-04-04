@@ -43,10 +43,6 @@ export default class KeyguardApi {
     }
 
     async getDefaultAccount() {
-        if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
-            return this.getDefaultAccountFromCookie();
-        }
-
         const keys = await this.list();
 
         const firstSafeKey = keys.find(key => key.type === KeyType.HIGH);
