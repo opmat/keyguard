@@ -18,7 +18,7 @@ function getConfig(host) {
 
         default:
             return {
-                safeOrigin: 'http://localhost',
+                safeOrigin: location.origin,
                 walletOrigin: location.origin,
                 minerOrigin: location.origin,
                 mode: 'dev'

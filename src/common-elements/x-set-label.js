@@ -45,6 +45,7 @@ export default class XSetLabel extends XElement {
     _cleanInput() {
         if (!BrowserDetection.isSafari() && !BrowserDetection.isIOS()) return;
 
+        // todo use encodeURL to support utf8
         this.$input.value = this.$input.value.replace(/[^\x00-\x7F]/g, '');
     }
 

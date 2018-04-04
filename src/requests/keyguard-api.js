@@ -32,16 +32,6 @@ export default class KeyguardApi {
         return keys;
     }
 
-    async getDefaultAccount() {
-        const keys = await this.list();
-
-        const firstSafeKey = keys.find(key => key.type === KeyType.HIGH);
-        if (firstSafeKey) return firstSafeKey;
-
-        // Return first Wallet key or NULL
-        return keys.find(key => key.type === KeyType.LOW) || null;
-    }
-
     async listFromCookie() {
         const match = document.cookie.match(new RegExp('accounts=([^;]+)'));
 
@@ -50,6 +40,20 @@ export default class KeyguardApi {
         }
 
         return [];
+    }
+
+    async getDefaultAccount() {
+        if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
+            return this.getDefaultAccountFromCookie();
+        }
+
+        const keys = await this.list();
+
+        const firstSafeKey = keys.find(key => key.type === KeyType.HIGH);
+        if (firstSafeKey) return firstSafeKey;
+
+        // Return first Wallet key or NULL
+        return keys.find(key => key.type === KeyType.LOW) || null;
     }
 
     /*createVolatile(number) {

@@ -80,11 +80,14 @@ class Keyguard {
         this._api = RPC.Server(AccessControl.addAccessControl(
             KeyguardApi, () => store.getState(), defaultPolicies
         ), true);
+
+        // tell calling window that we are ready
+        const client = self === top ? self.opener :  self.parent;
+        client.postMessage('ready', '*');
     }
 }
 
 (async function() {
-    // to be removed
     if (window.Nimiq) {
         await Nimiq.load();
         switch (config.mode) {
