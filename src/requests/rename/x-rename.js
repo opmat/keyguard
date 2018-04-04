@@ -23,8 +23,8 @@ export default class XRename extends MixinRedux(XElement) {
     }
 
     onCreate() {
-        this.$input = this.$('input#label');
-        super.onCreate();
+        this.$input = this.$('input#label');;
+        super.onCreate()
     }
 
     static get actions() {

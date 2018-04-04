@@ -12,7 +12,7 @@ gulp.task('build', ['clean'], () => NimiqBuild.build({
     distPath: 'deployment-keyguard/dist'
 }));
 
-gulp.task('build-iframe', () => NimiqBuild.build({
+gulp.task('build-iframe', ['build'], () => NimiqBuild.build({
     jsEntry: 'src/keyguard.js',
     cssEntry: 'src/keyguard.css',
     htmlEntry: 'src/index-list-only.html',
@@ -20,4 +20,4 @@ gulp.task('build-iframe', () => NimiqBuild.build({
     distPath: 'deployment-keyguard/dist'
 }));
 
-gulp.task('default', ['build']);
+gulp.task('default', ['build-iframe']);
