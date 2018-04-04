@@ -22,16 +22,17 @@ export default class XSetLabel extends XElement {
 
     onCreate() {
         this.$input = this.$('input');
+        this._oldInput = '';
     }
 
-    onEntry() {
+    onAfterEntry() {
         this.$input.focus();
     }
 
     listeners() {
         return {
             'keydown input': this._submitIfReturn.bind(this),
-            'keyup input': this._cleanInput.bind(this),
+            'input input': this._cleanInput.bind(this),
             'click button': this._returnValue.bind(this)
         }
     }
@@ -45,8 +46,14 @@ export default class XSetLabel extends XElement {
     _cleanInput() {
         if (!BrowserDetection.isSafari() && !BrowserDetection.isIOS()) return;
 
-        // todo use encodeURL to support utf8
-        this.$input.value = this.$input.value.replace(/[^\x00-\x7F]/g, '');
+        const currentValue = this.$input.value;
+        const encoded = encodeURIComponent(currentValue);
+
+        if (encoded.length > 24) {
+            this.$input.value = this._oldInput;
+        } else {
+            this._oldInput = currentValue;
+        }
     }
 
     _returnValue() {

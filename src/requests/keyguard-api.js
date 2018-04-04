@@ -36,7 +36,8 @@ export default class KeyguardApi {
         const match = document.cookie.match(new RegExp('accounts=([^;]+)'));
 
         if (match) {
-            return JSON.parse(match[1]);
+            const decoded = decodeURIComponent(match[1]);
+            return JSON.parse(decoded);
         }
 
         return [];
@@ -127,9 +128,16 @@ export default class KeyguardApi {
 
                 if (request.result) {
                     if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
-                        const keys = await keyStore.list();
+                        // Save result in cookie, so lovely Safari can find them without IndexedDB access
+                        const keys = (await keyStore.list()).slice(0, 10);
+                        const keysWithLabelsEncoded = keys.map(x => Object.assign({}, x, {
+                            label: encodeURIComponent(x.label)
+                        }));
+
+                        const encodedKeys = JSON.stringify(keysWithLabelsEncoded);
+
                         const expireDate = new Date('23 Jun 2038 00:00:00 PDT');
-                        document.cookie = `accounts=${ JSON.stringify(keys.slice(0, 10)) }; expires=${expireDate.toUTCString()}`;
+                        document.cookie = `accounts=${encodedKeys }; expires=${ expireDate.toUTCString() }`;
                     }
 
                     resolve(request.result);

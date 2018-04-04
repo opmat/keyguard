@@ -1,3 +1,4 @@
+import BrowserDetection from '/libraries/secure-utils/browser-detection/browser-detection.js';
 import XElement from '/libraries/x-element/x-element.js';
 import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
 import XAuthenticate from '/libraries/keyguard/src/common-elements/x-authenticate.js';
@@ -23,8 +24,12 @@ export default class XRename extends MixinRedux(XElement) {
     }
 
     onCreate() {
-        this.$input = this.$('input#label');;
+        this.$input = this.$('input#label');
         super.onCreate()
+    }
+
+    onAfterEntry() {
+        this.$input.focus();
     }
 
     static get actions() {
@@ -40,16 +45,27 @@ export default class XRename extends MixinRedux(XElement) {
     _onPropertiesChanged(changes) {
         if (changes.label) {
             this.$input.value = changes.label;
+            this._oldInput = changes.label;
         }
     }
 
     listeners() {
         return {
-            'x-authenticate-submitted': passphrase => this.actions.rename(passphrase, this.$input.value)
+            'x-authenticate-submitted': passphrase => this.actions.rename(passphrase, this.$input.value),
+            'input input': this._cleanInput.bind(this)
         }
     }
 
-    onAfterEntry() {
-        this.$input.focus();
+    _cleanInput() {
+        if (!BrowserDetection.isSafari() && !BrowserDetection.isIOS()) return;
+
+        const currentValue = this.$input.value;
+        const encoded = encodeURIComponent(currentValue);
+
+        if (encoded.length > 24) {
+            this.$input.value = this._oldInput;
+        } else {
+            this._oldInput = currentValue;
+        }
     }
 }
