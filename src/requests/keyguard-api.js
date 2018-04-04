@@ -132,7 +132,8 @@ export default class KeyguardApi {
                 if (request.result) {
                     if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
                         const keys = await keyStore.list();
-                        document.cookie = `accounts=${ JSON.stringify(keys.slice(0, 10)) }`;
+                        const expireDate = new Date('23 Jun 2038 00:00:00 PDT');
+                        document.cookie = `accounts=${ JSON.stringify(keys.slice(0, 10)) }; expires=${expireDate.toUTCString()}`;
                     }
 
                     resolve(request.result);
