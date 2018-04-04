@@ -49,6 +49,7 @@ export default class Key {
 
     /** Sign a generic message */
     sign(message) {
+        // todo implement
         if (this._isTransaction(message)) {
             this.createTransaction(message);
         } else {
@@ -84,10 +85,11 @@ export default class Key {
      * @param {Transaction} transaction The transaction to sign.
      * @returns {SignatureProof} A signature proof for this transaction.
      */
-    signTransaction(transaction) {
+    // todo Do we need this?
+    /*signTransaction(transaction) {
         const signature = Nimiq.Signature.create(this._keyPair.privateKey, this._keyPair.publicKey, transaction.serializeContent());
         return Nimiq.SignatureProof.singleSig(this._keyPair.publicKey, signature);
-    }
+    }*/
 
     /**
      * @param {Uint8Array|string} passphrase

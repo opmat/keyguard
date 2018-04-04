@@ -162,6 +162,10 @@ export default class KeyguardApi {
     }*/
 
     async signSafe(transaction) {
+        if (transaction.value < 1/KeyguardApi.satoshis) {
+            throw new Error('Amount is too small');
+        }
+
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.HIGH) throw new Error('Unauthorized: sender is not a Safe account');
 
@@ -175,6 +179,10 @@ export default class KeyguardApi {
     }
 
     async signWallet(transaction) {
+        if (transaction.value < 1/KeyguardApi.satoshis) {
+            throw new Error('Amount is too small');
+        }
+
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.LOW) throw new Error('Unauthorized: sender is not a Wallet account');
 
