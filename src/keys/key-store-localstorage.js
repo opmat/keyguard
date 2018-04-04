@@ -101,16 +101,6 @@ class KeyStore {
         });
     }
 
-    /**
-     * After account was successfully backuped, allow its use
-     *
-     * @param userFriendlyAddress
-     * @return {Promise<void>}
-     */
-    async activate(userFriendlyAddress) {
-        // TODO: implement
-    }
-
     close() {
         return true;
     }
