@@ -23,8 +23,8 @@ export default class XKeyguard extends MixinRedux(XElement) {
             <x-create-wallet x-route="create-wallet"></x-create-wallet>
             <x-backup-words x-route="backup-words"></x-backup-words>
             <x-backup-file x-route="backup-file"></x-backup-file>
-            <x-import-file-safe x-route="import-from-file"></x-import-file-safe>
-            <x-import-file-wallet x-route="import-from-file"></x-import-file-wallet>
+            <x-import-file-safe x-route="import-from-file-safe"></x-import-file-safe>
+            <x-import-file-wallet x-route="import-from-file-wallet"></x-import-file-wallet>
             <x-import-words x-route="import-from-words"></x-import-words>
             <div><x-sign-safe x-route="sign-safe-transaction"></x-sign-safe></div>
             <div><x-sign-wallet x-route="sign-wallet-transaction"></x-sign-wallet></div>

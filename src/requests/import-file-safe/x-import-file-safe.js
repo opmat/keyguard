@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
-import XDecrypt from './x-decrypt.js';
+import XDecryptSafe from './x-decrypt-safe.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 import { importFromFile, decrypt } from './actions.js';
@@ -10,13 +10,13 @@ export default class XImportFileSafe extends MixinRedux(XElement) {
 
     html() {
         return `
-            <x-decrypt x-route=""></x-decrypt>
+            <x-decrypt-safe x-route=""></x-decrypt-safe>
             <x-set-label x-route="set-label"></x-set-label>
         `
     }
 
     children() {
-        return [ XSetLabel, XDecrypt ];
+        return [ XSetLabel, XDecryptSafe ];
     }
 
     async onCreate() {
@@ -40,7 +40,7 @@ export default class XImportFileSafe extends MixinRedux(XElement) {
     }
 
     _onSetLabel(label) {
-        this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { label });
+        this.actions.setData(RequestTypes.IMPORT_FROM_FILE_SAFE, { label });
         this.actions.importFromFile();
     }
 }
