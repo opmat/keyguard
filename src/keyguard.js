@@ -4,7 +4,7 @@ import AccessControl from './access-control/access-control.js';
 import SafePolicy from './access-control/safe-policy.js';
 import WalletPolicy from './access-control/wallet-policy.js';
 import MinerPolicy from './access-control/miner-policy.js';
-import config from './config.js';
+import Config from '/libraries/secure-utils/config/config.js';
 import store from './store.js';
 import XKeyguard from './x-keyguard.js';
 import XNoRequest from './x-no-request.js';
@@ -37,15 +37,15 @@ class Keyguard {
         // configure access control
         const defaultPolicies = [
             {
-                origin: config.safeOrigin,
+                origin: Config.origin('safe'),
                 policy: new SafePolicy()
             },
             {
-                origin: config.walletOrigin,
+                origin: Config.origin('wallet'),
                 policy: new WalletPolicy(1000)
             },
             {
-                origin: config.minerOrigin,
+                origin: Config.origin('miner'),
                 policy: new MinerPolicy()
             }
         ];
@@ -90,20 +90,7 @@ class Keyguard {
 (async function() {
     if (window.Nimiq) {
         await Nimiq.load();
-        switch (config.mode) {
-            case 'main':
-                Nimiq.GenesisConfig.main();
-                break;
-            case 'bounty':
-                Nimiq.GenesisConfig.bounty();
-                break;
-            case 'test':
-                Nimiq.GenesisConfig.test();
-                break;
-            case 'dev':
-            default:
-                Nimiq.GenesisConfig.dev();
-        }
+        Nimiq.GenesisConfig[Config.network]();
     }
     window.keyguard = new Keyguard();
 })();
