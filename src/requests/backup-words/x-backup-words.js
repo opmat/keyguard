@@ -1,10 +1,8 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XAuthenticateBackup from '/libraries/keyguard/src/common-elements/x-authenticate-backup.js';
-import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
 import XShowWords from '/libraries/keyguard/src/common-elements/x-show-words.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
-import XMnemonicPhrase from '/secure-elements/x-mnemonic-phrase/x-mnemonic-phrase.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData, setResult } from '../request-redux.js';
 import { backupWords } from './actions.js';
@@ -22,7 +20,7 @@ export default class XBackupWords extends MixinRedux(XElement) {
     }
 
     children() {
-        return [ XAuthenticateBackup, XPrivacyAgent, XMnemonicPhrase, XMyAccount, XShowWords ];
+        return [ XAuthenticateBackup, XPrivacyAgent, XShowWords ];
     }
 
     static get actions() {

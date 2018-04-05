@@ -21,7 +21,7 @@ export default class XSetPassphrase extends XElement {
     }
 
     children() {
-        return [ XPassphraseTipps, XPassphraseSetter, XPassphraseGetter, XMyAccount ];
+        return [ XPassphraseSetter, XPassphraseGetter, XMyAccount ];
     }
 
     onAfterEntry() {
