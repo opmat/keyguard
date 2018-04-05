@@ -2,31 +2,31 @@ import { RequestTypes, setExecuting, setResult, setData, loadAccountData, setErr
 import { Key, KeyType, keyStore } from '../../keys/index.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
 
-// called after entering the passphrase
+// called after entering the pin
 export function decrypt() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE_WALLET) );
 
         // get encrypted key from request data set with _startRequest in keyguard-api
-        const { encryptedKeyPair64, passphrase } = getState().request.data;
+        const { encryptedKeyPair64, pin } = getState().request.data;
 
         try {
             const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKeyPair64);
 
             // test if we can decrypt
-            const key = await Key.loadEncrypted(encryptedKeyPair, passphrase);
+            const key = await Key.loadEncrypted(encryptedKeyPair, pin);
 
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_FILE, Object.assign({}, key.getPublicInfo()) )
+                setData(RequestTypes.IMPORT_FROM_FILE_WALLET, Object.assign({}, key.getPublicInfo()) )
             );
 
-            (await XRouter.instance).goTo('import-from-file/set-label');
+            (await XRouter.instance).goTo('import-from-file-wallet/set-label');
 
         } catch (e) {
             console.error(e);
             // assume the password was wrong
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: true })
+                setData(RequestTypes.IMPORT_FROM_FILE_WALLET, { isWrongPin: true })
             );
         }
     }

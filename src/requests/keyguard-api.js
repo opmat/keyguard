@@ -196,10 +196,25 @@ export default class KeyguardApi {
     }
 
     importFromFile(encryptedKeyPair64) {
-        return this._startRequest(RequestTypes.IMPORT_FROM_FILE, {
+        if (encryptedKeyPair64.substr(0, 2) === '#2') {
+            return this._importFromFileWallet(encryptedKeyPair64.substr(2));
+        }
+
+        return this._importFromFileSafe(encryptedKeyPair64);
+    }
+
+    _importFromFileSafe(encryptedKeyPair64) {
+        return this._startRequest(RequestTypes.IMPORT_FROM_FILE_SAFE, {
             encryptedKeyPair64
         });
     }
+
+    _importFromFileWallet(encryptedKeyPair64) {
+        return this._startRequest(RequestTypes.IMPORT_FROM_FILE_WALLET, {
+            encryptedKeyPair64
+        });
+    }
+
 
     importFromWords() {
         return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);

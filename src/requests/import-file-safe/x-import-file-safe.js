@@ -6,7 +6,7 @@ import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 import { importFromFile, decrypt } from './actions.js';
 
-export default class XImportFile extends MixinRedux(XElement) {
+export default class XImportFileSafe extends MixinRedux(XElement) {
 
     html() {
         return `

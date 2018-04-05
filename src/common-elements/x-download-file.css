@@ -1,4 +1,4 @@
-@import '/secure-elements/x-downloadable-image/x-downloadable-image.css';
+@import '/elements/x-downloadable-image/x-downloadable-image.css';
 
 x-download-file{
     position:  relative;

@@ -2,7 +2,7 @@ import XElement from "/libraries/x-element/x-element.js";
 import BackupFile from "/libraries/backup-file/backup-file.js";
 import QrScanner from '/libraries/qr-scanner/qr-scanner.min.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import XDownloadableImage from "/secure-elements/x-downloadable-image/x-downloadable-image.js";
+import XDownloadableImage from "/elements/x-downloadable-image/x-downloadable-image.js";
 
 export default class XDownloadFile extends MixinRedux(XElement) {
 

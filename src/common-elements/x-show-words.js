@@ -10,7 +10,7 @@ export default class XShowWords extends MixinRedux(XElement) {
         <x-grow></x-grow>
         <x-mnemonic-phrase></x-mnemonic-phrase>
         <div class="spacing-bottom center warning">
-            <strong>Anyone with access to these words can steal all your funds! Do not make a screenshot!</strong>
+            <strong>Anyone with access to these words can steal all your funds! Do not take a screenshot!</strong>
         </div>
         <x-grow x-grow="2"></x-grow>
         <button>Continue</button>
