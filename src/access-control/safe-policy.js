@@ -14,7 +14,7 @@ export default class SafePolicy extends BasePolicy {
                 // todo remove
             case 'createWallet':
                 // todo remove
-            case 'getDefaultAccount':
+            case 'getMinerAccount':
             case 'rename':
                 return true;
             case 'signSafe':
@@ -34,7 +34,7 @@ export default class SafePolicy extends BasePolicy {
             case 'list':
             case 'createVolatile':
             // todo remove
-            case 'getDefaultAccount':
+            case 'getMinerAccount':
                 return false;
             case 'createSafe':
             // todo remove
