@@ -165,6 +165,7 @@ export default class KeyguardApi {
         if (transaction.value < 1/KeyguardApi.satoshis) {
             throw new Error('Amount is too small');
         }
+        if (transaction.network !== Nimiq.GenesisConfig.NETWORK_NAME) throw Error('Network missmatch');
 
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.HIGH) throw new Error('Unauthorized: sender is not a Safe account');
@@ -182,6 +183,7 @@ export default class KeyguardApi {
         if (transaction.value < 1/KeyguardApi.satoshis) {
             throw new Error('Amount is too small');
         }
+        if (transaction.network !== Nimiq.GenesisConfig.NETWORK_NAME) throw Error('Network missmatch');
 
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.LOW) throw new Error('Unauthorized: sender is not a Wallet account');
