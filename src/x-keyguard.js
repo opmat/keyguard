@@ -1,5 +1,4 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XRouter from '/secure-elements/x-router/x-router.js';
 import XLoader from '/secure-elements/x-loader/x-loader.js';
 import XCreateSafe from './requests/create-safe/x-create-safe.js';
 import XCreateWallet from './requests/create-wallet/x-create-wallet.js';
@@ -41,7 +40,6 @@ export default class XKeyguard extends MixinRedux(XElement) {
     children() {
         return [
             XLoader,
-            XRouter,
             XClose,
             XCreateSafe,
             XCreateWallet,
