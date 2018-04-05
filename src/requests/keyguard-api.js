@@ -43,14 +43,14 @@ export default class KeyguardApi {
         return [];
     }
 
-    async getDefaultAccount() {
+    async getMinerAccount() {
         const keys = await this.list();
 
-        const firstSafeKey = keys.find(key => key.type === KeyType.HIGH);
-        if (firstSafeKey) return firstSafeKey;
+        const firstMinerKey = keys.find(key => key.type === KeyType.LOW);
+        if (firstMinerKey) return firstMinerKey;
 
-        // Return first Wallet key or NULL
-        return keys.find(key => key.type === KeyType.LOW) || null;
+        // Return first Safe key or NULL
+        return keys.find(key => key.type === KeyType.HIGH) || null;
     }
 
     /*createVolatile(number) {
