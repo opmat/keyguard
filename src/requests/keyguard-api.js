@@ -43,14 +43,14 @@ export default class KeyguardApi {
         return [];
     }
 
-    async getDefaultAccount() {
+    async getMinerAccount() {
         const keys = await this.list();
 
-        const firstSafeKey = keys.find(key => key.type === KeyType.HIGH);
-        if (firstSafeKey) return firstSafeKey;
+        const firstMinerKey = keys.find(key => key.type === KeyType.LOW);
+        if (firstMinerKey) return firstMinerKey;
 
-        // Return first Wallet key or NULL
-        return keys.find(key => key.type === KeyType.LOW) || null;
+        // Return first Safe key or NULL
+        return keys.find(key => key.type === KeyType.HIGH) || null;
     }
 
     /*createVolatile(number) {
@@ -165,6 +165,7 @@ export default class KeyguardApi {
         if (transaction.value < 1/KeyguardApi.satoshis) {
             throw new Error('Amount is too small');
         }
+        if (transaction.network !== Nimiq.GenesisConfig.NETWORK_NAME) throw Error('Network missmatch');
 
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.HIGH) throw new Error('Unauthorized: sender is not a Safe account');
@@ -182,6 +183,7 @@ export default class KeyguardApi {
         if (transaction.value < 1/KeyguardApi.satoshis) {
             throw new Error('Amount is too small');
         }
+        if (transaction.network !== Nimiq.GenesisConfig.NETWORK_NAME) throw Error('Network missmatch');
 
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.LOW) throw new Error('Unauthorized: sender is not a Wallet account');
