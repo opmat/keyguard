@@ -1,6 +1,5 @@
 import XElement from '/libraries/x-element/x-element.js';
 import XRouter from '/secure-elements/x-router/x-router.js';
-import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
 import XDecryptWallet from './x-decrypt-wallet.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
@@ -11,12 +10,11 @@ export default class XImportFileWallet extends MixinRedux(XElement) {
     html() {
         return `
             <x-decrypt-wallet x-route=""></x-decrypt-wallet>
-            <x-set-label x-route="set-label"></x-set-label>
         `
     }
 
     children() {
-        return [ XSetLabel, XDecryptWallet ];
+        return [ XDecryptWallet ];
     }
 
     async onCreate() {
@@ -30,13 +28,13 @@ export default class XImportFileWallet extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-decrypt': this._onDecrypt.bind(this),
-            'x-set-label': this._onSetLabel.bind(this)
+            'x-decrypt': this._onDecrypt.bind(this)
         }
     }
 
-    _onDecrypt() {
-        this.actions.decrypt();
+    async _onDecrypt() {
+        await this.actions.decrypt();
+        this._onSetLabel('Miner Wallet');
     }
 
     _onSetLabel(label) {

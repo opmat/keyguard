@@ -20,7 +20,7 @@ export function testPin(pin) {
             console.error(e);
             // assume the password was wrong
             dispatch(
-                setData(RequestTypes.BACKUP_FILE, { isWrongPassphrase: true })
+                setData(RequestTypes.BACKUP_FILE, { isWrongPin: true })
             );
         }
     }

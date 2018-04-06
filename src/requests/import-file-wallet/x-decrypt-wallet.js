@@ -10,6 +10,7 @@ export default class XDecryptWallet extends MixinRedux(XElement) {
         <h2>Please enter your PIN to unlock your Account Access File.</h2>
         <x-grow></x-grow>
         <x-authenticate-pin button-label="Import"></x-authenticate-pin>
+        <x-grow></x-grow>
         `;
     }
 
@@ -19,8 +20,18 @@ export default class XDecryptWallet extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-authenticate-submitted': this._onSubmit.bind(this)
+            'x-authenticate-pin-submitted': this._onSubmit.bind(this)
         };
+    }
+
+    onEntry() {
+        console.log("onentry");
+        this.$authenticatePin.$pinpad.open();
+    }
+
+    onExit() {
+        console.log("onexit");
+        this.$authenticatePin.$pinpad.close();
     }
 
     static get actions() {

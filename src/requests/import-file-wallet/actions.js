@@ -20,8 +20,6 @@ export function decrypt() {
                 setData(RequestTypes.IMPORT_FROM_FILE_WALLET, Object.assign({}, key.getPublicInfo()) )
             );
 
-            (await XRouter.instance).goTo('import-from-file-wallet/set-label');
-
         } catch (e) {
             console.error(e);
             // assume the password was wrong
@@ -35,16 +33,16 @@ export function decrypt() {
 
 export function importFromFile() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE_WALLET) );
 
-        const { encryptedKeyPair64, passphrase, label } = getState().request.data;
+        const { encryptedKeyPair64, pin, label } = getState().request.data;
 
         try {
             const encryptedKeyPair = Nimiq.BufferUtils.fromBase64(encryptedKeyPair64);
 
-            const key = await Key.loadEncrypted(encryptedKeyPair, passphrase);
+            const key = await Key.loadEncrypted(encryptedKeyPair, pin);
 
-            key.type = KeyType.HIGH;
+            key.type = KeyType.LOW;
             key.label = label;
 
             // actual import
@@ -58,12 +56,12 @@ export function importFromFile() {
             await keyStore.putPlain(keyInfo);
 
             dispatch(
-                setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
+                setResult(RequestTypes.IMPORT_FROM_FILE_WALLET, key.getPublicInfo())
             );
         } catch (e) {
             console.error(e);
             dispatch(
-                setError(RequestTypes.IMPORT_FROM_FILE, e)
+                setError(RequestTypes.IMPORT_FROM_FILE_WALLET, e)
             );
         }
     }
