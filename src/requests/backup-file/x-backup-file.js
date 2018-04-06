@@ -1,21 +1,21 @@
 import XElement from '/libraries/x-element/x-element.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import XAuthenticateBackup from '/libraries/keyguard/src/common-elements/x-authenticate-backup.js';
-import { testPassPhrase } from './actions.js';
+import XAuthenticateBackupPin from '/libraries/keyguard/src/common-elements/x-authenticate-backup-pin.js';
+import { testPin } from './actions.js';
 
 export default class XBackupFile extends MixinRedux(XElement) {
 
     html() { return `
-        <x-authenticate-backup></x-authenticate-backup>
+        <x-authenticate-backup-pin></x-authenticate-backup-pin>
         `;
     }
 
     children() {
-        return [ XAuthenticateBackup ];
+        return [ XAuthenticateBackupPin ];
     }
 
     static get actions() {
-        return { testPassPhrase };
+        return { testPin };
     }
 
     listeners() {
@@ -24,7 +24,7 @@ export default class XBackupFile extends MixinRedux(XElement) {
         };
     }
 
-    _onSubmit(passPhrase) {
-        this.actions.testPassPhrase(passPhrase);
+    _onSubmit(pin) {
+        this.actions.testPin(pin);
     }
 }

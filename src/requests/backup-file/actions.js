@@ -1,7 +1,7 @@
 import { RequestTypes, setExecuting, setResult, setData } from '../request-redux.js';
 import { keyStore } from '/libraries/keyguard/src/keys/index.js';
 
-export function testPassPhrase(passphrase) {
+export function testPin(pin) {
     return async (dispatch, getState) => {
         dispatch( setExecuting(RequestTypes.BACKUP_FILE) );
 
@@ -9,7 +9,7 @@ export function testPassPhrase(passphrase) {
 
         // try to decrypt to authenticate the user
         try {
-            await keyStore.get(address, passphrase);
+            await keyStore.get(address, pin);
 
             const encodedWalletKey = `#2${ Nimiq.BufferUtils.toBase64(encryptedKeyPair) }`;
 
