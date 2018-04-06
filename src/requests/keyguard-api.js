@@ -217,21 +217,26 @@ export default class KeyguardApi {
         });
     }
 
-
     importFromWords() {
         return this._startRequest(RequestTypes.IMPORT_FROM_WORDS);
     }
 
-    backupFile(address) {
+    async backupFile(address) {
         if (!ValidationUtils.isValidAddress(address)) return;
+
+        const key = await keyStore.getPlain(address);
+        if (key.type !== KeyType.LOW) throw new Error('Unauthorized: address is not a Wallet account');
 
         return this._startRequest(RequestTypes.BACKUP_FILE, {
             address
         });
     }
 
-    backupWords(address) {
+    async backupWords(address) {
         if (!ValidationUtils.isValidAddress(address)) return;
+
+        const key = await keyStore.getPlain(address);
+        if (key.type !== KeyType.HIGH) throw new Error('Unauthorized: address is not a Safe account');
 
         return this._startRequest(RequestTypes.BACKUP_WORDS, {
             address
