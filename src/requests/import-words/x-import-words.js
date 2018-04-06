@@ -9,7 +9,6 @@ import XRouter from '/secure-elements/x-router/x-router.js';
 
 export default class XImportWords extends MixinRedux(XElement) {
 
-    // todo fix router, so we can fix order. Last should be first
     html() { return `
           <x-enter-words x-route=""></x-enter-words>
           <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>

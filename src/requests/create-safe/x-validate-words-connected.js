@@ -1,5 +1,6 @@
 import XValidateWords from '/secure-elements/x-validate-words/x-validate-words.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
+import Config from '/libraries/secure-utils/config/config.js';
 
 export default class XValidateWordsConnected extends MixinRedux(XValidateWords) {
 
@@ -18,3 +19,9 @@ export default class XValidateWordsConnected extends MixinRedux(XValidateWords) 
     }
 }
 
+if (Config.network !== 'main') {
+    window.pass = () => {
+        const $validateWords = document.body.querySelector('x-validate-words-connected').xDebug
+        $validateWords.fire('x-validate-words');
+    }
+}
