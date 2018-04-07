@@ -20,7 +20,8 @@ export function signSafeTransaction(passphrase) {
                     value: tx.value / SATOSHIS,
                     fee: tx.fee / SATOSHIS,
                     validityStartHeight: tx.validityStartHeight,
-                    signature: tx.signature.serialize()
+                    signature: tx.signature.serialize(),
+                    hash: tx.hash().toBase64()
                 })
             )
         } catch (e) {
