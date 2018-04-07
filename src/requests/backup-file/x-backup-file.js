@@ -12,6 +12,7 @@ export default class XBackupFile extends MixinRedux(XElement) {
         <h2>Please enter your pin to backup your account.</h2>
         <x-grow x-grow="0.5"></x-grow>
         <x-my-account></x-my-account>
+        <x-grow></x-grow>
         <x-authenticate-pin button-label="Backup"></x-authenticate-pin>
         </section>
         `;

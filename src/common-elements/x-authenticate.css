@@ -37,5 +37,6 @@ x-authenticate.wrong button {
 }
 
 x-authenticate-pin {
+    display: block;
     margin-top: 32px;
 }
