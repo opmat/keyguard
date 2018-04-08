@@ -59,22 +59,25 @@ class Keyguard {
         };
 
         // cancel request and close window when there is an error
-        self.onerror = (error) => {
-            const { reject } = store.getState().request;
-            if (reject) {
-                reject(error);
-                self.close();
-            }
-        };
+        if (!Config.devMode) {
+            self.onerror = (error) => {
+                const { reject } = store.getState().request;
+                if (reject) {
+                    reject(error);
+                    self.close();
+                }
+            };
 
-        // cancel request and close window when there is an unhandled promise rejection
-        self.onunhandledrejection = (event) => {
-            const { reject } = store.getState().request;
-            if (reject) {
-                reject(new Error(event.reason));
-                self.close();
-            }
-        };
+            // cancel request and close window when there is an unhandled promise rejection
+            self.onunhandledrejection = (event) => {
+                const { reject } = store.getState().request;
+                if (reject) {
+                    reject(new Error(event.reason));
+                    self.close();
+                }
+            };
+        }
+
 
         // start postMessage RPC server
         this._api = RPC.Server(AccessControl.addAccessControl(
