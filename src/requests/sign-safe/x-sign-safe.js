@@ -1,7 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
-import XAccount from '/libraries/keyguard/src/common-elements/x-account.js';
 import XAuthenticate from '/libraries/keyguard/src/common-elements/x-authenticate.js';
+import XIdenticon from '/secure-elements/x-identicon/x-identicon.js';
+import XAddressNoCopy from '/secure-elements/x-address-no-copy/x-address-no-copy.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 import { signSafeTransaction } from './actions.js';
@@ -11,23 +11,64 @@ export default class XSignSafe extends MixinRedux(XElement) {
     html() { return `
         <h1>Authorize Transaction</h1>
         <h2>Enter your passphrase below to authorize this transaction:</h2>
-        <x-my-account></x-my-account>
-        <i class="material-icons">arrow_downward</i>
-        <x-account></x-account>
-        <div class="x-value"><span class="value"></span> NIM</div>
-        <div class="x-fee"><span class="fee"></span> Fee</div>
+        
+        <div class="transaction">
+            <div class="center">
+                <x-identicon sender></x-identicon>
+                <i class="arrow material-icons">arrow_forward</i>
+                <x-identicon recipient></x-identicon>
+            </div>
+        
+            <div class="center">
+                <div class="x-value"><span class="value"></span> NIM</div>
+            </div>
+        
+            <div class="row">
+                <label>From</label>
+                <div class="row-data">
+                    <div class="label" sender></div>
+                    <x-address-no-copy sender></x-address-no-copy>
+                </div>
+            </div>
+        
+            <div class="row">
+                <label>To</label>
+                <div class="row-data">
+                    <x-address-no-copy recipient></x-address-no-copy>
+                </div>
+            </div>
+        
+            <div class="fee-section display-none row">
+                <label>Fee</label>
+                <div class="row-data">
+                    <div class="fee"></div>
+                </div>
+            </div>
+        </div>
+        
         <x-authenticate button-label="Confirm"></x-authenticate>
         `;
     }
 
     children() {
-        return [ XAccount, XMyAccount, XAuthenticate ];
+        return [ XIdenticon, XAddressNoCopy, XAuthenticate ];
+    }
+
+    onCreate() {
+        this.$senderIdenticon = this.$identicon[0];
+        this.$recipientIdenticon = this.$identicon[1];
+        this.$senderLabel = this.$('.label[sender]');
+        this.$senderAddress = this.$addressNoCopy[0];
+        this.$recipientAddress = this.$addressNoCopy[1];
+
+        super.onCreate();
     }
 
     static mapStateToProps(state) {
         return {
             requestType: state.request.requestType,
-            transaction: state.request.data.transaction
+            transaction: state.request.data.transaction,
+            myLabel: state.request.data.label
         };
     }
 
@@ -44,20 +85,27 @@ export default class XSignSafe extends MixinRedux(XElement) {
 
         if (requestType !== RequestTypes.SIGN_SAFE_TRANSACTION) return;
 
-        const { transaction } = changes;
+        const { transaction, myLabel } = changes;
 
         if (transaction) {
-            const { recipient, value, fee } = transaction;
+            const { sender, recipient, value, fee } = transaction;
 
-            this.$account.address = recipient;
+            this.$senderAddress.address = sender;
+            this.$senderIdenticon.address = sender;
+
+            this.$recipientAddress.address = recipient;
+            this.$recipientIdenticon.address = recipient;
 
             this.$('.value').textContent = (value/1e5).toString();
 
-            if (fee === 0) {
-                this.$el.removeChild(this.$('.x-fee'));
-            } else {
-                this.$('.fee').textContent = (fee/1e5).toString();
+            if (fee !== 0) {
+                this.$('.fee-section').classList.remove('display-none');
+                this.$('.fee').textContent = (fee/1e5).toString() + ' NIM';
             }
+        }
+
+        if (myLabel) {
+            this.$senderLabel.textContent = this.properties.myLabel;
         }
     }
 

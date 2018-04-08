@@ -1,7 +1,5 @@
+@import '../../common-elements/transaction.css';
+
 x-sign-safe .x-value {
     font-size: 34px;
-}
-
-x-sign-safe x-fee {
-    font-size: 16px;
 }

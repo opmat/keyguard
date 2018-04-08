@@ -13,7 +13,7 @@ export default class XAccount extends XElement {
         `
     }
 
-    children() { return [XIdenticon, XAddressNoCopy ] }
+    children() { return [ XIdenticon, XAddressNoCopy ] }
 
     onCreate() {
         this.$label = this.$('.x-account-label');

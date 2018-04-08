@@ -1,7 +1,5 @@
-x-sign-wallet .x-value {
-    font-size: 34px;
-}
+@import '../../common-elements/transaction.css';
 
-x-sign-wallet x-fee {
-    font-size: 16px;
+x-sign-safe .x-value {
+    font-size: 34px;
 }
