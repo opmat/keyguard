@@ -20,7 +20,7 @@ function getRequestElement(requestType) {
             return XImportWords;
 
         case RequestTypes.IMPORT_FROM_FILE_SAFE:
-            return XImportFileWallet;
+            return XImportFileSafe;
 
         case RequestTypes.IMPORT_FROM_FILE_WALLET:
             return XImportFileWallet;
