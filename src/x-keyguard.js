@@ -12,23 +12,57 @@ import XBackupWords from './requests/backup-words/x-backup-words.js';
 import XRename from './requests/rename/x-rename.js';
 import XClose from '/secure-elements/x-close/x-close.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
+import { RequestTypes }  from './requests/request-redux.js';
 
-export default class XKeyguard extends MixinRedux(XElement) {
+function getRequestElement(requestType) {
+    switch (requestType) {
+        case RequestTypes.IMPORT_FROM_WORDS:
+            return XImportWords;
 
-    html() {
-        return `
+        case RequestTypes.IMPORT_FROM_FILE_SAFE:
+            return XImportFileWallet;
+
+        case RequestTypes.IMPORT_FROM_FILE_WALLET:
+            return XImportFileWallet;
+
+        case RequestTypes.CREATE_SAFE:
+            return XCreateSafe;
+
+        case RequestTypes.CREATE_WALLET:
+            return XCreateWallet;
+
+        case RequestTypes.SIGN_SAFE_TRANSACTION:
+            return XSignSafe;
+
+        case RequestTypes.SIGN_WALLET_TRANSACTION:
+            return XSignWallet;
+
+        case RequestTypes.BACKUP_WORDS:
+            return XBackupWords;
+
+        case RequestTypes.BACKUP_FILE:
+            return XBackupFile;
+
+        case RequestTypes.RENAME:
+            return XRename;
+
+        default:
+            throw new Error('unknown request');
+    }
+}
+
+export default (requestType) => {
+    const RequestElement = getRequestElement(requestType);
+
+    const tagName = XElement.__toTagName(RequestElement.name);
+
+    return class XKeyguard extends MixinRedux(XElement) {
+
+        html() {
+            return `
         <x-loader></x-loader>
         <div class="x-route-container">
-            <x-create-safe x-route="create-safe"></x-create-safe>
-            <x-create-wallet x-route="create-wallet"></x-create-wallet>
-            <x-backup-words x-route="backup-words"></x-backup-words>
-            <x-backup-file x-route="backup-file"></x-backup-file>
-            <x-import-file-safe x-route="import-from-file-safe"></x-import-file-safe>
-            <x-import-file-wallet x-route="import-from-file-wallet"></x-import-file-wallet>
-            <x-import-words x-route="import-from-words"></x-import-words>
-            <div><x-sign-safe x-route="sign-safe-transaction"></x-sign-safe></div>
-            <div><x-sign-wallet x-route="sign-wallet-transaction"></x-sign-wallet></div>
-            <div><x-rename x-route="rename"></x-rename></div>
+            <${ tagName } x-route="${requestType}"></${ tagName }>
             <x-close x-route="close"></x-close>
             <div><x-close x-route="/"></x-close></div>
         </div>
@@ -37,34 +71,22 @@ export default class XKeyguard extends MixinRedux(XElement) {
             Cancel
         </a>
         `;
-    }
+        }
 
-    children() {
-        return [
-            XLoader,
-            XClose,
-            XCreateSafe,
-            XCreateWallet,
-            XImportWords,
-            XRename,
-            XImportFileWallet,
-            XImportFileSafe,
-            XSignSafe,
-            XSignWallet,
-            XBackupWords,
-            XBackupFile
-        ];
-    }
+        children() {
+            return [ XLoader, XClose, RequestElement ];
+        }
 
-    static mapStateToProps(state) {
-        return {
-            executing: state.request.executing
-        };
-    }
+        static mapStateToProps(state) {
+            return {
+                executing: state.request.executing
+            };
+        }
 
-    _onPropertiesChanged(changes) {
-        if (changes.executing !== undefined) {
-            this.$loader.loading = changes.executing;
+        _onPropertiesChanged(changes) {
+            if (changes.executing !== undefined) {
+                this.$loader.loading = changes.executing;
+            }
         }
     }
 }

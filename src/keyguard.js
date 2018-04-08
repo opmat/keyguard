@@ -26,8 +26,9 @@ class Keyguard {
             // wait until request is started
             const unsubscribe = store.subscribe(() => {
                 const state = store.getState();
-                if (state.request.requestType) {
-                    window.app = new XKeyguard($appContainer);
+                const requestType = state.request.requestType;
+                if (requestType) {
+                    window.app = new (XKeyguard(requestType))($appContainer);
                     unsubscribe();
                     clearTimeout(noRequestTimer);
                 }
