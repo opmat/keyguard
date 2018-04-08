@@ -11,7 +11,9 @@ export default class XSetPassphrase extends XElement {
         <h1>Set a Pass Phrase</h1>
         <h2>Please enter a Pass Phrase to secure your account.</h2>
         <p>The Pass Phrase is <strong>not</strong> an alternative for your 24 Recovery Words and it cannot be changed or reset!</p>
+        <x-grow x-grow="0.5"></x-grow>
         <x-my-account></x-my-account>
+        <x-grow x-grow="0.5"></x-grow>
         <x-passphrase-setter x-route="" button-label="Confirm" show-indicator="true"></x-passphrase-setter>
         <section class="center" x-route="confirm">
             <h2>Please repeat your Pass Phrase:</h2>

@@ -70,6 +70,7 @@
 
 [x-route] [x-route] {
     min-height: unset;
+    flex-grow: 1;
 }
 
 [x-route] > * {
