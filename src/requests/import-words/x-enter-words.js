@@ -13,7 +13,7 @@ window.test = async () => {
         setTimeout(() => {
             field.$input.value = word;
             field._value = word;
-            field.__onValueChanged({type: 'blur'});
+            field._onBlur();
         }, index * 50);
     }
     const $mnemonicInput = document.body.querySelector('x-mnemonic-input').xDebug
