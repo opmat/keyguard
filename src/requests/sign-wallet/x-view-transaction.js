@@ -42,9 +42,11 @@ export default class XViewTransaction extends MixinRedux(XElement) {
                     <div class="fee"></div>
                 </div>
             </div>
-            
-            <button>Enter PIN</button>
         </div>
+        
+        <x-grow></x-grow>
+        
+        <button>Enter PIN</button>
         `;
     }
 

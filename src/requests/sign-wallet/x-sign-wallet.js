@@ -8,7 +8,7 @@ import { signWalletTransaction } from './actions.js';
 export default class XSignWallet extends MixinRedux(XElement) {
 
     html() { return `
-        <x-view-transaction x-route="">
+        <x-view-transaction x-route=""></x-view-transaction>
         <x-enter-pin x-route="enter-pin"></x-enter-pin>
         `;
     }
@@ -23,7 +23,7 @@ export default class XSignWallet extends MixinRedux(XElement) {
 
     listeners() {
         return {
-            'x-view-transaction-confirm': async () => (await XRouter.instance).goTo(this, 'enter-pin'),
+            'x-view-transaction-confirm': async () => (await XRouter.instance).goTo('sign-wallet-transaction/enter-pin'),
             'x-authenticate-pin-submitted': pin => this.actions.signWalletTransaction(pin)
         }
     }

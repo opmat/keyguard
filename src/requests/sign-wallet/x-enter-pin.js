@@ -7,8 +7,7 @@ export default class XEnterPin extends MixinRedux(XElement) {
     html() { return `
         <h1>Enter your PIN</h1>
         <h2>Please enter your PIN to authorize the transaction</h2>
-        <x-grow></x-grow>
-        <x-authenticate-pin x-route=""></x-authenticate-pin>
+        <x-authenticate-pin x-route="" class="center"></x-authenticate-pin>
         `;
     }
 
