@@ -9,10 +9,14 @@ export default class XShowWords extends MixinRedux(XElement) {
         <h2 secondary>Write down and physically store the complete following list of 24 Account Recovery Words at a <strong>SAFE and SECRET</strong> place to recover this account in the future.</h2>
         <x-grow></x-grow>
         <x-mnemonic-phrase></x-mnemonic-phrase>
+        <div class="info-box">
+            <i class="info-icon"></i>
+            <p class="info-text">Move your mouse over the numbers or tap them to reveal each word.</p>
+        </div>
         <div class="spacing-bottom center warning">
             <strong>Anyone with access to these words can steal all your funds!</strong>
         </div>
-        <x-grow x-grow="2"></x-grow>
+        <x-grow></x-grow>
         <button>Continue</button>
         `;
     }

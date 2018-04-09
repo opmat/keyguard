@@ -1,3 +1,7 @@
 x-show-words x-mnemonic-phrase {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
+}
+
+x-show-words .info-box {
+    margin-bottom: 24px;
 }
