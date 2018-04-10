@@ -1,46 +1,38 @@
 import XElement from '/libraries/x-element/x-element.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
-import { testPin } from './actions.js';
-import XAuthenticatePin from '/libraries/keyguard/src/common-elements/x-authenticate-pin.js';
-import XMyAccount from '/libraries/keyguard/src/common-elements/x-my-account.js';
+import XDownloadFile from '/libraries/keyguard/src/common-elements/x-download-file.js';
+import XBackupEnterPin from './x-backup-enter-pin.js';
+import { RequestTypes, setResult } from '../request-redux.js';
+import { backupFile } from './actions.js';
 
 export default class XBackupFile extends MixinRedux(XElement) {
 
     html() { return `
-        <section>
-        <h1>Backup your Account</h1>
-        <h2>Please enter your pin to backup your account.</h2>
-        <x-grow x-grow="0.5"></x-grow>
-        <x-my-account></x-my-account>
-        <x-grow></x-grow>
-        <x-authenticate-pin button-label="Backup"></x-authenticate-pin>
-        </section>
+        <x-backup-enter-pin x-route=""></x-backup-enter-pin>
+        <x-download-file x-route="download"></x-download-file>
         `;
     }
 
     children() {
-        return [ XAuthenticatePin, XMyAccount ];
-    }
-
-    onEntry() {
-        this.$authenticatePin.$pinpad.open();
-    }
-
-    onExit() {
-        this.$authenticatePin.$pinpad.close();
+        return [ XBackupEnterPin, XDownloadFile ];
     }
 
     static get actions() {
-        return { testPin };
+        return { backupFile, setResult };
     }
 
     listeners() {
         return {
-            'x-authenticate-pin-submitted': this._onSubmit.bind(this)
+            'x-authenticate-pin-submitted': this._onSubmit.bind(this),
+            'x-file-download-complete': this._onFileDownload.bind(this)
         };
     }
 
     _onSubmit(pin) {
-        this.actions.testPin(pin);
+        this.actions.backupFile(pin);
+    }
+
+    _onFileDownload() {
+        this.actions.setResult(RequestTypes.BACKUP_FILE, true);
     }
 }

@@ -7,7 +7,7 @@
 @import '/secure-elements/x-validate-words/x-validate-words.css';
 @import '/secure-elements/x-privacy-agent/x-privacy-agent.css';
 @import '/secure-elements/nimiq-logo/nimiq-logo.css';
-@import '/elements/x-account-backup-import/x-account-backup-import.css';
+@import '/secure-elements/x-account-backup-import/x-account-backup-import.css';
 @import '/secure-elements/x-loader/x-loader.css';
 @import '/secure-elements/x-pinpad/x-pinpad.css';
 @import './common-elements/x-account.css';
