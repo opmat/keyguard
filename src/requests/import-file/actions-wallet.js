@@ -1,13 +1,11 @@
 import { RequestTypes, setExecuting, setResult, setData, loadAccountData, setError } from '../request-redux.js';
 import { Key, KeyType, keyStore } from '../../keys/index.js';
-import XRouter from '/secure-elements/x-router/x-router.js';
 
 // called after entering the pin
 export function decrypt() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE_WALLET) );
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
-        // get encrypted key from request data set with _startRequest in keyguard-api
         const { encryptedKeyPair64, pin } = getState().request.data;
 
         try {
@@ -17,14 +15,18 @@ export function decrypt() {
             const key = await Key.loadEncrypted(encryptedKeyPair, pin);
 
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_FILE_WALLET, Object.assign({}, key.getPublicInfo()) )
+                setData(RequestTypes.IMPORT_FROM_FILE, Object.assign({}, key.getPublicInfo(), {
+                    label: 'Miner Account'
+                }) )
             );
+
+            dispatch(importFromFile());
 
         } catch (e) {
             console.error(e);
             // assume the password was wrong
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_FILE_WALLET, { isWrongPin: true })
+                setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPin: true })
             );
         }
     }
@@ -33,7 +35,7 @@ export function decrypt() {
 
 export function importFromFile() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE_WALLET) );
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
         const { encryptedKeyPair64, pin, label } = getState().request.data;
 
@@ -56,12 +58,12 @@ export function importFromFile() {
             await keyStore.putPlain(keyInfo);
 
             dispatch(
-                setResult(RequestTypes.IMPORT_FROM_FILE_WALLET, key.getPublicInfo())
+                setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
             );
         } catch (e) {
             console.error(e);
             dispatch(
-                setError(RequestTypes.IMPORT_FROM_FILE_WALLET, e)
+                setError(RequestTypes.IMPORT_FROM_FILE, e)
             );
         }
     }

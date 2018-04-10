@@ -5,9 +5,8 @@ import XRouter from '/secure-elements/x-router/x-router.js';
 // called after entering the passphrase
 export function decrypt() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE_SAFE) );
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
-        // get encrypted key from request data set with _startRequest in keyguard-api
         const { encryptedKeyPair64, passphrase } = getState().request.data;
 
         try {
@@ -17,16 +16,16 @@ export function decrypt() {
             const key = await Key.loadEncrypted(encryptedKeyPair, passphrase);
 
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_FILE_SAFE, Object.assign({}, key.getPublicInfo()) )
+                setData(RequestTypes.IMPORT_FROM_FILE, Object.assign({}, key.getPublicInfo()) )
             );
 
-            (await XRouter.instance).goTo('import-from-file-safe/set-label');
+            (await XRouter.instance).goTo('import-from-file/set-label');
 
         } catch (e) {
             console.error(e);
             // assume the password was wrong
             dispatch(
-                setData(RequestTypes.IMPORT_FROM_FILE_SAFE, { isWrongPassphrase: true })
+                setData(RequestTypes.IMPORT_FROM_FILE, { isWrongPassphrase: true })
             );
         }
     }
@@ -35,7 +34,7 @@ export function decrypt() {
 
 export function importFromFile() {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE_SAFE) );
+        dispatch( setExecuting(RequestTypes.IMPORT_FROM_FILE) );
 
         const { encryptedKeyPair64, passphrase, label } = getState().request.data;
 
@@ -58,12 +57,12 @@ export function importFromFile() {
             await keyStore.putPlain(keyInfo);
 
             dispatch(
-                setResult(RequestTypes.IMPORT_FROM_FILE_SAFE, key.getPublicInfo())
+                setResult(RequestTypes.IMPORT_FROM_FILE, key.getPublicInfo())
             );
         } catch (e) {
             console.error(e);
             dispatch(
-                setError(RequestTypes.IMPORT_FROM_FILE_SAFE, e)
+                setError(RequestTypes.IMPORT_FROM_FILE, e)
             );
         }
     }

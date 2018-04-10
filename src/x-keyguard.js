@@ -3,8 +3,7 @@ import XLoader from '/secure-elements/x-loader/x-loader.js';
 import XCreateSafe from './requests/create-safe/x-create-safe.js';
 import XCreateWallet from './requests/create-wallet/x-create-wallet.js';
 import XImportWords from './requests/import-words/x-import-words.js';
-import XImportFileWallet from './requests/import-file-wallet/x-import-file-wallet.js'
-import XImportFileSafe from './requests/import-file-safe/x-import-file-safe.js';
+import XImportFile from './requests/import-file/x-import-file.js';
 import XSignSafe from './requests/sign-safe/x-sign-safe.js';
 import XSignWallet from './requests/sign-wallet/x-sign-wallet.js';
 import XBackupFile from './requests/backup-file/x-backup-file.js';
@@ -19,11 +18,8 @@ function getRequestElement(requestType) {
         case RequestTypes.IMPORT_FROM_WORDS:
             return XImportWords;
 
-        case RequestTypes.IMPORT_FROM_FILE_SAFE:
-            return XImportFileSafe;
-
-        case RequestTypes.IMPORT_FROM_FILE_WALLET:
-            return XImportFileWallet;
+        case RequestTypes.IMPORT_FROM_FILE:
+            return XImportFile;
 
         case RequestTypes.CREATE_SAFE:
             return XCreateSafe;

@@ -2,6 +2,7 @@ import XElement from '/libraries/x-element/x-element.js';
 import XAuthenticatePin from '/libraries/keyguard/src/common-elements/x-authenticate-pin.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
+import KeyType from '/libraries/keyguard/src/keys/key-type.js';
 
 export default class XDecryptWallet extends MixinRedux(XElement) {
 
@@ -18,6 +19,12 @@ export default class XDecryptWallet extends MixinRedux(XElement) {
         return [ XAuthenticatePin ];
     }
 
+    static mapStateToProps(state) {
+        return {
+            keyType: state.request.data.type
+        }
+    }
+
     listeners() {
         return {
             'x-authenticate-pin-submitted': this._onSubmit.bind(this)
@@ -25,12 +32,14 @@ export default class XDecryptWallet extends MixinRedux(XElement) {
     }
 
     onEntry() {
-        console.log("onentry");
+        if (this.properties.keyType !== KeyType.LOW) {
+            throw new Error('Key type does not match');
+        }
+
         this.$authenticatePin.$pinpad.open();
     }
 
     onExit() {
-        console.log("onexit");
         this.$authenticatePin.$pinpad.close();
     }
 
@@ -39,7 +48,7 @@ export default class XDecryptWallet extends MixinRedux(XElement) {
     }
 
     _onSubmit(pin) {
-        this.actions.setData(RequestTypes.IMPORT_FROM_FILE_WALLET, { pin });
+        this.actions.setData(RequestTypes.IMPORT_FROM_FILE, { pin });
         this.fire('x-decrypt');
     }
 }
