@@ -41,10 +41,10 @@ class Keyguard {
                 origin: Config.origin('safe'),
                 policy: new SafePolicy()
             },
-            {
+            /*{
                 origin: Config.origin('wallet'),
                 policy: new WalletPolicy(1000)
-            },
+            },*/
             {
                 origin: Config.origin('miner'),
                 policy: new MinerPolicy()
