@@ -10,8 +10,6 @@ import BrowserDetection from '/libraries/secure-utils/browser-detection/browser-
 
 export default class KeyguardApi {
 
-    static get satoshis() { return 1e5 }
-
     constructor() {
         this.actions = bindActionCreators({
             createVolatile,
@@ -162,7 +160,7 @@ export default class KeyguardApi {
     }*/
 
     async signSafe(transaction) {
-        if (transaction.value < 1/KeyguardApi.satoshis) {
+        if (transaction.value < 1/Nimiq.Policy.SATOSHIS_PER_COIN) {
             throw new Error('Amount is too small');
         }
         if (transaction.network !== Nimiq.GenesisConfig.NETWORK_NAME) throw Error(`Network missmatch: ${transaction.network} in transaction, but ${Nimiq.GenesisConfig.NETWORK_NAME} in Keyguard`);
@@ -170,8 +168,8 @@ export default class KeyguardApi {
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.HIGH) throw new Error('Unauthorized: sender is not a Safe account');
 
-        transaction.value = Math.round(transaction.value * KeyguardApi.satoshis);
-        transaction.fee = Math.round(transaction.fee * KeyguardApi.satoshis);
+        transaction.value = Nimiq.Policy.coinsToSatoshis(transaction.value);
+        transaction.fee = Nimiq.Policy.coinsToSatoshis(transaction.fee);
 
         return this._startRequest(RequestTypes.SIGN_SAFE_TRANSACTION, {
             transaction,
@@ -180,7 +178,7 @@ export default class KeyguardApi {
     }
 
     async signWallet(transaction) {
-        if (transaction.value < 1/KeyguardApi.satoshis) {
+        if (transaction.value < 1/Nimiq.Policy.SATOSHIS_PER_COIN) {
             throw new Error('Amount is too small');
         }
         if (transaction.network !== Nimiq.GenesisConfig.NETWORK_NAME) throw Error(`Network missmatch: ${transaction.network} in transaction, ${Nimiq.GenesisConfig.NETWORK_NAME} in Keyguard`);
@@ -188,8 +186,8 @@ export default class KeyguardApi {
         const key = await keyStore.getPlain(transaction.sender);
         if (key.type !== KeyType.LOW) throw new Error('Unauthorized: sender is not a Wallet account');
 
-        transaction.value = Math.round(transaction.value * KeyguardApi.satoshis);
-        transaction.fee = Math.round(transaction.fee * KeyguardApi.satoshis);
+        transaction.value = Nimiq.Policy.coinsToSatoshis(transaction.value);
+        transaction.fee = Nimiq.Policy.coinsToSatoshis(transaction.fee);
 
         return this._startRequest(RequestTypes.SIGN_WALLET_TRANSACTION, {
             transaction,
