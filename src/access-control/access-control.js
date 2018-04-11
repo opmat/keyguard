@@ -14,7 +14,7 @@ export default class ACL {
                 this._isEmbedded = self !== top;
 
                 const storedPolicies = self.localStorage.getItem(ACL.STORAGE_KEY);
-                /** @type {Map<string,Policy> */
+                /** @type {Map<string,Policy>} */
                 this._appPolicies = storedPolicies ? ACL._parseAppPolicies(storedPolicies) : new Map();
 
                 // Init defaults
@@ -89,3 +89,8 @@ export default class ACL {
         }
     }
 }
+
+ACL.RPC_WHITELIST = [
+    'getPolicy',
+    'authorize'
+];

@@ -23,14 +23,14 @@ export default class KeyguardApi {
 
     async list() {
         if (BrowserDetection.isIOS() || BrowserDetection.isSafari()) {
-            return this.listFromCookie();
+            return this._listFromCookie();
         }
 
         const keys = await keyStore.list();
         return keys;
     }
 
-    async listFromCookie() {
+    async _listFromCookie() {
         const match = document.cookie.match(new RegExp('accounts=([^;]+)'));
 
         if (match) {
@@ -233,3 +233,17 @@ export default class KeyguardApi {
         });
     }
 }
+
+KeyguardApi.RPC_WHITELIST = [
+    'list',
+    'getMinerAccount',
+    'createSafe',
+    'createWallet',
+    'signSafe',
+    'signWallet',
+    'importFromFile',
+    'importFromWords',
+    'backupFile',
+    'backupWords',
+    'rename'
+];
