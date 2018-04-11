@@ -35,3 +35,8 @@ x-authenticate button {
 x-authenticate.wrong button {
     opacity: 0;
 }
+
+x-authenticate-pin {
+    display: block;
+    margin-top: 24px;
+}

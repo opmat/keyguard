@@ -28,7 +28,7 @@ export default class XAuthenticatePin extends MixinRedux(XElement) {
     _onPropertiesChanged(changes) {
         if (changes.isWrongPin) {
             this.$pinpad.onPinIncorrect();
-            XToast.show('incorrect pin', 'error');
+            XToast.error('Incorrect PIN');
             this.actions.setData(this.properties.requestType, { isWrongPin: false });
         }
     }

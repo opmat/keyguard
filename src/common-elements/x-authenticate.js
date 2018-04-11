@@ -23,7 +23,7 @@ export default class XAuthenticate extends MixinRedux(XPassphraseGetter) {
     _onPropertiesChanged(changes) {
         if (changes.isWrongPassphrase) {
             this.wrongPassphrase();
-            XToast.show('incorrect passphrase', 'error');
+            XToast.error('Incorrect passphrase');
             this.actions.setData(this.properties.requestType, { isWrongPassphrase: false });
         }
     }
