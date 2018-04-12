@@ -13,11 +13,8 @@ export function createPersistent() {
         key.label = label;
 
         if (await keyStore.put(key, passphrase)) {
-            const encryptedKeyPair = (await keyStore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
-                setResult(RequestTypes.CREATE_SAFE, Object.assign({}, key.getPublicInfo(), {
-                    encryptedKeyPair
-                }))
+                setResult(RequestTypes.CREATE_SAFE, Object.assign({}, key.getPublicInfo()))
             );
         } else {
             dispatch(

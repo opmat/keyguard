@@ -13,11 +13,8 @@ export function createWalletPersistent() {
         key.label = label;
 
         if (await keyStore.put(key, pin)) {
-            const encryptedKeyPair = (await keyStore.getPlain(key.userFriendlyAddress)).encryptedKeyPair;
             dispatch(
-                setResult(RequestTypes.CREATE_WALLET, Object.assign({}, key.getPublicInfo(), {
-                    encryptedKeyPair
-                }))
+                setResult(RequestTypes.CREATE_WALLET, Object.assign({}, key.getPublicInfo()))
             );
         } else {
             dispatch(
