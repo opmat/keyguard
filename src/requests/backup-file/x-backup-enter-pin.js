@@ -23,7 +23,7 @@ export default class XBackupEnterPin extends XElement {
         this.$authenticatePin.$pinpad.open();
     }
 
-    onExit() {
+    onBeforeExit() {
         this.$authenticatePin.$pinpad.close();
     }
 }

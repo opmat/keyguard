@@ -232,6 +232,18 @@ export default class KeyguardApi {
             address
         });
     }
+
+    async upgrade(address) {
+         if (!ValidationUtils.isValidAddress(address)) return;
+
+        const key = await keyStore.getPlain(address);
+        if (key.type !== KeyType.LOW) throw new Error('Unauthorized: Address is not a Wallet account');
+        if (key.label !== 'Miner Account') throw new Error('Unauthorized: Only Miner accounts can be upgraded');
+
+        return this._startRequest(RequestTypes.UPGRADE, {
+            address
+        });
+    }
 }
 
 KeyguardApi.RPC_WHITELIST = [
@@ -245,5 +257,6 @@ KeyguardApi.RPC_WHITELIST = [
     'importFromWords',
     'backupFile',
     'backupWords',
-    'rename'
+    'rename',
+    'upgrade'
 ];

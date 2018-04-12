@@ -9,6 +9,7 @@ import XSignWallet from './requests/sign-wallet/x-sign-wallet.js';
 import XBackupFile from './requests/backup-file/x-backup-file.js';
 import XBackupWords from './requests/backup-words/x-backup-words.js';
 import XRename from './requests/rename/x-rename.js';
+import XUpgrade from './requests/upgrade/x-upgrade.js';
 import XClose from '/secure-elements/x-close/x-close.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes }  from './requests/request-redux.js';
@@ -41,6 +42,9 @@ function getRequestElement(requestType) {
 
         case RequestTypes.RENAME:
             return XRename;
+
+        case RequestTypes.UPGRADE:
+            return XUpgrade;
 
         default:
             throw new Error('unknown request');

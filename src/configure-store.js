@@ -3,6 +3,7 @@ import { createLogger } from '/libraries/redux-logger/src/index.js';
 import thunk from '/libraries/redux/src/redux-thunk.js';
 import { reducer as keyReducer } from './keys/keys-redux.js';
 import { reducer as requestReducer } from './requests/request-redux.js';
+import Config from '/libraries/secure-utils/config/config.js';
 
 const reducers = {
     keys: keyReducer,
@@ -17,10 +18,10 @@ const logger = createLogger({
 export default function configureStore(initialState) {
 
     const createStoreWithMiddleware = compose(
-        applyMiddleware(
+        Config.devMode ? applyMiddleware(
             thunk,
             logger
-        )
+        ) : applyMiddleware(thunk)
     )(createStore);
 
     // Combine all reducers and instantiate the app-wide store instance

@@ -11,7 +11,8 @@ export const RequestTypes = {
     IMPORT_FROM_WORDS: 'import-from-words',
     BACKUP_FILE: 'backup-file',
     BACKUP_WORDS: 'backup-words',
-    RENAME: 'rename'
+    RENAME: 'rename',
+    UPGRADE: 'upgrade'
 };
 
 // basic action types

@@ -31,7 +31,7 @@ export default class XSetPin extends XElement {
         this.$pinpad.open();
     }
 
-    onExit() {
+    onBeforeExit() {
         this.$pinpad.close();
     }
 

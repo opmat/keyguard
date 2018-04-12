@@ -1,28 +1,46 @@
-import { RequestTypes, setExecuting, setData } from '../request-redux.js';
-import { keyStore } from '/libraries/keyguard/src/keys/index.js';
+import { RequestTypes, setExecuting, setData, setResult, setError } from '../request-redux.js';
+import { keyStore, KeyType } from '/libraries/keyguard/src/keys/index.js';
 
-export function backupFile(pin) {
+export function decrypt(pin, onSuccess) {
     return async (dispatch, getState) => {
-        dispatch( setExecuting(RequestTypes.BACKUP_FILE) );
+        dispatch( setExecuting(RequestTypes.UPGRADE) );
 
         const { address } = getState().request.data;
 
         // try to decrypt to authenticate the user
         try {
-            await keyStore.get(address, pin);
+            const key = await keyStore.get(address, pin);
 
-            // encryptedkeypair is already in store because of loadAccountData
-            // but we need to get rid of executing
             dispatch(
-                setData(RequestTypes.BACKUP_FILE, {})
+                setData(RequestTypes.UPGRADE, { key, privateKey: key.keyPair.privateKey.toHex() })
             );
 
-            (await XRouter.instance).goTo('backup-file/download')
+            onSuccess();
         } catch (e) {
             console.error(e);
             // assume the password was wrong
             dispatch(
-                setData(RequestTypes.BACKUP_FILE, { isWrongPin: true })
+                setData(RequestTypes.UPGRADE, { isWrongPin: true })
+            );
+        }
+    }
+}
+
+export function encryptAndPersist() {
+    return async (dispatch, getState) => {
+        dispatch( setExecuting(RequestTypes.UPGRADE) );
+
+        const { key, passphrase } = getState().request.data;
+
+        key.type = KeyType.HIGH;
+
+        if (await keyStore.put(key, passphrase)) {
+            dispatch(
+                setResult(RequestTypes.UPGRADE, true)
+            );
+        } else {
+            dispatch(
+                setError(RequestTypes.UPGRADE, 'Key could not be persisted')
             );
         }
     }

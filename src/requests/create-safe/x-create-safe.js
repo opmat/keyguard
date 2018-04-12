@@ -4,7 +4,7 @@ import XSetLabel from '/libraries/keyguard/src/common-elements/x-set-label.js';
 import XSetPassphrase from '/libraries/keyguard/src/common-elements/x-set-passphrase.js';
 import XPrivacyAgent from '/secure-elements/x-privacy-agent/x-privacy-agent.js';
 import XShowWords from '/libraries/keyguard/src/common-elements/x-show-words.js';
-import XValidateWordsConnected from './x-validate-words-connected.js';
+import XValidateWordsConnected from '../../common-elements/x-validate-words-connected.js';
 import XIdenticons from '../../common-elements/x-identicons/x-identicons.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
 import { RequestTypes, setData } from '../request-redux.js';
@@ -19,10 +19,10 @@ export default class XCreateSafe extends MixinRedux(XElement) {
             <x-grow></x-grow>
             <x-privacy-agent></x-privacy-agent>
           </section>
-          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
-          <x-set-label x-route="set-label"></x-set-label>
           <x-show-words x-route="words"></x-show-words>
           <x-validate-words-connected x-route="validate-words"></x-validate-words-connected>
+          <x-set-passphrase x-route="set-passphrase"></x-set-passphrase>
+          <x-set-label x-route="set-label"></x-set-label>
         `;
     }
 
@@ -52,44 +52,45 @@ export default class XCreateSafe extends MixinRedux(XElement) {
 
     async onCreate() {
         super.onCreate();
-        this.router = await XRouter.instance;
+        this._router = await XRouter.instance;
     }
 
     listeners() {
         return {
             'x-choose-identicon': this._onChooseIdenticon.bind(this),
             'x-surrounding-checked': this._onSurroundingChecked.bind(this),
-            'x-set-passphrase': this._onSetPassphrase.bind(this),
-            'x-set-label': this._onSetLabel.bind(this),
             'x-show-words': this._onWordsSeen.bind(this),
-            'x-validate-words': this._onWordsValidated.bind(this)
+            'x-validate-words-back': _ => this._router.goTo(this, 'words'),
+            'x-validate-words': this._onWordsValidated.bind(this),
+            'x-set-passphrase': this._onSetPassphrase.bind(this),
+            'x-set-label': this._onSetLabel.bind(this)
         }
     }
 
     _onChooseIdenticon(address) {
         const volatileKey = this.properties.volatileKeys.get(address);
         this.actions.setData(RequestTypes.CREATE_SAFE, { address, volatileKey } );
-        this.router.goTo(this, 'warning');
+        this._router.goTo(this, 'warning');
     }
 
     _onSurroundingChecked() {
         this.actions.setData(RequestTypes.CREATE_SAFE, {
             privateKey: this.properties.volatileKey.keyPair.privateKey.toHex()
         });
-        this.router.goTo(this, 'words');
+        this._router.goTo(this, 'words');
     }
 
     _onWordsSeen() {
-        this.router.goTo(this, 'validate-words');
+        this._router.goTo(this, 'validate-words');
     }
 
     async _onWordsValidated() {
-        this.router.goTo(this, 'set-passphrase');
+        this._router.goTo(this, 'set-passphrase');
     }
 
     _onSetPassphrase(passphrase) {
         this.actions.setData(RequestTypes.CREATE_SAFE, { passphrase });
-        this.router.goTo(this, 'set-label');
+        this._router.goTo(this, 'set-label');
     }
 
     _onSetLabel(label) {

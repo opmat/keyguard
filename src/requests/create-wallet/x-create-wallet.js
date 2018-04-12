@@ -40,7 +40,7 @@ export default class XCreateWallet extends MixinRedux(XElement) {
 
     async onCreate() {
         super.onCreate();
-        this.router = await XRouter.instance;
+        this._router = await XRouter.instance;
     }
 
     listeners() {
@@ -53,7 +53,7 @@ export default class XCreateWallet extends MixinRedux(XElement) {
     _onChooseIdenticon(address) {
         this.actions.setData(RequestTypes.CREATE_WALLET, { address } );
         this.actions.setData(RequestTypes.CREATE_WALLET, { label: 'Miner Account' });
-        this.router.goTo(this, 'set-pin');
+        this._router.goTo(this, 'set-pin');
     }
 
     async _onSetPin(pin) {

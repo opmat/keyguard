@@ -19,7 +19,7 @@ export default class XEnterPin extends MixinRedux(XElement) {
         this.$authenticatePin.$pinpad.open();
     }
 
-    onExit() {
+    onBeforeExit() {
         this.$authenticatePin.$pinpad.close();
     }
 }

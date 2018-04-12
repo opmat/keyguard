@@ -6,7 +6,7 @@ export default class XValidateWordsConnected extends MixinRedux(XValidateWords) 
 
     static mapStateToProps(state) {
         return {
-            privateKey: state.request.data.privateKey,
+            privateKey: state.request.data.privateKey
         };
     }
 

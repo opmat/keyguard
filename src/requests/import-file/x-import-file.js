@@ -32,7 +32,7 @@ export default class XImportFile extends MixinRedux(XElement) {
 
     async onCreate() {
         super.onCreate();
-        this.router = await XRouter.instance;
+        this._router = await XRouter.instance;
     }
 
     static mapStateToProps(state) {
@@ -60,14 +60,14 @@ export default class XImportFile extends MixinRedux(XElement) {
                 type: KeyType.LOW,
                 encryptedKeyPair64: encryptedKeyPair64.substr(2)
             });
-            this.router.goTo('import-from-file/decrypt-wallet');
+            this._router.goTo('import-from-file/decrypt-wallet');
         } else {
             // safe account (deprecated)
             this.actions.setData(RequestTypes.IMPORT_FROM_FILE, {
                 type: KeyType.HIGH,
                 encryptedKeyPair64
             });
-            this.router.goTo('import-from-file/decrypt-safe');
+            this._router.goTo('import-from-file/decrypt-safe');
         }
     }
 

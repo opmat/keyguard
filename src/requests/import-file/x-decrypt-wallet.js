@@ -39,7 +39,7 @@ export default class XDecryptWallet extends MixinRedux(XElement) {
         this.$authenticatePin.$pinpad.open();
     }
 
-    onExit() {
+    onBeforeExit() {
         this.$authenticatePin.$pinpad.close();
     }
 
