@@ -44,7 +44,7 @@ export default class KeyguardApi {
     async getMinerAccount() {
         const keys = await this.list();
 
-        const firstMinerKey = keys.find(key => key.type === KeyType.LOW);
+        const firstMinerKey = keys.find(key => key.label === 'Miner Account');
         if (firstMinerKey) return firstMinerKey;
 
         // Return first Safe key or NULL
