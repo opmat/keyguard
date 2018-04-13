@@ -1,4 +1,4 @@
-@import '/elements/x-address/x-address.css';
+@import '/secure-elements/x-address-no-copy/x-address-no-copy.css';
 @import '/secure-elements/x-loading-animation/x-loading-animation.css';
 
 x-identicons {
@@ -8,7 +8,6 @@ x-identicons {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    min-height: 100vh;
     /* max-height: 600px; */
 }
 
@@ -17,7 +16,7 @@ x-identicons x-header {
 }
 
 x-identicons x-identicon {
-    width: 128px;
+    width: unset;
     height: 128px;
     position: absolute;
     transition: transform 500ms;
@@ -88,68 +87,28 @@ x-identicons [button] {
 
 
 x-identicons x-backdrop {
-    content: '';
-    position: fixed;
-    bottom: 0;
+    position: absolute;
+    top: -60px;
     background: rgba(0, 0, 0, 0.8);
     z-index: 1;
     pointer-events: none;
     opacity: 0;
     transition: opacity;
     will-change: opacity;
-    box-sizing: content-box;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
 }
 
 x-identicons x-backdrop [button]+[secondary] {
-    margin-bottom: 16px;
     position: absolute;
+    margin-bottom: 16px;
     bottom: 25px;
 }
-
 
 x-identicons [secondary] {
     margin-top: 30px;
     margin-bottom: 20px;
-}
-
-x-identicons x-address:before {
-    display: block;
-    content: 'Account';
-    line-height: 24px;
-    font-weight: 700;
-    font-size: 13px;
-}
-
-x-identicons x-address {
-    opacity: 0;
-    position: absolute;
-    bottom: 35vh;
-    width: unset;
-    transition: opacity 300ms, transform 500ms;
-    transform: scale(0.3);
-    cursor: auto;
-}
-
-@media (max-height: 600px) {
-    x-identicons x-address {
-        bottom: 40vh;
-    }
-}
-
-@media (max-height: 500px) {
-    x-identicons x-address {
-        bottom: 45vh;
-    }
-}
-
-@media (max-height: 450px) {
-    x-identicons x-address {
-        bottom: 50vh;
-    }
-}
-
-x-identicons x-address:hover {
-    background: none;
 }
 
 x-identicons[selected] [button] {
@@ -157,21 +116,23 @@ x-identicons[selected] [button] {
     z-index: 2;
     transform: translate(0, 0);
     pointer-events: all;
-    width: 100vw;
+    width: 97vw;
 }
 
-x-identicons[selected] x-address {
-    opacity: 1;
-    z-index: 2;
-    transform: translate(0, 56px);
-    margin-top: 32px;
+x-identicon x-address-no-copy {
+    display: none;
+}
+
+x-identicon[selected] x-address-no-copy {
+    display: block;
+    text-align: center;
+    transform: scale(0.68);
+    margin-top: 1.7rem;
 }
 
 x-identicons[selected] x-backdrop {
     pointer-events: all;
     opacity: 1;
-    border: 100vmax solid transparent;
-    margin-bottom: -100vmax;
 }
 
 x-identicons x-identicon[selected],
@@ -182,6 +143,7 @@ x-identicons x-identicon.returning {
 
 x-identicons x-identicon[selected] {
     transform: scale(1.5) translateY(-40px);
+    width: unset;
 }
 
 @media (max-width: 380px) {

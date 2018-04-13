@@ -1,6 +1,7 @@
 import XElement from '/libraries/x-element/x-element.js';
-import XIdenticon from '/secure-elements/x-identicon/x-identicon.js';
 import MixinRedux from '/secure-elements/mixin-redux/mixin-redux.js';
+import XIdenticon from '/secure-elements/x-identicon/x-identicon.js';
+import XAddressNoCopy from '/secure-elements/x-address-no-copy/x-address-no-copy.js';
 import { createVolatile, clearVolatile } from '/libraries/keyguard/src/keys/keys-redux.js';
 import { RequestTypes, setData } from '/libraries/keyguard/src/requests/request-redux.js';
 
@@ -22,7 +23,6 @@ export default class XIdenticons extends MixinRedux(XElement) {
             <x-grow></x-grow>
 
             <x-backdrop class="center">
-                <x-address></x-address>
                 <a button>Confirm</a>
                 <a secondary>Back</a>
             </x-backdrop>
@@ -32,7 +32,6 @@ export default class XIdenticons extends MixinRedux(XElement) {
     onCreate() {
         this.$container = this.$('x-container');
         this.$loading = this.$('#loading');
-        this.$address = this.$('x-address');
         this.$confirmButton = this.$('x-backdrop [button]');
         super.onCreate();
     }
@@ -71,7 +70,10 @@ export default class XIdenticons extends MixinRedux(XElement) {
             const $identicon = XIdenticon.createElement();
             this.$container.appendChild($identicon.$el);
             $identicon.address = address;
-            $identicon.addEventListener('click', e => this._onIdenticonSelected(address, $identicon));
+            const $address = XAddressNoCopy.createElement();
+            $address.address = address;
+            $identicon.$el.appendChild($address.$el);
+            $identicon.addEventListener('click', e => this._onIdenticonSelected($identicon));
         }
 
         setTimeout(e => this.$el.setAttribute('active', true), 100);
@@ -90,13 +92,12 @@ export default class XIdenticons extends MixinRedux(XElement) {
         this.actions.createVolatile(this.properties.requestType, 7);
     }
 
-    _onIdenticonSelected(address, $identicon) {
+    _onIdenticonSelected($identicon) {
         this.$('x-identicon.returning') && this.$('x-identicon.returning').classList.remove('returning');
         this.$confirmButton.onclick = () => this.fire('x-choose-identicon', address);
         this._selectedIdenticon = $identicon;
         this.$el.setAttribute('selected', true);
         $identicon.$el.setAttribute('selected', true);
-        this.$address.textContent = address;
     }
 
     _clearSelection() {
