@@ -2,7 +2,7 @@ import { RPC } from '/libraries/boruca-messaging/src/boruca.js';
 import KeyguardApi from './requests/keyguard-api.js';
 import AccessControl from './access-control/access-control.js';
 import SafePolicy from './access-control/safe-policy.js';
-import WalletPolicy from './access-control/wallet-policy.js';
+//import WalletPolicy from './access-control/wallet-policy.js';
 import MinerPolicy from './access-control/miner-policy.js';
 import Config from '/libraries/secure-utils/config/config.js';
 import store from './store.js';
