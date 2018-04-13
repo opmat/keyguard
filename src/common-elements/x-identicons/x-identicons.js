@@ -94,7 +94,7 @@ export default class XIdenticons extends MixinRedux(XElement) {
 
     _onIdenticonSelected($identicon) {
         this.$('x-identicon.returning') && this.$('x-identicon.returning').classList.remove('returning');
-        this.$confirmButton.onclick = () => this.fire('x-choose-identicon', address);
+        this.$confirmButton.onclick = () => this.fire('x-choose-identicon', $identicon.address);
         this._selectedIdenticon = $identicon;
         this.$el.setAttribute('selected', true);
         $identicon.$el.setAttribute('selected', true);
