@@ -7,8 +7,7 @@ export default class XUpgradeWelcome extends XElement {
         <x-grow></x-grow>
         <div>
             <p class="-left">
-                After completion of the following process, your Miner Account will be converted to a
-                <a href="https://nimiq.com/faq/safe-account" target="_blank" title="Learn more">Safe Account</a>.
+                After completion of the following process, your Miner Account will be converted to a Safe Account</a>.
             </p>
             &nbsp;
             <p class="-left">
