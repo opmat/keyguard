@@ -93,7 +93,7 @@ class Keyguard {
 
 (async function() {
     if (window.Nimiq) {
-        await Nimiq.load();
+        await Nimiq.loadOffline();
         Nimiq.GenesisConfig[Config.network]();
     }
     window.keyguard = new Keyguard();
