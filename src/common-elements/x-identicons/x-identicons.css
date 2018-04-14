@@ -87,8 +87,9 @@ x-identicons [button] {
 
 
 x-identicons x-backdrop {
-    position: absolute;
-    top: -60px;
+    position: fixed;
+    top: 0;
+    left: 0;
     background: rgba(0, 0, 0, 0.8);
     z-index: 1;
     pointer-events: none;
@@ -98,6 +99,8 @@ x-identicons x-backdrop {
     box-sizing: border-box;
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flew-flow: column;
 }
 
 x-identicons x-backdrop [button]+[secondary] {
@@ -145,6 +148,7 @@ x-identicons x-identicon[selected] {
     transform: scale(1.5) translateY(-40px);
     width: unset;
     pointer-events: none;
+    position: fixed;
 }
 
 @media (max-height: 620px) {
