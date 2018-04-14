@@ -15,7 +15,7 @@ export default class XUpgradeWelcome extends XElement {
                 For this you will:
                 <ul>
                     <li>Authenticate with your PIN</li>
-                    <li>Get a backup in form of 24 recovery words, which represent your private key</li>
+                    <li>Get a backup in form of 24 Recovery Words, which represent your private key</li>
                     <li>Choose a Pass Phrase to encrypt your private key</li>
                 </ul>
             </p>
