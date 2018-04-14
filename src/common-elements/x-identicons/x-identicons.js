@@ -65,6 +65,7 @@ export default class XIdenticons extends MixinRedux(XElement) {
         if (!addresses) return;
 
         this.$container.textContent = '';
+        this.$el.removeAttribute('active');
 
         for (const address of this.properties.addresses) {
             const $identicon = XIdenticon.createElement();
@@ -76,7 +77,7 @@ export default class XIdenticons extends MixinRedux(XElement) {
             $identicon.addEventListener('click', e => this._onIdenticonSelected($identicon));
         }
 
-        setTimeout(e => this.$el.setAttribute('active', true), 100);
+        setTimeout(() => this.$el.setAttribute('active', true), 100);
     }
 
     onEntry() {
